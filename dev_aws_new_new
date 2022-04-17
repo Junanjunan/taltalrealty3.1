@@ -123,3 +123,10 @@ DJANGO_SETTINGS_MODULE : config.settings
 
 컨테이너 옵션에서
 WSGIPath 수동 추가 config.wsgi:application
+
+
+이렇게 해주니까 되었음
+
+django.config 에서 띄어쓰기 오타때문에 업로드가 안된건지 모르니, eb terminate 해주고 다시 해보자.
+
+.elasticbeanstalk도 삭제해주고 다시 eb init부터
