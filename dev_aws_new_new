@@ -90,6 +90,9 @@ Elastic Beanstalk 구성 설정(configurations)해서 .env 변수들 추가하�
 Elastic Beanstalk 구성을 보면
 DJANGO_SETTINGS_MODULE이 없음. wsgi 설정을 잘못해서 그런듯...?
 
+cfn-init.log: cfnbootstrap.construction_errors.ToolError: Command 01_migrate failed
+cfn-init-cmd.log: ModuleNotFoundError: No module named 'config'
+
 .ebextensions/02-django.config
   container_commands:
     01_migrate:
@@ -104,3 +107,19 @@ DJANGO_SETTINGS_MODULE이 없음. wsgi 설정을 잘못해서 그런듯...?
       DJANGO_SETTINGS_MODULE: config.settings
 
 위와 같이 해주고 다시 eb deploy 
+
+cfn-init.log: cfnbootstrap.construction_errors.ToolError: Command 01_migrate failed
+cfn-init-cmd.log: ModuleNotFoundError: No module named 'config'
+
+여전히 마찬가지임.
+Elastic Beanstalk 구성 설정에
+DJANGO_SETTINGS_MODULE이 빠져있고, WSGIPath도 업데이트가 안되고 application으로 되어있어서 그런것 같음...
+
+보통은 생성할때 위 2개가 설정이 되어있었는데,
+django-config 파일을 오타(띄어쓰기)를 내서 설정이 잘못된거 같기도 함
+
+DJANGO_SETTINGS_MODULE은 수동으로 추가해줌
+DJANGO_SETTINGS_MODULE : config.settings
+
+컨테이너 옵션에서
+WSGIPath 수동 추가 config.wsgi:application
