@@ -10,17 +10,17 @@ $ pipenv shell
 
 
 .ebextensions/02-django.config
-    container_commands:
+  container_commands:
     01_migrate:
-        command: "django-admin migrate"
-        leader_only: true
+      command: "django-admin migrate"
+      leader_only: true
     02_createsu:
-        command: "django-admin createsu"
-    option_settings:
-        aws:elasticbeanstalk:container:python:
-        WSGIPath: config/wsgi.py
-        aws:elasticbeanstalk:application:environment:
-        DJANGO_SETTINGS_MODULE: config.settings
+      command: "django-admin createsu"
+  option_settings:
+    aws:elasticbeanstalk:container:python:
+      WSGIPath: config/wsgi.py
+    aws:elasticbeanstalk:application:environment:
+      DJANGO_SETTINGS_MODULE: config.settings
 
     -> static 관련된 부분 우선 삭제하고 진행
 
@@ -97,10 +97,10 @@ DJANGO_SETTINGS_MODULE이 없음. wsgi 설정을 잘못해서 그런듯...?
       leader_only: true
     02_createsu:
       command: "django-admin createsu"
-    option_settings:
-      aws:elasticbeanstalk:container:python:
-      WSGIPath: config.wsgi:application             # 이 부분 바꿔줌
-      aws:elasticbeanstalk:application:environment:
+  option_settings:
+    aws:elasticbeanstalk:container:python:
+      WSGIPath: config.wsgi:application     # 이 부분만 수정해보고 진행
+    aws:elasticbeanstalk:application:environment:
       DJANGO_SETTINGS_MODULE: config.settings
 
 위와 같이 해주고 다시 eb deploy 
