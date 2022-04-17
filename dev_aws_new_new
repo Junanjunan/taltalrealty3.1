@@ -183,4 +183,71 @@ PYTHONPATH가 설정되어 있지 않은데,
 
     -> AWS의 linux 원격으로 보고 내부 파일을 모두 볼 수 있는 방법을 익혀서 그 구조를 확인해보는 것을 다음 과제로 하자
 
-S3 ACL 설정
+S3 ACL 설정(S3 버킷 삭제도 가능)
+ - 권한 부여를 하고 진행해야 가능
+
+ https://docs.aws.amazon.com/ko_kr/config/latest/developerguide/s3-bucket-policy.html
+  1. S3 버킷이 포함된 계정을 사용하여 AWS Management Console에 로그인합니다.
+
+  2. https://console.aws.amazon.com/s3/에서 Amazon S3 콘솔을 엽니다.
+
+  3. AWS Config에서 구성 항목을 전송할 때 사용할 버킷을 선택한 다음 속성을 선택합니다.
+
+  4. 권한을 선택합니다.
+
+  5. [Edit Bucket Policy]를 선택합니다.
+
+  6.다음 정책을 버킷 정책 편집기 창으로 복사합니다.
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "AWSConfigBucketPermissionsCheck",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "config.amazonaws.com"
+          },
+          "Action": "s3:GetBucketAcl",
+          "Resource": "arn:aws:s3:::targetBucketName",
+          "Condition": { 
+            "StringEquals": {
+              "AWS:SourceAccount": "sourceAccountID"
+            }
+          }
+        },
+        {
+          "Sid": "AWSConfigBucketExistenceCheck",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "config.amazonaws.com"
+          },
+          "Action": "s3:ListBucket",
+          "Resource": "arn:aws:s3:::targetBucketName",
+          "Condition": { 
+            "StringEquals": {
+              "AWS:SourceAccount": "sourceAccountID"
+            }
+          }
+        },
+        {
+          "Sid": "AWSConfigBucketDelivery",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "config.amazonaws.com"
+          },
+          "Action": "s3:PutObject",
+          "Resource": "arn:aws:s3:::targetBucketName/[optional] prefix/AWSLogs/sourceAccountID/Config/*",
+          "Condition": { 
+            "StringEquals": { 
+              "s3:x-amz-acl": "bucket-owner-full-control",
+              "AWS:SourceAccount": "sourceAccountID"
+            }
+          }
+        }
+      ]
+    }
+
+    sourceAccountID는 계정 ID: 1542-4215-1844 숫자 형태로 되어있는것
+                                영문으로 되어있는 걸로 하면 퍼블릭 액세스 차단 상태에서 접근이 안됨
+
+    
