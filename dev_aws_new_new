@@ -9,6 +9,24 @@ $ pipenv shell
             - python manage.py makemigrations / migrate / createsuperuser / runserver로 작동 되는지 확인
 
 
+.ebextensions/02-django.config
+    container_commands:
+    01_migrate:
+        command: "django-admin migrate"
+        leader_only: true
+    02_createsu:
+        command: "django-admin createsu"
+    option_settings:
+        aws:elasticbeanstalk:container:python:
+        WSGIPath: config/wsgi.py
+        aws:elasticbeanstalk:application:environment:
+        DJANGO_SETTINGS_MODULE: config.settings
+
+    -> static 관련된 부분 우선 삭제하고 진행
+
+config/settings.py
+    static 관련된 부분 주석처리하고 진행
+
 기본 세팅들이 되어있으니, eb create를 하기 전에 RDS를 먼저 만들어보자.
 
 AWS RDS 생성
@@ -33,5 +51,8 @@ AWS RDS 생성
 
 
 $ eb init
+
+$ pipenv install pipenv-to-requirements
+    $ pipenv lock -r > requirements.txt
 
 $ git add . / git commit -m "." / eb create
