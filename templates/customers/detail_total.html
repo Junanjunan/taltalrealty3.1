@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "partials/bnc2.html" %}
+<h4>-손님 상세 정보-</h4>
+<div class="creating-form">
+    <div class="creating">
+        <div class="creating-address">
+            <div class="creating-div">손님</div>{{object.guest_phone}}
+        </div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">확인일</div>{{object.updated|date:"Y/m/d"}}
+        </div>
+    </div>
+    {% if object.room %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">방</div> {{object.room}}개</div>
+    </div>
+    {% endif %}
+    <div class="creating"><button class="toggle_money" value="manwon" onclick="togglingMoney()">금액단위(만원)</button></div>
+    {% if object.price %}
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">매매가</div>  <span class="toggle_money_area">{{object.price}}</span>
+        </div>
+    </div>
+    {% else %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">보증금</div>  <span class="toggle_money_area">{{object.deposit}}</span></div>
+        <div class="creating-input-bound"><div class="creating-div">월세</div>  <span class="toggle_money_area">{{object.month_fee}}</span></div>
+    </div>
+    {% endif %}
+    <div class="creating"><button class="toggle_m2" value="m2" onclick="toggling()">면적단위(㎡)</button></div><div></div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">전용면적</div><span class="toggle_area">{{object.area_m2}}</span></div>
+    </div>
+    {% url 'customers:building-dealing-customer-detail' object.pk as url_2 %}
+    {% if request.path == url_2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">대지면적</div><span class="toggle_area">{{object.land_m2}}</span></div>   
+    </div>
+    {% endif %}
+    {% if request.path != url_2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">주차가능</div>{% if object.parking %}O{% else %}X{% endif %}<label for="id_parking"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">승강기</div>{% if object.elevator %}O{% else %}X{% endif %}<label for="id_elevator"></label></div>
+    </div>
+    {% endif %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">대출</div>{% if object.loan %}O{% else %}X{% endif %}<label for="id_loan"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">진행손님</div>{% if object.not_finished %}O{% else %}X{% endif %}<label for="id_not_finished"></label></div>
+    </div>
+    <div class="creating creating-description-text">
+        <div class="creating-address">
+            <div class="creating-div">설명</div> {{object.description}}<label for="id_description"></label>
+        </div>
+    </div>
+<div class="change-delete">
+    {% url 'customers:apartment-dealing-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:apartment-dealing-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:apartment-dealing-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:apartment-lease-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:apartment-lease-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:apartment-lease-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:building-dealing-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:building-dealing-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:building-dealing-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:officetel-dealing-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:officetel-dealing-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:officetel-dealing-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:officetel-lease-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:officetel-lease-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:officetel-lease-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:house-dealing-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:house-dealing-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:house-dealing-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:house-lease-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:house-lease-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:house-lease-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:shop-dealing-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:shop-dealing-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:shop-dealing-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'customers:shop-lease-customer-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'customers:shop-lease-customer-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'customers:shop-lease-customer-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+</div>
+    {% endblock content %}

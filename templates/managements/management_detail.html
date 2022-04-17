@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>-임대 매물 상세 정보-</h4>
+<div class="creating-form">
+    <div class="creating">
+        <div class="creating-address">
+            <div class="creating-div">주소</div>{{object.address}}
+        </div>
+    </div>
+    <div class="creating">
+        {% if object.deposit %}
+        <div class="creating-input-bound"><div class="creating-div">보증금</div>{{object.deposit}}만원</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">보증금</div>-</div>    
+        {% endif %}       
+        {% if object.month_fee %}
+        <div class="creating-input-bound"><div class="creating-div">월세</div> {{object.month_fee}}만원</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">월세</div> -</div>
+        {% endif %} 
+    </div>
+    <div class="creating">
+        {% if object.management_fee %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> {{object.management_fee}}만원</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> -</div>
+        {% endif %}
+        {% if object.parking_fee %}
+        <div class="creating-input-bound"><div class="creating-div">주차비</div> {{object.parking_fee}}만원</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">주차비</div> -</div>
+        {% endif %}
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">계약일</div><span class="contract_day">{{object.contract_day|date:"Y-m-d"}}</span></div>
+        <div class="creating-input-bound"><div class="creating-div">거래신고 잔여일</div><span class="report_due_day"></span></div>
+        <div class="creating-input-bound"><div class="creating-div">거래신고</div>{% if object.deal_report %}O{% else %}X{% endif %}<label for="id_report"></label></div>
+    </div>
+    
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">입주일</div><span class="contract_start_day">{{object.contract_start_day|date:"Y-m-d"}}</span></div>
+        <div class="creating-input-bound"><div class="creating-div">만기일</div><span class="contract_last_day">{{object.contract_last_day|date:"Y-m-d"}}</span></div>
+        <div class="creating-input-bound"><div class="creating-div ">만기일까지</div><span class="last_due_day"></span>일 남음</div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">갱신기간<br>(180~60일)</div><span class="renewal_asking_period"></span></div>
+        <div class="creating-input-bound"><div class="creating-div">갱신여부고지</div>{% if object.deal_renewal_notice %}O{% else %}X{% endif %}</div>
+        <div class="creating-input-bound"><div class="creating-div">갱신청구권 사용</div>{% if object.deal_renewal_right_usage %}O{% else %}X{% endif %}</div>
+    </div>
+    <div class="creating">
+        
+        
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">집주인</div>{{object.owner_phone}}</div>
+        <div class="creating-input-bound"><div class="creating-div">세입자</div>{{object.tenant_phone}}</div>
+    </div>
+    <div class="creating creating-description-text">
+        <div class="creating-address">
+            <div class="creating-div">특이사항</div> {{object.description}}<label for="id_description"></label>
+        </div>
+    </div>
+<div class="change-delete">
+    <div class="change-delete-div change-div"><a href="{% url 'managements:update' object.pk %}" class="change-delete-text">계약 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'managements:delete' object.pk %}" class="change-delete-text" onclick="return confirm('계약을 삭제하시겠습니까?');">계약 삭제</a></div>
+</div>
+<script>
+    const contract_day = document.getElementsByClassName("contract_day");
+    const report_due_day = document.getElementsByClassName("report_due_day");
+
+    function getTimeReportMinusToday2() {
+        for (var i=0; i<contract_day.length; i++){
+            const today = new Date();
+            const contractDay = new Date(contract_day[i].innerHTML);
+            contractDay.setDate(contractDay.getDate()+30);
+            const leftMilSec = new Date(contractDay) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.floor(leftDays);
+            // report_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            report_due_day[i].innerHTML = `${days}`;
+            // date = new Date(startDay);
+            // year = date.getFullYear();
+            // month = date.getMonth()+1;
+            // dt = date.getDate();
+            // if (dt < 10) {
+            // dt = '0' + dt;
+            // }
+            // if (month < 10) {
+            // month = '0' + month;
+            // }
+            // report_day[i].innerHTML = `${year}-${month}-${dt}`
+            // last_due_day[i].innerText = `${days}일`;
+            
+        }
+    }
+    
+    getTimeReportMinusToday2();
+
+    const contract_start_day = document.getElementsByClassName("contract_start_day");
+    const contract_last_day = document.getElementsByClassName("contract_last_day");
+    const last_due_days = document.getElementsByClassName("last_due_day");
+    const renewal_asking_periods = document.getElementsByClassName("renewal_asking_period");
+
+
+    function getTimeContractLastMinusToday2() {
+        for (var i=0; i<last_due_days.length; i++){
+            const today = new Date();
+            const leftMilSec = new Date(contract_last_day[i].innerHTML) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.ceil(leftDays);
+            // last_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            last_due_days[i].innerHTML = `${days}`;
+
+            if (days >= 60 && days <= 180) {
+                renewal_asking_periods[i].innerHTML = 'O';
+            } else {
+                renewal_asking_periods[i].innerHTML = 'X';
+            }
+        }
+    }
+
+    getTimeContractLastMinusToday2();
+</script>
+    {% endblock content %}

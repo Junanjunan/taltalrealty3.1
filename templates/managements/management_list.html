@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="regist"><div class="regist-a"><a href="{% url 'managements:creating' %}">관리매물 등록</a></div></div>
+<div>금액단위(만원)</div>
+<table id="myTable">
+    <thead>
+        <tr>
+            <th onclick="sortTableLetter(0)">주소</th>
+            <th onclick="sortTableNumber(1)" class="dis640 testtest">보증금</th>
+            <th onclick="sortTableNumber(2)" class="dis640">월세</th>
+            <th onclick="sortTableNumber(3)" class="dis640">관리비</th>
+            <th onclick="sortTableNumber(4)" class="dis640">주차비</th>
+            <th onclick="sortTableLetter(5)" class="dis720">계약일</th>
+            <th onclick="sortTableNumber(6)" class="dis1100">거래신고<br>잔여일</th>
+            <th onclick="sortTableLetter(7)" class="dis1100">거래신고</th>
+            <th onclick="sortTableLetter(8)" class="dis720">입주일</th>
+            <th onclick="sortTableLetter(9)" class="dis1220">만기일</th>
+            <th onclick="sortTableNumber(10)" class="dis880">남은계약일</th>
+            <th onclick="sortTableLetter(11)" class="dis880">갱신 확인기간<br>(180일~60일)</th>
+            <th onclick="sortTableLetter(12)" class="dis880">갱신여부고지</th>
+            <th onclick="sortTableLetter(13)" class="dis1100">갱신청구권<br>사용여부</th>
+            <th onclick="sortTableLetter(14)" class="dis1000">집주인</th>
+            <th onclick="sortTableLetter(15)" class="dis1240">세입자</th>
+            <th onclick="sortTableLetter(16)">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for list in lists %}
+        {% if user.pk == list.manager.pk %}
+        <tr>
+            <td><a href="{% url 'managements:detail' list.pk %}">{{list.address}}</a></td>
+            <td class="dis640">{% if list.deposit == 0 or list.deposit == None%}0{% else %}{{list.deposit}}{% endif %}</td>
+            <td class="dis640">{% if list.month_fee == 0 or list.month_fee == None%}0{% else %}{{list.month_fee}}{% endif %}</td>
+            <td class="dis640">{% if list.management_fee == 0 or list.management_fee == None%}0{% else %}{{list.management_fee}}{% endif %}</td>
+            <td class="dis640">{% if list.parking_fee == 0 or list.parking_fee == None%}0{% else %}{{list.parking_fee}}{% endif %}</td>
+            <td class="contract_day dis640">{{list.contract_day|date:"Y-m-d"}}</td>
+            <td class="report_due_day dis950"></td>
+            <td class="dis1100">{% if list.deal_report %}O{% else %}X{% endif %}</td>
+            
+            <td class="contract_start_day dis720">{{list.contract_start_day|date:"Y-m-d"}}</td>
+            <td class="contract_last_day">{{list.contract_last_day|date:"Y-m-d"}}</td>
+            <td class="last_due_day dis880"></td>
+            <td class="renewal_asking_period dis880"></td>
+            <td>{% if list.deal_renewal_notice %}O{% else %}X{% endif %}</td>
+            <td class="dis1000">{% if list.deal_renewal_right_usage %}O{% else %}X{% endif %}</td></td>
+            <td class="dis1240">{{list.owner_phone}}</td>
+            <td class="dis1240">{{list.tenant_phone}}</td>
+            <td class="dis1240">{{list.description}}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    const contract_day = document.getElementsByClassName("contract_day");
+    const report_due_day = document.getElementsByClassName("report_due_day");
+
+    function getTimeReportMinusToday2() {
+        for (var i=0; i<contract_day.length; i++){
+            const today = new Date();
+            const contractDay = new Date(contract_day[i].innerHTML);
+            contractDay.setDate(contractDay.getDate()+30);
+            const leftMilSec = new Date(contractDay) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.floor(leftDays);
+            // report_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            report_due_day[i].innerHTML = `${days}`;
+            // date = new Date(startDay);
+            // year = date.getFullYear();
+            // month = date.getMonth()+1;
+            // dt = date.getDate();
+            // if (dt < 10) {
+            // dt = '0' + dt;
+            // }
+            // if (month < 10) {
+            // month = '0' + month;
+            // }
+            // report_day[i].innerHTML = `${year}-${month}-${dt}`
+            // last_due_day[i].innerText = `${days}일`;
+            
+        }
+    }
+    
+    getTimeReportMinusToday2();
+
+    const contract_start_day = document.getElementsByClassName("contract_start_day");
+    const contract_last_day = document.getElementsByClassName("contract_last_day");
+    const last_due_days = document.getElementsByClassName("last_due_day");
+    const renewal_asking_periods = document.getElementsByClassName("renewal_asking_period");
+
+
+    function getTimeContractLastMinusToday2() {
+        for (var i=0; i<last_due_days.length; i++){
+            const today = new Date();
+            const leftMilSec = new Date(contract_last_day[i].innerHTML) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.ceil(leftDays);
+            // last_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            last_due_days[i].innerHTML = `${days}`;
+
+            if (days >= 60 && days <= 180) {
+                renewal_asking_periods[i].innerHTML = 'O';
+            } else {
+                renewal_asking_periods[i].innerHTML = 'X';
+            }
+        }
+    }
+
+    getTimeContractLastMinusToday2();
+</script>
+{% endblock content %}

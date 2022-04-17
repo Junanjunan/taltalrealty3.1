@@ -1,0 +1,28 @@
+<tr>
+    <td><a href="{% url 'books:officetel-dealing-detail' list.pk %}">{{list.address}}</a></td>
+    <td class="table-updated">{{list.updated|date:"y/m/d"}}</td>
+    <td class="toggle_money_area">{{list.price}}</td>
+    <td class="toggle_money_area">{{list.deposit}}</td>
+    <td class="toggle_money_area">{{list.month_fee}}</td>
+    <!-- <td>{{list.management_fee}}</td> -->
+    <td>{{list.room}}</td>
+    <!-- <td>{{list.bath}}</td> -->
+    <td class="table-birth">{{list.birth|date:"Y년"}}</td>
+    <td class="table-area_m2 toggle_area">{{list.area_m2}}</td>
+    <!-- <td>{{list.land_m2}}</td> -->
+    <td class="table-parking">{% if list.parking %}O{% else %}X{% endif %}</td>
+    <!-- <td>{% if list.elevator %}O{% else %}X{% endif %}</td> -->
+    <td class="table-empty">{% if list.empty %}O{% else %}X{% endif %}</td>
+    <!-- <td>{% if list.naver %}O{% else %}X{% endif %}</td> -->
+    <td class="table-not_finished">{% if list.not_finished %}O{% else %}X{% endif %}</td>
+    <td class="table-owner">{{list.owner_phone}}</td>
+    <td class="table-tenant">{{list.tenant_phone}}</td>
+    <!-- <td>
+        <div>
+            <a href="{% url 'books:officetel-dealing-detail' list.pk %}">상세정보</a>
+        </div>
+        <div>
+            <a href="{% url 'books:room-lease-delete' list.pk %}">삭제</a>
+        </div>
+    </td> -->
+</tr>

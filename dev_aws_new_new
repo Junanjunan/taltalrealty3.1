@@ -1,0 +1,37 @@
+python version 3.8.10 64-bit
+
+$ pipenv shell
+    -> Pipfile 생성됨
+        -> 이용하던 Pipfile 있어서 삭제하고 그 파일 붙여넣기함
+            - pipenv install : 불러온 Pipfile에 기록되어 있는 library등 일괄 설치
+            - .env 등을 포함해서 django app 그대로 가져옴
+                - .env 적용시키려면 vsc 껐다 키기
+            - python manage.py makemigrations / migrate / createsuperuser / runserver로 작동 되는지 확인
+
+
+기본 세팅들이 되어있으니, eb create를 하기 전에 RDS를 먼저 만들어보자.
+
+AWS RDS 생성
+    - PostgreSQL , 버전: PostgreSQL 13.4-R1 (default), 프리티어
+    - DB 인스턴스 식별자: taltalrealty3
+    - 마스터 사용자 이름: postgres (default)
+    - 마스터 암호: @ 사용 안됨
+    - 추가 구성 / 데이터베이스 옵션 / 초기 데이터베이스 이름 설정 
+      ->  "데이터베이스 이름을 지정하지 않으면 Amazon RDS에서 데이터베이스를 생성하지 않습니다." 라고 설명
+          실제로 이걸 안해줘서 오류 발생
+    - DB 인스턴스 클래스: 버스터블 클래스(t클래스 포함) - db.t3.micro 선택 (default)
+    - 나머지 설정 default로 놔두고 생성
+
+    요금 설명
+      Amazon RDS 프리 티어는 12개월 동안 사용할 수 있습니다. 매월 프리 티어를 통해 아래 나열된 Amazon RDS 리소스를 무료로 사용할 수 있습니다.
+      단일 AZ db.t2.micro 인스턴스에서 Amazon RDS의 750시간.
+      20GB의 범용 스토리지(SSD).
+      20GB의 자동 백업 스토리지 및 사용자가 시작한 모든 DB 스냅샷.
+      AWS 무료 티어에 대해 자세히 알아보세요.
+      무료 사용이 만료되었거나 애플리케이션에서 프리 티어 사용량을 초과한 경우 Amazon RDS 요금 페이지에서 설명한 대로, 표준 종량 서비스 요금이 적용됩니다.
+      Amazon RDS 요금 설명: https://aws.amazon.com/ko/rds/pricing/
+
+
+$ eb init
+
+$ git add . / git commit -m "." / eb create

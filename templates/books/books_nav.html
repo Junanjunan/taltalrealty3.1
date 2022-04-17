@@ -1,0 +1,135 @@
+<div class="book-category-div">
+    <div class="book-category-line">
+        <div class="book-category-type">매매</div>
+        <div class="book-category-a">
+
+        {% url 'books:apartment-dealing-list' as url %}
+        {% url 'books:apartment-dealing-search' as url_search %}
+        {% url 'books:apartment-dealing-creating' as url_creating %}
+        {% url 'books:apartment-dealing-detail' object.pk as url_detail %}
+        {% url 'books:apartment-dealing-update' object.pk as url_update %}
+        <a href="{% url 'books:apartment-dealing-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">아파트</a>
+
+
+        {% url 'books:room-dealing-list' as url %}
+        {% url 'books:room-dealing-search' as url_search %}
+        {% url 'books:room-dealing-creating' as url_creating %}
+        {% url 'books:room-dealing-detail' object.pk as url_detail %}
+        {% url 'books:room-dealing-update' object.pk as url_update %}
+        <a href="{% url 'books:room-dealing-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">빌라</a>
+
+
+        {% url 'books:officetel-dealing-list' as url %}
+        {% url 'books:officetel-dealing-search' as url_search %}
+        {% url 'books:officetel-dealing-creating' as url_creating %}
+        {% url 'books:officetel-dealing-detail' object.pk as url_detail %}
+        {% url 'books:officetel-dealing-update' object.pk as url_update %}
+        <a href="{% url 'books:officetel-dealing-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">오피스텔</a>
+
+
+        {% url 'books:store-dealing-list' as url %}
+        {% url 'books:store-dealing-search' as url_search %}
+        {% url 'books:store-dealing-creating' as url_creating %}
+        {% url 'books:store-dealing-detail' object.pk as url_detail %}
+        {% url 'books:store-dealing-update' object.pk as url_update %}
+        <a href="{% url 'books:store-dealing-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">상가</a>
+        
+
+        {% url 'books:building-dealing-list' as url %}
+        {% url 'books:building-dealing-search' as url_search %}
+        {% url 'books:building-dealing-creating' as url_creating %}
+        {% url 'books:building-dealing-detail' object.pk as url_detail %}
+        {% url 'books:building-dealing-update' object.pk as url_update %}
+        <a href="{% url 'books:building-dealing-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">건물</a>
+    </div>
+    </div>
+    <div class="book-category-line">
+        <div class="book-category-type">임대</div>
+        <div class="book-category-a">
+        {% url 'books:apartment-lease-list' as url %}
+        {% url 'books:apartment-lease-search' as url_search %}
+        {% url 'books:apartment-lease-creating' as url_creating %}
+        {% url 'books:apartment-lease-detail' object.pk as url_detail %}
+        {% url 'books:apartment-lease-update' object.pk as url_update %}
+        <a href="{% url 'books:apartment-lease-list' %}" class="book-category 
+            {% if request.path == url %}active
+            {% elif request.path == url_search %}active
+            {% elif request.path == url_creating %}active
+            {% elif request.path == url_detail %}active
+            {% elif request.path == url_update %}active
+            {% endif %}">아파트</a>
+
+
+        {% url 'books:room-lease-list' as url %}
+        {% url 'books:room-lease-search' as url_search %}
+        {% url 'books:room-lease-creating' as url_creating %}
+        {% url 'books:room-lease-detail' object.pk as url_detail %}
+        {% url 'books:room-lease-update' object.pk as url_update %}
+        <a href="{% url 'books:room-lease-list' %}" class="book-category 
+            {% if request.path == url %}active
+            {% elif request.path == url_search %}active
+            {% elif request.path == url_creating %}active
+            {% elif request.path == url_detail %}active
+            {% elif request.path == url_update %}active
+            {% endif %}">주택</a>
+
+
+        {% url 'books:officetel-lease-list' as url %}
+        {% url 'books:officetel-lease-search' as url_search %}
+        {% url 'books:officetel-lease-creating' as url_creating %}
+        {% url 'books:officetel-lease-detail' object.pk as url_detail %}
+        {% url 'books:officetel-lease-update' object.pk as url_update %}
+        <a href="{% url 'books:officetel-lease-list' %}" class="book-category 
+            {% if request.path == url %}active
+            {% elif request.path == url_search %}active
+            {% elif request.path == url_creating %}active
+            {% elif request.path == url_detail %}active
+            {% elif request.path == url_update %}active
+            {% endif %}">오피스텔</a>
+
+
+        {% url 'books:store-lease-list' as url %}
+        {% url 'books:store-lease-search' as url_search %}
+        {% url 'books:store-lease-creating' as url_creating %}
+        {% url 'books:store-lease-detail' object.pk as url_detail %}
+        {% url 'books:store-lease-update' object.pk as url_update %}
+        <a href="{% url 'books:store-lease-list' %}" class="book-category 
+        {% if request.path == url %}active
+        {% elif request.path == url_search %}active
+        {% elif request.path == url_creating %}active
+        {% elif request.path == url_detail %}active
+        {% elif request.path == url_update %}active
+        {% endif %}">상가</a>
+    </div>
+    </div>
+</div>

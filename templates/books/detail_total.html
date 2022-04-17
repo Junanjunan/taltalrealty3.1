@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "partials/bnc2.html" %}
+<h4>-매물 상세 정보-</h4>
+<div class="creating-form">
+    <div class="creating">
+        <div class="creating-address">
+            <div class="creating-div">주소</div>{{object.address}}
+        </div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">확인일</div>{{object.updated|date:"Y/m/d"}}
+        </div>
+    </div>
+    {% if object.room %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">방</div> {{object.room}}개</div>
+        {% if object.bath %}
+        <div class="creating-input-bound"><div class="creating-div">화장실</div> {{object.bath}}개</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">화장실</div> -개</div>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="creating"><button class="toggle_money" value="manwon" onclick="togglingMoney()">금액단위(만원)</button></div>
+    {% if object.price %}
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">매매가</div> <span class="toggle_money_area">{{object.price}}</span>
+        </div>
+    </div>
+    {% endif %}
+    {% url 'books:store-lease-detail' object.pk as url_1 %}
+    {% if request.path != url_1 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">보증금</div> <span class="toggle_money_area">{{object.deposit}}</span></div>
+        <div class="creating-input-bound"><div class="creating-div">월세</div> <span class="toggle_money_area">{{object.month_fee}}</span></div>
+        {% if object.management_fee %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> <span class="toggle_money_area">{{object.management_fee}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> <span class="toggle_money_area">-</span></div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="creating">
+        {% if object.right_deposit %}
+        <div class="creating-input-bound"><div class="creating-div">권리금</div> <span class="toggle_money_area">{{object.right_deposit}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">권리금</div> <span class="toggle_money_area">-</span></div>
+        {% endif %}    
+        <div class="creating-input-bound"><div class="creating-div">보증금</div> <span class="toggle_money_area">{{object.deposit}}</span></div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">월세</div> <span class="toggle_money_area">{{object.month_fee}}</span></div>
+        
+        {% if object.management_fee %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> <span class="toggle_money_area">{{object.management_fee}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> <span class="toggle_money_area">-</span></div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">준공</div> {{object.birth|date:"Y/m/d"}}</div>
+    </div>    
+    <div class="creating"><button class="toggle_m2" value="m2" onclick="toggling()">면적단위(㎡)</button></div><div></div>
+    {% if object.price and object.area_m2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">전용면적</div> <span class="toggle_area">{{object.area_m2}}</span></div>
+        {% if object.total_area_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">{{object.total_area_m2}}</span></div>    
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">-</span></div>    
+        {% endif %}
+        
+        {% if object.land_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">대지지분</div> <span class="toggle_area">{{object.land_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">대지지분</div> <span class="toggle_area">-</span></div>   
+        {% endif %}
+                
+        
+    </div>
+    {% endif %}
+    {% if not object.price and object.area_m2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">전용면적</div> <span class="toggle_area">{{object.area_m2}}</span></div>
+        {% if object.total_area_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">{{object.total_area_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">-</span></div>        
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    {% url 'books:building-dealing-detail' object.pk as url_2 %}
+    {% if request.path == url_2 %}
+    <div class="creating">        
+        {% if object.floor_top %}
+        <div class="creating-input-bound"><div class="creating-div">지상층</div> {{object.floor_top}}층</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">지상층</div> -층</div>
+        {% endif %}
+        {% if object.floor_bottom%}
+        <div class="creating-input-bound"><div class="creating-div">지하층</div> {{object.floor_bottom}}층</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">지하층</div> -층</div>
+        {% endif %}
+        
+    </div>
+    <div class="creating">
+        {% if object.land_type %}
+        <div class="creating-input-bound"><div class="creating-div">대지종류</div> {{object.land_type}}</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">대지종류</div> -</div>
+        {% endif %}
+        
+        <div class="creating-input-bound"><div class="creating-div">대지면적</div><span class="toggle_area">{{object.land_m2}}</span></div>   
+    </div>
+    <div class="creating">
+        {% if object.building_area_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">건축면적</div> <span class="toggle_area">{{object.building_area_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">건축면적</div> -</div>
+        {% endif %}
+        {% if object.total_floor_area_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">연면적</div> <span class="toggle_area">{{object.total_floor_area_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">연면적</div> -</div>
+        {% endif %}
+        {% if object.total_floor_area_m2_for_ratio %}
+        <div class="creating-input-bound"><div class="creating-div">연면적<br>(용적률용)</div><span class="toggle_area">{{object.total_floor_area_m2_for_ratio}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">연면적<br>(용적률용)</div>-</div>
+        {% endif %}
+        
+    </div>
+    <div class="creating">
+        {% if object.building_coverage %}
+        <div class="creating-input-bound"><div class="creating-div">건폐율</div> {{object.building_coverage}}%</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">건폐율</div> -%</div>
+        {% endif %}
+        {% if object.floor_area_ratio %}
+        <div class="creating-input-bound"><div class="creating-div">용적률</div>{{object.floor_area_ratio}}%</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">용적률</div>-%</div>
+        {% endif %}
+        
+    </div>
+    <div class="creating">
+        {% if object.parking_number %}
+        <div class="creating-input-bound"><div class="creating-div">주차대수</div>{{object.parking_number}}대</div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">주차대수</div>-대</div>
+        {% endif %}
+        
+    </div>
+    {% endif %}
+    {% if not object.room and object.bath %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">화장실</div> {{object.bath}}개</div>
+    </div>
+    {% endif %}
+    {% if request.path != url_2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">주차가능</div>{% if object.parking %}O{% else %}X{% endif %}<label for="id_parking"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">공실</div>{% if object.empty %}O{% else %}X{% endif %}<label for="id_empty"></label></div>
+    </div>
+    {% endif %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">승강기</div>{% if object.elevator %}O{% else %}X{% endif %}<label for="id_elevator"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">대출</div>{% if object.loan %}O{% else %}X{% endif %}<label for="id_loan"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">진행매물</div>{% if object.not_finished %}O{% else %}X{% endif %}<label for="id_not_finished"></label></div>     
+    </div>
+    {% if request.path == url_2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">네이버</div>{% if object.naver %}O{% else %}X{% endif %}<label for="id_naver"></label></div>
+    </div>
+    {% else %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">네이버</div>{% if object.naver %}O{% else %}X{% endif %}<label for="id_naver"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">다방</div>{% if object.dabang %}O{% else %}X{% endif %}<label for="id_dabang"></label></div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">직방</div>{% if object.zicbang %}O{% else %}X{% endif %}<label for="id_zicbang"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">피터팬</div>{% if object.peterpan %}O{% else %}X{% endif %}<label for="id_peterpan"></label></div>
+    </div>
+    {% endif %}
+    <div class="creating">
+        
+        {% if object.owner_phone %}
+        <div class="creating-phone"><div class="creating-div">집주인</div>{{object.owner_phone}}<label for="id_owner_phone"></label></div>
+        {% else %}
+        <div class="creating-phone"><div class="creating-div">집주인</div>-<label for="id_owner_phone"></label></div>
+        {% endif %}
+    </div>
+    <div class="creating">
+        {% if object.tenant_phone %}
+        <div class="creating-phone"><div class="creating-div">세입자</div>{{object.tenant_phone}}<label for="id_tenant_phone"></label></div>
+        {% else %}
+        <div class="creating-phone"><div class="creating-div">세입자</div>-<label for="id_tenant_phone"></label></div>
+        {% endif %}
+    </div>
+    {% if object.owner_phone.errors %}
+    <div class="creating">{{object.owner_phone.errors}}</div>
+    {% endif %}
+    <div class="creating creating-description-text">
+        <div class="creating-address">
+            <div class="creating-div">설명</div> {{object.description}}<label for="id_description"></label>
+        </div>
+    </div>
+<div class="change-delete">
+    {% url 'books:apartment-dealing-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:apartment-dealing-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:apartment-dealing-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:apartment-lease-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:apartment-lease-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:apartment-lease-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:building-dealing-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:building-dealing-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:building-dealing-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:officetel-dealing-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:officetel-dealing-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:officetel-dealing-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:officetel-lease-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:officetel-lease-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:officetel-lease-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:room-dealing-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:room-dealing-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:room-dealing-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:room-lease-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:room-lease-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:room-lease-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:store-dealing-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:store-dealing-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:store-dealing-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+    
+    {% url 'books:store-lease-detail' object.pk as url %}
+    {% if request.path == url %}
+    <div class="change-delete-div change-div"><a href="{% url 'books:store-lease-update' object.pk %}" class="change-delete-text">매물 정보 수정</a></div>
+    <div class="change-delete-div delete-div"><a href="{% url 'books:store-lease-delete' object.pk %}" class="change-delete-text" onclick="return confirm('매물을 삭제하시겠습니까?');">매물 삭제</a></div>
+    {% endif %}
+</div>
+    {% endblock content %}

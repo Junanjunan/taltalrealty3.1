@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "partials/bnc2.html" %}
+<h4>- {% if not form.guest_phone.value %}손님 등록{% else %}손님 정보 수정{% endif %} -</h4>
+<form class="creating-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="creating">
+        <div class="creating-address">
+            <div class="creating-div">손님</div>{{form.guest_phone}}
+        </div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">확인일</div>{{form.updated}}
+        </div>
+    </div>
+    {% if form.room %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">방</div> {{form.room}}개</div>
+    </div>
+    {% endif %}
+    {% if form.price %}
+    <div class="creating">
+        <div class="creating-input-bound">
+            <div class="creating-div">매매가</div> {{form.price}}만원
+        </div>
+    </div>
+    {% else %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">보증금</div> {{form.deposit}}만원</div>
+        <div class="creating-input-bound"><div class="creating-div">월세</div> {{form.month_fee}}만원</div>
+    </div>
+    {% endif %}
+    {% if form.area_m2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">전용면적</div> {{form.area_m2}}㎡</div>
+    </div>
+    {% else %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">대지면적</div> {{form.land_m2}}㎡</div>   
+    </div>
+    {% endif %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">주차가능</div> {{form.parking}}<label for="id_parking"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">승강기</div> {{form.elevator}}<label for="id_elevator"></label></div>
+    </div>
+    <div class="creating">
+        {% url 'customers:apartment-lease-customer-creating' as url_1 %}
+        {% url 'customers:apartment-lease-customer-update' as url_2 %}
+        {% url 'customers:house-lease-customer-creating' as url_3 %}
+        {% url 'customers:house-lease-customer-update' as url_4 %}
+        {% url 'customers:officetel-lease-customer-creating' as url_5 %}
+        {% url 'customers:officetel-lease-customer-update' as url_6 %}
+        {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 %}
+        <div class="creating-input-bound"><div class="creating-div">대출</div> {{form.loan}}<label for="id_loan"></label></div>
+        {% endif %}
+        <div class="creating-input-bound"><div class="creating-div">진행매물</div> {{form.not_finished}}<label for="id_not_finished"></label></div>     
+    </div>
+    <div class="creating creating-description-text">
+        <div class="creating-address">
+            <div class="creating-div">설명</div> {{form.description}}<label for="id_description"></label>
+        </div>
+    </div>
+    <div class="change-delete">
+        <button class="change-delete-div change-div change-delete-text">{% if not form.guest_phone.value %}매물 등록{% else %}매물 정보 수정{% endif %}</button>
+        <div class="change-delete-div delete-div"><a href="javascript:history.back()" class="change-delete-text">취소</a></div>
+    </div>
+</form>
+{% endblock content %}

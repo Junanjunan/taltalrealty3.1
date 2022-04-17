@@ -1,0 +1,22 @@
+{% extends 'partials/bnc.html' %}
+{% block content %}
+<div class="search-box">
+<form class="search-form" method="get" action="{% url 'books:room-lease-search' %}">
+    {% include "books/partials/form_inside.html" %}
+</form>
+</div>
+<div class="regist"><div></div><div class="regist-a"><a href="{% url 'books:room-lease-creating' %}">매물 등록</a></div></div>
+{% include "partials/unit_description.html" %}
+<div class="container">
+    <table id="myTable">
+        {% include "./list_thead.html" %}
+        <tbody>
+            {% for list in lists %} 
+                {% if user.pk == list.realtor.pk %}                    
+                    {% include "./list_tbody_tr.html" %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles2.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+
+    <title>{% block page_title %}{% endblock page_title %}</title>
+</head>
+<header>
+    {% include "partials/nav.html" %}
+    
+</header>
+<body>
+
+    <nav>
+        <a href="{% static 'css/styles2.css' %}">static</a>
+        <div class="nav-choice"><a href="{% url 'books:bnc' %}">매물/손님</a></div>
+        <div class="nav-choice"><a href="{% url 'contracts:list' %}">계약매물</a></div>
+        <div class="nav-choice"><a href="{% url 'managements:list' %}">임대관리</a></div>
+    </nav>
+    {% block bnc %}{% endblock bnc %}
+
+    {% block login-signup %}{% endblock login-signup %}
+    {% block content %}{% endblock content %}
+    {% include 'partials/messages.html' %}
+    <script src="{% static 'js/sortTableNumber.js' %}"></script>
+    <script src="{% static 'js/sortTableLetter.js' %}"></script>
+    {% comment %} <script src="{% static 'js/dueDate.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js/changeArea.js' %}"></script>
+</body>
+
+</html>

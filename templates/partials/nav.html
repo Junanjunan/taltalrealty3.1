@@ -1,0 +1,13 @@
+<div class="nav-top">
+    <div class="nav-login"><a href="{% url 'core:home' %}">탈탈부동산</a></div>
+    <div><a href="{% url 'managements:mailing' %}">메일보내기~~</a></div>
+    {% if user.is_authenticated %}
+    <div class="nav-login"><a href="{% url 'users:status' user.pk %}" class="nav-welcome">{{user.username}}</a><a href="{% url 'users:logout' %}">로그아웃(Logout)</a></div>  
+    {% else %}
+    <div class="nav-login-signup">
+        <div class="nav-login"><a href="{% url 'users:login' %}">로그인<span class="none-335">(Log In)</span></a></div>
+        <div class="nav-login"><a href="{% url 'users:signup' %}">회원가입<span class="none-335">(Sign Up)</span></a></div>
+    </div>
+    {% endif %}
+</div>
+<hr>

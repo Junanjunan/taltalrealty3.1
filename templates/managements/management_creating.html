@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>-임대 관리 매물 등록-</h4>
+<form class="creating-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="creating">
+        <div class="creating-address">
+            <div class="creating-div">주소</div>{{form.address}}
+        </div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">보증금</div> {{form.deposit}}만원</div>
+        <div class="creating-input-bound"><div class="creating-div">월세</div> {{form.month_fee}}만원</div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">관리비</div> {{form.management_fee}}만원</div>
+        <div class="creating-input-bound"><div class="creating-div">주차비</div> {{form.parking_fee}}만원</div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">계약일</div> {{form.contract_day}}</div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">거래신고</div> {{form.deal_report}}<label for="id_deal_report"></label></div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">입주일</div> {{form.contract_start_day}}</div>
+        <div class="creating-input-bound"><div class="creating-div">만기일</div> {{form.contract_last_day}}</div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">갱신여부고지</div> {{form.deal_renewal_notice}}<label for="id_deal_renewal_notice"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">갱신청구권사용</div> {{form.deal_renewal_right_usage}}<label for="id_deal_renewal_right_usage"></label></div>
+    </div>
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">집주인</div> {{form.owner_phone}}<label for="id_report"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">세입자</div> {{form.tenant_phone}}<label for="id_finished"></label></div>
+    </div>
+
+    <div class="creating creating-description-text">
+        <div class="creating-address">
+            <div class="creating-div">설명</div> {{form.description}}<label for="id_description"></label>
+        </div>
+    </div>
+    <div class="change-delete">
+        <button class="change-delete-div change-div change-delete-text">{% if not form.address.value %}계약 등록{% else %}계약 정보 수정{% endif %}</button>
+        <div class="change-delete-div delete-div"><a href="javascript:history.back()" class="change-delete-text">취소</a></div>
+    </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+
+{% block login-signup %}
+<h2>탈탈 부동산 장부</h2>
+<h3>로그인 페이지</h3>
+<form method="POST" action="{% url 'users:login' %}">
+    {% csrf_token %}
+    <div>{{form.as_p}}</div>
+    <!-- <div>{{form.email}}{{form.ValidationError}}</div>
+    <div>{{form.password}}</div> -->        
+    <button class="login-button">로그인(Log In)</button>
+</form>
+<div class="password-signup"><a href="{% url 'users:request-password' %}">비밀번호 찾기</a><span>|</span><a href="{% url 'users:signup' %}">회원가입</a></div>
+
+{% include 'users/social_login.html' %}
+<hr>  
+{% endblock login-signup %}
+
+
+
+

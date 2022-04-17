@@ -1,0 +1,19 @@
+<div class="button-flex">
+    <div class="search-box2">
+        <div class="search-part">
+            <div class="search-part-one">
+                <div class="search-text-bound-top"><span class="search-text">|| 주소</span><input value="{{address__contains}}" id='address' name='address' class="search-input-height search-input-address" /></div>              
+            </div>
+            <div class="search-part-one">
+                <div class="search-text-bound-top"><span class="search-text">|| 특징</span><input value="{{description__contains}}" id='description' name='description' class="search-input-height search-input-address" /></div>
+            </div>
+        </div>
+        <div class="search-part-two">
+            <div class="search-part">
+                <div class="search-text-bound-bottom"><input {% if report %}checked{% endif %} type='checkbox' id='report' name='report' /><label for='parking'><span class="search-text">거래 미신고</span></label></div>
+                <div class="search-text-bound-bottom"><input {% if not_finished %}checked{% endif %} type='checkbox' id='not_finished' name='not_finished' /><label for='not_finished'><span class="search-text">미완료계약</span></label></div>
+            </div>
+        </div>
+    </div>
+    <div><button class="search-button"><i class="fas fa-search"></i>계약 검색</button></div>
+    </div>

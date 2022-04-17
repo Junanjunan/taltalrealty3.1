@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="regist"><div class="regist-a"><a href="{% url 'contracts:creating' %}">계약 등록</a></div></div>
+<div>금액단위(만원)</div>
+<table id="myTable">
+<thead>
+    <tr>
+        <th onclick="sortTableLetter(0)" class="dis780">계약유형</th>
+        <th onclick="sortTableLetter(1)">주소</th>
+        <th onclick="sortTableNumber(2)" class="dis640">매매가</th>
+        <th onclick="sortTableNumber(3)" class="dis640">보증금</th>
+        <th onclick="sortTableNumber(4)" class="dis640">월세</th>
+        <th onclick="sortTableNumber(5)" class="dis570">계약금</th>
+        <th onclick="sortTableNumber(6)" class="dis1220">중도금</th>
+        <th onclick="sortTableNumber(7)" class="dis570">잔금</th>
+        <th onclick="sortTableLetter(8)" class="dis720">계약일</th>
+        <th onclick="sortTableLetter(9)" class="dis1220">중도금일</th>
+        <th onclick="sortTableLetter(10)">잔금일</th>
+        <th onclick="sortTableLetter(11)" class="dis880">신고기한</th>
+        <th onclick="sortTableNumber(12)" class="dis950">잔금일<br>까지(일)</th>
+        <th onclick="sortTableLetter(13)" class="dis950">신고기한<br>까지(일)</th>
+        <th onclick="sortTableLetter(14)" class="dis1100">거래신고</th>
+        <th onclick="sortTableLetter(15)" class="dis1000">완료계약</th>
+        <th onclick="sortTableLetter(16)" class="dis1000">매도(임대)인</th>
+        <th onclick="sortTableLetter(17)" class="dis1000">매수(임차)인</th>
+        <th onclick="sortTableLetter(18)" class="dis1240">특이사항</th>
+    </tr>
+</thead>
+<tbody>
+    {% for list in lists %}
+    {% if user.pk == list.realtor.pk %}
+    <tr>
+        <td class="dis780">{{list.get_types_display}}</td>
+        <td><a href="{% url 'contracts:detail' list.pk %}">{{list.address}}</a></td>
+        <td class="dis640">{% if list.price == 0 or list.price == None %}0{% else %}{{list.price}}{% endif %}</td>
+        <td class="dis640">{% if list.deposit == 0 or list.deposit == None %}0{% else %}{{list.deposit}}{% endif %}</td>
+        <td class="dis640">{% if list.month_fee == 0 or list.month_fee == None %}0{% else %}{{list.month_fee}}{% endif %}</td>
+        <td class="dis570">{{list.start_money}}</td>
+        <td class="dis1220">{% if list.middle_money == 0 or list.middle_money == None %}0{% else %}{{list.middle_money}}{% endif %}</td>
+        <td class="dis570">{{list.last_money}}</td>
+        <td class="start_day dis720">{{list.start_day|date:"Y-m-d"}}</td>
+        <td class="dis1220">{{list.middle_day|date:"Y-m-d"}}</td>
+        <td class="last_day">{{list.last_day|date:"Y-m-d"}}</td>
+        <td class="report_day dis880"></td>
+        <td class="last_due_day dis950"></td>
+        <td class="report_due_day dis950"></td>
+        <td class="dis1100">{% if list.report %}O{% else %}X{% endif %}</td>
+        <td class="dis1000">{% if list.finished %}O{% else %}X{% endif %}</td></td>
+        <td class="dis640">{{list.owner_phone}}</td>
+        <td class="dis640">{{list.tenant_phone}}</td>
+        <td class="dis1240">{{list.description}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</tbody>
+</table>
+
+<script>
+    const start_day = document.getElementsByClassName("start_day");
+    const last_day = document.getElementsByClassName("last_day");
+    const last_due_day = document.getElementsByClassName("last_due_day");
+    const report_due_day = document.getElementsByClassName("report_due_day");
+    const report_day = document.getElementsByClassName("report_day");
+    
+
+    function getTimeLastMinusToday() {
+        for (var i=0; i<last_due_day.length; i++){
+            const today = new Date();
+            const leftMilSec = new Date(last_day[i].innerHTML) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.ceil(leftDays);
+            // last_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            last_due_day[i].innerText = `${days}`;
+        }
+    }
+    
+    function getTimeReportMinusToday() {
+        for (var i=0; i<start_day.length; i++){
+            const today = new Date();
+            const startDay = new Date(start_day[i].innerHTML);
+            startDay.setDate(startDay.getDate()+30);
+            const leftMilSec = new Date(startDay) - today
+            const leftSec = leftMilSec / 1000;
+            const sec = Math.floor(leftSec % 60);
+            const leftMin = leftMilSec / (1000 * 60);
+            const min = Math.floor(leftMin % 60);
+            const leftHours = leftMilSec / (1000 * 60 * 60);
+            const hours = Math.floor(leftHours % 24);
+            const leftDays = leftMilSec / (1000 * 60 * 60 * 24);
+            const days = Math.floor(leftDays);
+            // report_due_day[i].innerText = `${days}일 ${hours < 10 ? `0${hours}` : hours}시간 ${sec < 10 ? `0${sec}` : sec}초`;
+            report_due_day[i].innerText = `${days}`;
+            date = new Date(startDay);
+            year = date.getFullYear();
+            month = date.getMonth()+1;
+            dt = date.getDate();
+            if (dt < 10) {
+            dt = '0' + dt;
+            }
+            if (month < 10) {
+            month = '0' + month;
+            }
+            report_day[i].innerHTML = `${year}-${month}-${dt}`
+            // last_due_day[i].innerText = `${days}일`;
+            
+        }
+    }
+    
+    
+    getTimeLastMinusToday();
+    getTimeReportMinusToday();
+</script>
+{% endblock content %}
