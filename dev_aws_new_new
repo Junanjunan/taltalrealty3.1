@@ -51,8 +51,56 @@ AWS RDS 생성
 
 
 $ eb init
+    - seoul 선택 (10번)
+    - Create New Application (2번) 선택
+    - Enter Application Name : taltalrealty3.1
+    - It appears you are using Python. Is this correct? Y
+    - Select a platform branch. 1) Python 3.8
+    - Do you wish to continue with CodeCommit? n
+    - Do you want to set up SSH for your instances? Y
+        - Select a keypair. 2) Create new KeyPair
+            - Type a keypair name: aws-eb-taltalrealty2
+                Enter passphrase(empty for no passphrase): 비어있는 상태로 엔터
+                Enter same passphrase again: 그대로 엔터
 
 $ pipenv install pipenv-to-requirements
     $ pipenv lock -r > requirements.txt
 
 $ git add . / git commit -m "." / eb create
+    - Enter Environment Name: taltalrealty31-dev
+    - Enter DNS CNAME prefix: taltalrealty31-dev
+    - Select a load balancer type
+        1) classic
+        2) application
+        3) network
+        (default is2): 엔터
+    - Would you like to enable spot Fleet requests for this environment? N
+
+여기까지 진행하고 웹 실행해보면
+    502 Bad Gateway
+    nginx/1.20.0
+
+eb logs --all 을 통해 log를 보
+별다른 오류가 발생하지 않았음.
+
+Elastic Beanstalk 구성 설정(configurations)해서 .env 변수들 추가하고, RDS 연결.
+
+아직 안되었음
+
+Elastic Beanstalk 구성을 보면
+DJANGO_SETTINGS_MODULE이 없음. wsgi 설정을 잘못해서 그런듯...?
+
+.ebextensions/02-django.config
+  container_commands:
+    01_migrate:
+      command: "django-admin migrate"
+      leader_only: true
+    02_createsu:
+      command: "django-admin createsu"
+    option_settings:
+      aws:elasticbeanstalk:container:python:
+      WSGIPath: config.wsgi:application             # 이 부분 바꿔줌
+      aws:elasticbeanstalk:application:environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+
+위와 같이 해주고 다시 eb deploy 
