@@ -159,4 +159,4 @@ PYTHONPATH가 설정되어 있지 않은데,
 /var/app/venv/staging-LQM1lest/bin 으로 설정되어있음
 
 이를 지워주고 해보자
--> 지워도 다시 생성됨 eb deploy를 하면
+-> 지워도 다시 생성됨
