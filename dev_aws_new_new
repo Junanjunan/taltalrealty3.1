@@ -160,3 +160,27 @@ PYTHONPATH가 설정되어 있지 않은데,
 
 이를 지워주고 해보자
 -> 지워도 다시 생성됨
+
+.ebextensions
+    container_commands:
+      01_migrate:
+        command: "source /var/app/venv/staging-LQM1lest/bin/activate ; python manage.py migrate"
+        leader_only: true
+      02_collectstatic:
+        command: "source /var/app/venv/staging-LQM1lest/bin/activate ; python manage.py collectstatic --noinput"
+      03_createsu:
+        command: "source /var/app/venv/staging-LQM1lest/bin/activate ; python manage.py createsu"
+    option_settings:
+      aws:elasticbeanstalk:container:python:
+        WSGIPath: config.wsgi:application
+      aws:elasticbeanstalk:application:environment:
+        DJANGO_SETTINGS_MODULE: config.settings
+
+-> Elastic Beanstalk의 configurations settting 에 자동설정되어 있는 
+   PYTHONPATH 이용:/var/app/venv/staging-LQM1lest/bin
+   그런데 저기까지만 하면 안되고, /activate 추가해주어야 됨
+   command: "source /var/app/venv/staging-LQM1lest/bin/activate ; python manage.py migrate"
+
+    -> AWS의 linux 원격으로 보고 내부 파일을 모두 볼 수 있는 방법을 익혀서 그 구조를 확인해보는 것을 다음 과제로 하자
+
+S3 ACL 설정
