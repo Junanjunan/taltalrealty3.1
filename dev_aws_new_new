@@ -137,3 +137,8 @@ WSGIPath, DJANGO_SETTINGS_MODULE 설정되어있음
 이제 다시등록
 
 잘 됨
+
+근데 수정할거 있어서 수정해주고 eb deploy 해주니 또 안됨
+또 같은 에러 발생
+cfn-init.log: cfnbootstrap.construction_errors.ToolError: Command 01_migrate failed
+cfn-init-cmd.log: ModuleNotFoundError: No module named 'config'
