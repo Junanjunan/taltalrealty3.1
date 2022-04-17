@@ -1,3 +1,5 @@
+https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/create-deploy-python-container.html
+
 python version 3.8.10 64-bit
 
 $ pipenv shell
