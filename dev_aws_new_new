@@ -1,5 +1,8 @@
 https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/create-deploy-python-container.html
 
+https://blog.hbsmith.io/elastic-beanstalk-amazon-linux2-python-%ED%99%98%EA%B2%BD-%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98-%ED%9B%84%EA%B8%B0-96fe21370d84
+pythonpath가 제대로 설정되어 있지 않아서 eb create는 되는데 eb deploy가 계속 에러?
+
 python version 3.8.10 64-bit
 
 $ pipenv shell
@@ -144,3 +147,15 @@ WSGIPath, DJANGO_SETTINGS_MODULE 설정되어있음
 또 같은 에러 발생
 cfn-init.log: cfnbootstrap.construction_errors.ToolError: Command 01_migrate failed
 cfn-init-cmd.log: ModuleNotFoundError: No module named 'config'
+
+https://blog.hbsmith.io/elastic-beanstalk-amazon-linux2-python-%ED%99%98%EA%B2%BD-%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98-%ED%9B%84%EA%B8%B0-96fe21370d84
+pythonpath가 제대로 설정되어 있지 않아서 eb create는 되는데 eb deploy가 계속 에러?
+
+아무래도 이게 맞는 듯,
+노마드 강의를 보면
+PYTHONPATH가 설정되어 있지 않은데,
+
+지금 Elastic Beanstalk를 생성하면, PYTHONPATH가 default로
+/var/app/venv/staging-LQM1lest/bin 으로 설정되어있음
+
+이를 지워주고 해보자
