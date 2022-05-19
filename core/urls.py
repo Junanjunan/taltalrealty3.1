@@ -5,4 +5,5 @@ app_name = "core"
 
 urlpatterns = [
     path("", home_views.homes, name='home'),
+    path("privacy/", home_views.privacy, name="privacy")
 ]
