@@ -46,6 +46,8 @@ psycopg2-binary = "*"
 boto3 = "*"
 django-staticfiles = "*"
 djangorestframework = "*"
+jwt = "*"
+pyjwt = "*"
 
 [dev-packages]
 
