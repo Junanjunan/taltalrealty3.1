@@ -45,6 +45,7 @@ django-import-export = "*"
 psycopg2-binary = "*"
 boto3 = "*"
 django-staticfiles = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

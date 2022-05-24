@@ -30,6 +30,7 @@ urlpatterns = [
     path("customers/", include('customers.urls', namespace='customers')),
     path("contracts/", include('contracts.urls', namespace="contracts")),
     path("managements/", include('managements.urls', namespace="managements")),
+    path("api/v1/", include('apis.urls', namespace='api')),
     path('admin/', admin.site.urls),
     path('sentry-debug/', trigger_error),
     # path('verification/', include('verify_email.urls')),
