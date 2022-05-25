@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from users import models as users_models
 from books import models as books_models
+from contracts import models as contracts_models
 from . import serializers
 
 
@@ -40,4 +41,11 @@ class BooksApartmentDealingView(APIView):
     def get(self, request):
         books = books_models.ApartmentDealing.objects.all()
         serializer = serializers.BooksApartmentSerializer(books, many=True, context={"request":request}).data
+        return Response(serializer)
+
+
+class ContractView(APIView):
+    def get(self, request):
+        contracts = contracts_models.ContractBase.objects.all()
+        serializer = serializers.ContractSerializer(contracts, many=True, context={"request":request}).data
         return Response(serializer)
