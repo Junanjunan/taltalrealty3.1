@@ -18,7 +18,7 @@ class BooksApartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = books_models.ApartmentDealing
         fields =  ('__all__')
-
+        
 
 
 class ContractSerializer(serializers.ModelSerializer):
