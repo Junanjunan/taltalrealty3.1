@@ -49,6 +49,12 @@ class BooksApartmentDealingDetailView(APIView):
         serializer = serializers.BooksApartmentSerializer(books, context={"request":request}).data
         return Response(serializer)
 
+class BooksVillaDealingView(APIView):
+    def get(self, request):
+        books = books_models.RoomDealing.objects.all()
+        serializer = serializers.BooksVillaSerializer(books, many=True, context={"request":request}).data
+        return Response(serializer)
+
 class ContractView(APIView):
     def get(self, request):
         contracts = contracts_models.ContractBase.objects.all()

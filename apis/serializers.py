@@ -20,6 +20,12 @@ class BooksApartmentSerializer(serializers.ModelSerializer):
         fields =  ('__all__')
         
 
+class BooksVillaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = books_models.RoomDealing
+        fields =  ('__all__')
+
 
 class ContractSerializer(serializers.ModelSerializer):
 
