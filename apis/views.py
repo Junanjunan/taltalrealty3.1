@@ -55,6 +55,14 @@ class BooksVillaDealingView(APIView):
         serializer = serializers.BooksVillaSerializer(books, many=True, context={"request":request}).data
         return Response(serializer)
 
+    def post(self, request):
+        serializer = serializers.BooksVillaSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_villa = serializer.save()
+            return Response(serializers.BooksVillaSerializer(new_villa).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ContractView(APIView):
     def get(self, request):
         contracts = contracts_models.ContractBase.objects.all()

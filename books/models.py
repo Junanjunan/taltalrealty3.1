@@ -1,6 +1,6 @@
 from django.db import models
-
-
+from datetime import date
+from django.utils import timezone
 
 
 """ dealing """
@@ -20,15 +20,15 @@ class ApartmentDealing(models.Model):
     area_m2 = models.FloatField()
     total_area_m2 = models.FloatField(blank=True, null=True)
     land_m2 = models.FloatField(blank=True, null=True)
-    parking = models.BooleanField()    
-    elevator = models.BooleanField()
-    loan = models.BooleanField()
-    empty = models.BooleanField()  
+    parking = models.BooleanField(null=True)    
+    elevator = models.BooleanField(null=True)
+    loan = models.BooleanField(null=True)
+    empty = models.BooleanField(null=True)  
     not_finished = models.BooleanField(default=True)   
-    naver = models.BooleanField()
-    dabang = models.BooleanField()
-    zicbang = models.BooleanField()
-    peterpan = models.BooleanField()
+    naver = models.BooleanField(null=True)
+    dabang = models.BooleanField(null=True)
+    zicbang = models.BooleanField(null=True)
+    peterpan = models.BooleanField(null=True)
     owner_phone = models.CharField(blank=True, null=True, max_length=100)
     tenant_phone = models.CharField(blank=True, null=True, max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -37,15 +37,15 @@ class ApartmentDealing(models.Model):
 class RoomDealing(models.Model):
     realtor = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
-    updated = models.DateField(blank=True, null=True)
+    updated = models.DateField(blank=True, null=True, default=date.today())
     price = models.IntegerField()
-    deposit = models.IntegerField()
-    month_fee = models.IntegerField()
+    deposit = models.IntegerField(blank=True, null=True)
+    month_fee = models.IntegerField(blank=True, null=True)
     management_fee = models.IntegerField(blank=True, null=True)
     room = models.IntegerField()
     bath = models.IntegerField(blank=True, null=True)
     birth = models.DateField(blank=True, null=True)
-    area_m2 = models.FloatField()
+    area_m2 = models.FloatField(blank=True, null=True)
     total_area_m2 = models.FloatField(blank=True, null=True)
     land_m2 = models.FloatField(blank=True, null=True)
     parking = models.BooleanField()    
