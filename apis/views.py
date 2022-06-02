@@ -63,6 +63,36 @@ class BooksVillaDealingView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class BooksVillaDealingUpdatingView(APIView):
+    def get(self, request, pk):
+        book = books_models.RoomDealing.objects.get(pk=pk)
+        serializer = serializers.BooksVillaSerializer(book, context={"request":request}).data
+        # updated_villa = serializer.save()
+        return Response(serializer)
+    def put(self, request, pk):
+        book = books_models.RoomDealing.objects.get(pk=pk)
+        serializer = serializers.BooksVillaSerializer(book, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BooksVillaDealingDeletingView(APIView):
+    def get(self, request, pk):
+        book = books_models.RoomDealing.objects.get(pk=pk)
+        serializer = serializers.BooksVillaSerializer(book)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        book = books_models.RoomDealing.objects.get(pk=pk)
+        # serializer = serializers.BooksVillaSerializer(book)
+        # serializer.destroy()
+        book.delete()
+        return Response()
+
+
 class ContractView(APIView):
     def get(self, request):
         contracts = contracts_models.ContractBase.objects.all()
