@@ -87,11 +87,43 @@ class BooksVillaDealingDeletingView(APIView):
 
     def delete(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        # serializer = serializers.BooksVillaSerializer(book)
-        # serializer.destroy()
         book.delete()
         return Response()
 
+
+class BooksVillaDealingSearchingView(APIView):
+    def get(self, request):
+        address = request.GET.get("address")
+        price = int(request.GET.get("price", 0))
+        area_m2 = int(request.GET.get("area_m2", 0))
+        room = request.GET.get("room", 0)
+        parking = request.GET.get("parking")
+        elevator = request.GET.get("elevator")
+        empty = request.GET.get("empty")
+        not_finished = request.GET.get("not_finished")
+        description = request.GET.get("description")
+    
+        filter_args = {}
+        filter_args["address__contains"] = address
+        filter_args["description__contains"] = description
+        filter_args["price__lte"] = price
+        filter_args["area_m2__gte"] = area_m2
+        filter_args["room__contains"] = room
+        if parking == "on":
+            filter_args["parking"] = True
+        if elevator == "on":
+            filter_args["elevator"] = True
+        if empty == "on":
+            filter_args["empty"] = True
+        if not_finished == "on":
+            filter_args["not_finished"] = True
+        try:
+            lists = books_models.RoomDealing.objects.filter(**filter_args)
+        except:
+            lists = books_models.RoomDealing.objects.all()
+        serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+    
 
 class ContractView(APIView):
     def get(self, request):

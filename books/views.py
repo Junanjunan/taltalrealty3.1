@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from . import models, forms
+from django.utils import timezone
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -620,7 +621,6 @@ class RoomDealingUpdate(LoggedInOnlyView, UpdateView):
 
 
 def roomdealing_search(request):
-
     address = request.GET.get("address")
     price = int(request.GET.get("price", 0))
     area_m2 = int(request.GET.get("area_m2", 0))
