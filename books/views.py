@@ -624,7 +624,7 @@ def roomdealing_search(request):
     address = request.GET.get("address")
     price = int(request.GET.get("price", 0))
     area_m2 = int(request.GET.get("area_m2", 0))
-    room = request.GET.get("room", 0)
+    room = request.GET.get("room", 10)
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
     empty = request.GET.get("empty")
@@ -640,7 +640,7 @@ def roomdealing_search(request):
     filter_args["description__contains"] = description
     filter_args["price__lte"] = price
     filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
+    filter_args["room__gte"] = room
     if parking == "on":
         filter_args["parking"] = True
     if elevator == "on":

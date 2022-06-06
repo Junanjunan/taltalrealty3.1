@@ -95,32 +95,55 @@ class BooksVillaDealingSearchingView(APIView):
     def get(self, request):
         address = request.GET.get("address")
         price = int(request.GET.get("price", 0))
+        print(price)
         area_m2 = int(request.GET.get("area_m2", 0))
         room = request.GET.get("room", 0)
         parking = request.GET.get("parking")
         elevator = request.GET.get("elevator")
+        loan = request.GET.get("loan")
         empty = request.GET.get("empty")
         not_finished = request.GET.get("not_finished")
-        description = request.GET.get("description")
     
         filter_args = {}
-        filter_args["address__contains"] = address
-        filter_args["description__contains"] = description
-        filter_args["price__lte"] = price
-        filter_args["area_m2__gte"] = area_m2
-        filter_args["room__contains"] = room
-        if parking == "on":
+        if address:
+            filter_args["address__contains"] = address
+        # filter_args["description__contains"] = description
+        if price:
+            filter_args["price__lte"] = price
+        if area_m2:
+            filter_args["area_m2__gte"] = area_m2
+        if room:
+            filter_args["room__gte"] = room
+        if parking:
             filter_args["parking"] = True
-        if elevator == "on":
-            filter_args["elevator"] = True
-        if empty == "on":
+        else:
+            filter_args["parking"] = False
+        if empty:
             filter_args["empty"] = True
-        if not_finished == "on":
+        else:
+            filter_args["empty"] = False
+        if elevator:
+            filter_args["elevator"] = True
+        else:
+            filter_args["elevator"] = False
+        if loan:
+            filter_args["loan"] = True
+        else:
+            filter_args["loan"] = False
+        if not_finished:
             filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+
+        print(filter_args)
+        lists = books_models.RoomDealing.objects.filter(**filter_args)
+        print(lists)
         try:
             lists = books_models.RoomDealing.objects.filter(**filter_args)
         except:
-            lists = books_models.RoomDealing.objects.all()
+            # lists = books_models.RoomDealing.objects.all()
+            # serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
     
