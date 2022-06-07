@@ -113,7 +113,7 @@ class BooksVillaDealingSearchingView(APIView):
         if area_m2:
             filter_args["area_m2__gte"] = area_m2
         if room:
-            filter_args["room__gte"] = room
+            filter_args["room"] = room
         if parking:
             filter_args["parking"] = True
         else:

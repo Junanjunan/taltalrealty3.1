@@ -19,7 +19,7 @@ class ContractAdmin(admin.ModelAdmin):
         'last_day',
         'due_days',
         'report',
-        'finished',
+        'not_finished',
         'owner_phone',
         'tenant_phone',
         'description',

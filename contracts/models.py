@@ -24,7 +24,7 @@ class ContractBase(models.Model):
     last_day = models.DateField()
     due_days = models.DurationField(blank=True, null=True)
     report = models.BooleanField()
-    finished = models.BooleanField()
+    not_finished = models.BooleanField(default=True)
     owner_phone = models.CharField(blank=True, null=True, max_length=100)
     tenant_phone = models.CharField(blank=True, null=True, max_length=100)
     description = models.TextField(blank=True, null=True)
