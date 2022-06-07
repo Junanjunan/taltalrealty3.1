@@ -153,3 +153,17 @@ class ContractView(APIView):
         contracts = contracts_models.ContractBase.objects.all()
         serializer = serializers.ContractSerializer(contracts, many=True, context={"request":request}).data
         return Response(serializer)
+
+class ContractUpdatingView(APIView):
+    def get(self, request, pk):
+        contract = contracts_models.ContractBase.objects.get(pk=pk)
+        serializer = serializers.ContractSerializer(contract, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        contract = contracts_models.ContractBase.objects.get(pk=pk)
+        serializer = serializers.ContractSerializer(contract, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

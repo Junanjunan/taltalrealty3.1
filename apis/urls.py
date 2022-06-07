@@ -13,5 +13,6 @@ urlpatterns = [
     path("books-villa-dealing-updating/<int:pk>/", views.BooksVillaDealingUpdatingView.as_view()),
     path("books-villa-dealing-deleting/<int:pk>/", views.BooksVillaDealingDeletingView.as_view()),
     path("books-villa-dealing-searching/", views.BooksVillaDealingSearchingView.as_view()),
-    path("contracts/", views.ContractView.as_view())
+    path("contracts/", views.ContractView.as_view()),
+    path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view())
 ]
