@@ -22,7 +22,6 @@ class ContractBase(models.Model):
     start_day = models.DateField()
     middle_day = models.DateField(blank=True, null=True)
     last_day = models.DateField()
-    due_days = models.DurationField(blank=True, null=True)
     report = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     owner_phone = models.CharField(blank=True, null=True, max_length=100)

@@ -23,7 +23,6 @@ class ContractCreating(LoggedInOnlyView, CreateView):
     def form_valid(self, form):
         book = form.save()
         book.realtor = self.request.user
-        book.due_days = book.last_day - date.today()
         if book.types != "Deal":
             book.price = 0
         book.save()

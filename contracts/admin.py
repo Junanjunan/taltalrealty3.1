@@ -17,7 +17,6 @@ class ContractAdmin(admin.ModelAdmin):
         'start_day',
         'middle_day',
         'last_day',
-        'due_days',
         'report',
         'not_finished',
         'owner_phone',
