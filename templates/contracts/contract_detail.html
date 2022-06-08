@@ -53,7 +53,7 @@
     </div>
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">거래신고</div>{% if object.report %}O{% else %}X{% endif %}<label for="id_report"></label></div>
-        <div class="creating-input-bound"><div class="creating-div">완료</div>{% if object.finished %}O{% else %}X{% endif %}<label for="id_finished"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">진행중</div>{% if object.not_finished %}O{% else %}X{% endif %}<label for="id_not_finished"></label></div>
     </div>
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">매도(임대)인</div>{{object.owner_phone}}</div>
