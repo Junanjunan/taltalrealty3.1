@@ -141,8 +141,6 @@ class BooksVillaDealingSearchingView(APIView):
         try:
             lists = books_models.RoomDealing.objects.filter(**filter_args)
         except:
-            # lists = books_models.RoomDealing.objects.all()
-            # serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
@@ -150,9 +148,18 @@ class BooksVillaDealingSearchingView(APIView):
 
 class ContractView(APIView):
     def get(self, request):
+        print(request.user)
         contracts = contracts_models.ContractBase.objects.all()
         serializer = serializers.ContractSerializer(contracts, many=True, context={"request":request}).data
         return Response(serializer)
+    def post(self, request):
+        serializer = serializers.ContractSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_contract = serializer.save()
+            return Response(serializers.ContractSerializer(new_contract).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ContractUpdatingView(APIView):
     def get(self, request, pk):
