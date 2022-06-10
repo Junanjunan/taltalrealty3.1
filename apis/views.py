@@ -8,6 +8,7 @@ from rest_framework import status
 from users import models as users_models
 from books import models as books_models
 from contracts import models as contracts_models
+from managements import models as managements_models
 from . import serializers
 
 
@@ -148,8 +149,7 @@ class BooksVillaDealingSearchingView(APIView):
 
 class ContractView(APIView):
     def get(self, request):
-        print(request.user)
-        contracts = contracts_models.ContractBase.objects.all()
+        contracts = contracts_models.ContractBase.objects.filter(realtor_id=request.user.pk)
         serializer = serializers.ContractSerializer(contracts, many=True, context={"request":request}).data
         return Response(serializer)
     def post(self, request):
@@ -174,3 +174,53 @@ class ContractUpdatingView(APIView):
             return Response()
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ContractDeletingView(APIView):
+    def get(self, request, pk):
+        contract = contracts_models.ContractBase.objects.get(pk=pk)
+        serializer = serializers.ContractSerializer(contract)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        contract = contracts_models.ContractBase.objects.get(pk=pk)
+        contract.delete()
+        return Response()
+
+class ManagementView(APIView):
+    def get(self, request):
+        managements = managements_models.Management.objects.filter(manager_id = request.user.pk)
+        serializer = serializers.ManagementSerializer(managements, many=True, context={"request":request}).data
+        return Response(serializer)
+    def post(self, request):
+        serializer = serializers.ManagementSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_management = serializer.save()
+            return Response(serializers.ManagementSerializer(new_management).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ManagementUpdatingView(APIView):
+    def get(self, request, pk):
+        management = managements_models.Management.objects.get(pk=pk)
+        serializer = serializers.ManagementSerializer(management, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        management = managements_models.Management.objects.get(pk=pk)
+        serializer = serializers.ManagementSerializer(management, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ManagementDeletingView(APIView):
+    def get(self, request, pk):
+        management = managements_models.Management.objects.get(pk=pk)
+        serializer = serializers.ManagementSerializer(management)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        management = managements_models.Management.objects.get(pk=pk)
+        management.delete()
+        return Response()

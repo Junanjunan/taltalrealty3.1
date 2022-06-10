@@ -14,5 +14,9 @@ urlpatterns = [
     path("books-villa-dealing-deleting/<int:pk>/", views.BooksVillaDealingDeletingView.as_view()),
     path("books-villa-dealing-searching/", views.BooksVillaDealingSearchingView.as_view()),
     path("contracts/", views.ContractView.as_view()),
-    path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view())
+    path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view()),
+    path("contract-deleting/<int:pk>/", views.ContractDeletingView.as_view()),
+    path("managements/", views.ManagementView.as_view()),
+    path("management-updating/<int:pk>/", views.ManagementUpdatingView.as_view()),
+    path("management-deleting/<int:pk>/", views.ManagementDeletingView.as_view()),
 ]

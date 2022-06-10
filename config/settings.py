@@ -195,3 +195,11 @@ if not DEBUG:
 
 # WARNINGS: books.ApartmentDealing: (models.W042) Auto-created primary key used when not defining a primary key type, by default 'django.db.models.AutoField'. / HINT: Configure the DEFAULT_AUTO_FIELD setting or the BooksConfig.default_auto_field attribute to point to a subclass of AutoField, e.g. 'django.db.models.BigAutoField'.
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+# Django Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'config.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
