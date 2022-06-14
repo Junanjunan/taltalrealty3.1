@@ -24,4 +24,5 @@ urlpatterns = [
     path("request-reset-link/", views.RequestPasswordResetEmail.as_view(), name="request-password"),
     path("set-new-password/<uidb64>/<token>/", views.CompletePasswordReset.as_view(), name="reset-user-password"),
     path("sending-password-email-done/", views.SendingPasswordEmailDone.as_view(), name="sending-passowrd-email-done"),
+    path("webview-sample/", views.WebViewSample.as_view(), name="webview-sample"),
 ]

@@ -405,3 +405,8 @@ def naver_callback(request):
         user.save()
     login(request,user)
     return redirect(reverse("core:home"))
+
+
+class WebViewSample(View):
+    def get(self, request):
+        return render(request, 'users/webview_sample.html')
