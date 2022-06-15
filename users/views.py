@@ -356,7 +356,7 @@ def kakao_callback(request):
 def kakao_login_app(request):
     if settings.DEBUG == True:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://052f-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
+        REDIRECT_URI = "https://3a01-211-112-197-82.jp.ngrok.io/users/login/kakao-app/callback/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
@@ -367,7 +367,7 @@ def kakao_callback_app(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://052f-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
+            REDIRECT_URI = "https://3a01-211-112-197-82.jp.ngrok.io/users/login/kakao-app/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
@@ -407,8 +407,11 @@ def kakao_callback_app(request):
                 user.avatar.save(f"{nickname}-avatar",
                                 ContentFile(photo_request.content))
         login(request, user)
+        get_user = models.User.objects.get(username=user.username)
+        print(get_user.username)
+        print(get_user.pk)
         # return redirect(reverse("core:home"))
-        return render(request, 'app_token.html', {"access_token":access_token})
+        return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
     except KakaoException:
         return redirect(reverse("users:login"))
 
