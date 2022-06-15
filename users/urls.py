@@ -14,6 +14,10 @@ urlpatterns = [
     path("login/github/callback/", views.github_callback, name="github-callback"),
     path("login/kakao/", views.kakao_login, name="kakao-login"),
     path("login/kakao/callback/", views.kakao_callback, name="kakao-callback"),
+
+    path("login/kakao-app/", views.kakao_login_app, name="kakao-login-app"),
+    path("login/kakao-app/callback/", views.kakao_callback_app, name="kakao-callback-app"),
+    
     path("login/naver/", views.naver_login, name="naver-login"),
     path("login/naver/callback/", views.naver_callback, name="naver-callback"),
     path("logout/", views.log_out, name="logout"),
