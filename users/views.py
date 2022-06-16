@@ -274,7 +274,7 @@ def github_callback(request):
     print(profile_json)
     email = profile_json.get("email")
     bio = profile_json.get("bio")
-    bio = "" if bio is None else bio 
+    bio = "" if bio is None else bio
     try:
         user = models.User.objects.get(email=email)
         if user.login_method != models.User.LOGIN_GITHUB:
@@ -356,7 +356,7 @@ def kakao_callback(request):
 def kakao_login_app(request):
     if settings.DEBUG == True:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://3a01-211-112-197-82.jp.ngrok.io/users/login/kakao-app/callback/"
+        REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
@@ -367,7 +367,7 @@ def kakao_callback_app(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://3a01-211-112-197-82.jp.ngrok.io/users/login/kakao-app/callback/"
+            REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"

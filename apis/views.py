@@ -10,6 +10,8 @@ from books import models as books_models
 from contracts import models as contracts_models
 from managements import models as managements_models
 from . import serializers
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 class MeView(APIView):
@@ -35,6 +37,27 @@ class LoginView(APIView):
             encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
             return Response(data={"token":encoded_jwt, "id":user.pk})
         else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SocialLoginView(APIView):
+    def post(self, request):
+        print("here0")
+        username = request.data.get("username")
+        print("here0-1")
+        if not username:
+            print("here1")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        user = authenticate(username=username)
+        print("here2")
+        if user is not None:
+            print("here3")
+            encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+            print("here4")
+            return Response(data={"token":encoded_jwt, "id":user.pk})
+        else:
+            print("here5")
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
