@@ -356,7 +356,7 @@ def kakao_callback(request):
 def kakao_login_app(request):
     if settings.DEBUG == True:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
+        REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/api/v1/users/social-login/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"
@@ -367,7 +367,7 @@ def kakao_callback_app(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
+            REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/users/login/kakao-app/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"

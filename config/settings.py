@@ -203,3 +203,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+
+# AUTHENTICATION_BACKENDS = (
+#     # ... your other backends
+#     'config.auth_backend.PasswordlessAuthBackend',
+# )

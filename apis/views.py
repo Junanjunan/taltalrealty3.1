@@ -12,6 +12,14 @@ from managements import models as managements_models
 from . import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate, login, logout
+import os
+import requests
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.core.files.base import ContentFile
+from django.urls import reverse
 
 
 class MeView(APIView):
@@ -43,22 +51,69 @@ class LoginView(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class SocialLoginView(APIView):
     def post(self, request):
-        print("here0")
         username = request.data.get("username")
-        print("here0-1")
+        password = request.data.get("password")
+        # username = "kjhwnsghksk@naver.com"
+        # password = "52848625a"
+        
         if not username:
-            print("here1")
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        user = authenticate(username=username)
-        print("here2")
+        # user = authenticate(username=username)
+        user = authenticate(username=username, password=password)
         if user is not None:
-            print("here3")
             encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
-            print("here4")
             return Response(data={"token":encoded_jwt, "id":user.pk})
         else:
-            print("here5")
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class KakaoException(Exception):
+    pass
+
+
+@api_view(["GET", "PUT"])
+def social_login(request):
+    try:
+        REST_API_KEY = os.environ.get("KAKAO_ID")
+        REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/api/v1/users/social-login/"
+        code = request.GET.get("code")
+        token_request = requests.get(
+            f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
+        token_json = token_request.json()
+        access_token = token_json.get("access_token")
+        profile_request = requests.get(
+            "https://kapi.kakao.com/v2/user/me",
+            headers={
+                "Authorization": f"Bearer {access_token}", })
+        profile_json = profile_request.json()
+        properties = profile_json.get("properties")
+        kakao_account = profile_json.get("kakao_account")
+        email = kakao_account.get("email")
+        nickname = properties.get("nickname")
+        profile_image = properties.get("profile_image")
+        try:
+            user = users_models.User.objects.get(email=email)
+            if user.login_method != users_models.User.LOGIN_KAKAO:
+                messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
+                return redirect("users:login")
+        except users_models.User.DoesNotExist:
+            user = users_models.User.objects.create(
+                email=email,
+                username=email,
+                first_name=nickname,
+                login_method=users_models.User.LOGIN_KAKAO,
+            )
+            user.set_unusable_password()
+            user.email_verified = True
+            user.save()
+            if profile_image is not None:
+                photo_request = requests.get(profile_image)
+                user.avatar.save(f"{nickname}-avatar",
+                                ContentFile(photo_request.content))
+        encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+        # return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
+        return Response(data={"token":encoded_jwt, "id":user.pk})
+    except KakaoException:
+        return redirect(reverse("users:login"))
 
 
 class BooksApartmentDealingView(APIView):
