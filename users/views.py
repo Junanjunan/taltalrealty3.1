@@ -359,7 +359,7 @@ def kakao_login_app(request):
         REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
+        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"
     return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
 
 
@@ -370,7 +370,7 @@ def kakao_callback_app(request):
             REDIRECT_URI = "https://527e-112-187-140-235.jp.ngrok.io/users/login/kakao-app/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
+            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"
         code = request.GET.get("code")
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
