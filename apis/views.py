@@ -22,6 +22,19 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 
 
+class AllUserView(APIView):
+    def get(self, request):
+        user = users_models.User.objects.all()
+        serializer = serializers.UserSerializer(user, many=True, context={"request":request}).data
+        return Response(serializer)
+
+class SocialLoginTokenView(APIView):
+    def get(self, request,pk):
+        user = users_models.User.objects.get(pk=pk)
+        serializer = serializers.UserTokenSerializer(user, context={"request":request}).data
+        return Response(serializer)
+
+
 class MeView(APIView):
     def get(self, request):
         return Response(serializers.UserSerializer(request.user).data)
@@ -48,23 +61,22 @@ class LoginView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class SocialLoginView(APIView):
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-        # username = "kjhwnsghksk@naver.com"
-        # password = "52848625a"
+# class SocialLoginView(APIView):
+#     def post(self, request):
+#         username = request.data.get("username")
+#         password = request.data.get("password")
+#         # username = "kjhwnsghksk@naver.com"
+#         # password = "52848625a"
         
-        if not username:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        # user = authenticate(username=username)
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
-            return Response(data={"token":encoded_jwt, "id":user.pk})
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+#         if not username:
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
+#         # user = authenticate(username=username)
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+#             return Response(data={"token":encoded_jwt, "id":user.pk})
+#         else:
+#             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class KakaoException(Exception):
     pass
@@ -74,7 +86,7 @@ class KakaoException(Exception):
 def social_login(request):
     try:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/api/v1/users/social-login/"
+        REDIRECT_URI = "https://2a43-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
         code = request.GET.get("code")
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
@@ -111,7 +123,9 @@ def social_login(request):
                                 ContentFile(photo_request.content))
         encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
         # return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
-        return Response(data={"token":encoded_jwt, "id":user.pk})
+        login(request, user)
+        # return Response(data={"token":encoded_jwt, "id":user.pk})
+        return render(request, 'app_token.html', {"user_pk":user.pk})
     except KakaoException:
         return redirect(reverse("users:login"))
 
