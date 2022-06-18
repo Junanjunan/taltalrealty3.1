@@ -85,7 +85,8 @@ class KakaoException(Exception):
 @api_view(["GET", "PUT"])
 def social_login(request):
     try:
-        REST_API_KEY = os.environ.get("KAKAO_ID")
+        # REST_API_KEY = os.environ.get("KAKAO_ID")
+        REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
         code = request.GET.get("code")
         token_request = requests.get(
