@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 
 
 """ dealing """
@@ -36,7 +36,7 @@ class ApartmentDealing(models.Model):
 class RoomDealing(models.Model):
     realtor = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
-    updated = models.DateField(blank=True, null=True, default=timezone.now)
+    updated = models.DateField(blank=True, null=True, default=datetime.now().strftime('%Y-%m-%d'))
     price = models.IntegerField()
     deposit = models.IntegerField(blank=True, null=True)
     month_fee = models.IntegerField(blank=True, null=True)

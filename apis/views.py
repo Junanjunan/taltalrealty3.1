@@ -86,7 +86,7 @@ class KakaoException(Exception):
 def social_login(request):
     try:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://2a43-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
+        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
         code = request.GET.get("code")
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
@@ -125,7 +125,7 @@ def social_login(request):
         # return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
         login(request, user)
         # return Response(data={"token":encoded_jwt, "id":user.pk})
-        return render(request, 'app_token.html', {"user_pk":user.pk})
+        return render(request, 'app_token.html', {"user_pk":user.pk, 'request':request})
     except KakaoException:
         return redirect(reverse("users:login"))
 
