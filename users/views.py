@@ -356,7 +356,7 @@ def kakao_callback(request):
 def kakao_login_app(request):
     if settings.DEBUG == True:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://3c37-211-112-197-82.jp.ngrok.io/api/v1/users/social-login/"
+        REDIRECT_URI = "https://16f7-211-112-197-82.jp.ngrok.io/api/v1/users/social-login/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
