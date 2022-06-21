@@ -11,6 +11,7 @@ urlpatterns = [
     path("users/login/", views.LoginView.as_view()),
     # path("users/social-login/", views.SocialLoginView.as_view()),
     path("users/social-login/", views.social_login),
+    path("users/social-logout/", views.social_logout),
     path("books-apartment-dealing/", views.BooksApartmentDealingView.as_view()),
     path("books-apartment-dealing/<int:pk>/", views.BooksApartmentDealingDetailView.as_view()),
     path("books-villa-dealing/", views.BooksVillaDealingView.as_view()),
