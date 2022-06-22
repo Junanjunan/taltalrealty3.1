@@ -87,7 +87,7 @@ def social_login(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://9baf-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
+            REDIRECT_URI = "https://cb3b-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
