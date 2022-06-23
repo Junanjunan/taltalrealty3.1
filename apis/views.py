@@ -28,6 +28,7 @@ class AllUserView(APIView):
         serializer = serializers.UserSerializer(user, many=True, context={"request":request}).data
         return Response(serializer)
 
+
 class SocialLoginTokenView(APIView):
     def get(self, request,pk):
         user = users_models.User.objects.get(pk=pk)
@@ -37,7 +38,14 @@ class SocialLoginTokenView(APIView):
 
 class MeView(APIView):
     def get(self, request):
-        return Response(serializers.UserSerializer(request.user).data)
+        return Response(serializers.UserSerializer(request.user, context={"request":request}).data)
+
+
+class ProfileView(APIView):
+    def get(self, request, pk):
+        user = users_models.User.objects.get(pk=pk)
+        serializer = serializers.UserSerializer(user, context={"request":request}).data
+        return Response(serializer)
 
 
 class TestView(APIView):
@@ -87,7 +95,7 @@ def social_login(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://cb3b-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
+            REDIRECT_URI = "https://5a49-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"

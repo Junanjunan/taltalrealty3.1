@@ -83,7 +83,11 @@ class LoginView(LoggedOutOnlyView, FormView):
         # else:
         #     messages.info(self.request, "이메일을 확인하여 인증을 완료해주세요.")
         #     user.verify_email()
-        return super().form_valid(form) 
+        return super().form_valid(form)
+
+class AppLoginView(LoggedOutOnlyView):
+    def get(self, request):
+        return render(request, 'users/app_login.html')
         
         
 def log_out(request):
@@ -216,7 +220,7 @@ class CompletePasswordReset(LoggedOutOnlyView, View):
         except:
             pass
         return render(request, 'users/set-new-password.html', context)
-  
+
     def post(self, request, uidb64, token):
         context = {'uidb64':uidb64, 'token': token}
         password = request.POST['password']
@@ -356,7 +360,7 @@ def kakao_callback(request):
 def kakao_login_app(request):
     if settings.DEBUG == True:
         REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://cb3b-112-187-140-235.jp.ngrok.io/api/v1/users/social-login/"
+        REDIRECT_URI = "https://5a49-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
