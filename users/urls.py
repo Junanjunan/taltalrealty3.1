@@ -17,8 +17,8 @@ urlpatterns = [
 
     path("login/app/", views.AppLoginView.as_view(), name="login-app"),
 
-    path("login/kakao-app/", views.kakao_login_app, name="kakao-login-app"),
-    path("login/kakao-app/callback/", views.kakao_callback_app, name="kakao-callback-app"),
+    # path("login/kakao-app/", views.kakao_login_app, name="kakao-login-app"),
+    # path("login/kakao-app/callback/", views.kakao_callback_app, name="kakao-callback-app"),
     
     path("login/naver/", views.naver_login, name="naver-login"),
     path("login/naver/callback/", views.naver_callback, name="naver-callback"),

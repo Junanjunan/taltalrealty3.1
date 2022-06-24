@@ -357,67 +357,67 @@ def kakao_callback(request):
         return redirect(reverse("users:login"))
 
 
-def kakao_login_app(request):
-    if settings.DEBUG == True:
-        REST_API_KEY = os.environ.get("KAKAO_ID")
-        REDIRECT_URI = "https://5a49-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
-    else:
-        REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
-    return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
+# def kakao_login_app(request):
+#     if settings.DEBUG == True:
+#         REST_API_KEY = os.environ.get("KAKAO_ID")
+#         REDIRECT_URI = "https://8821-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
+#     else:
+#         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
+#         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
+#     return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
 
 
-def kakao_callback_app(request):
-    try:
-        if settings.DEBUG == True:
-            REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/users/login/kakao-app/callback/"
-        else:
-            REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"
-        code = request.GET.get("code")
-        token_request = requests.get(
-            f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
-        token_json = token_request.json()
-        access_token = token_json.get("access_token")
-        print(access_token)
-        profile_request = requests.get(
-            "https://kapi.kakao.com/v2/user/me",
-            headers={
-                "Authorization": f"Bearer {access_token}", })
-        profile_json = profile_request.json()
-        properties = profile_json.get("properties")
-        kakao_account = profile_json.get("kakao_account")
-        email = kakao_account.get("email")
-        nickname = properties.get("nickname")
-        profile_image = properties.get("profile_image")
-        try:
-            user = models.User.objects.get(email=email)
-            if user.login_method != models.User.LOGIN_KAKAO:
-                messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
-                return redirect("users:login")
-        except models.User.DoesNotExist:
-            user = models.User.objects.create(
-                email=email,
-                username=email,
-                first_name=nickname,
-                login_method=models.User.LOGIN_KAKAO,
-            )
-            user.set_unusable_password()
-            user.email_verified = True
-            user.save()
-            if profile_image is not None:
-                photo_request = requests.get(profile_image)
-                user.avatar.save(f"{nickname}-avatar",
-                                ContentFile(photo_request.content))
-        login(request, user)
-        get_user = models.User.objects.get(username=user.username)
-        print(get_user.username)
-        print(get_user.pk)
-        # return redirect(reverse("core:home"))
-        return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
-    except KakaoException:
-        return redirect(reverse("users:login"))
+# def kakao_callback_app(request):
+#     try:
+#         if settings.DEBUG == True:
+#             REST_API_KEY = os.environ.get("KAKAO_ID")
+#             REDIRECT_URI = "https://24a5-175-193-30-213.jp.ngrok.io/users/login/kakao-app/callback/"
+#         else:
+#             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
+#             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao-app/callback/"
+#         code = request.GET.get("code")
+#         token_request = requests.get(
+#             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
+#         token_json = token_request.json()
+#         access_token = token_json.get("access_token")
+#         print(access_token)
+#         profile_request = requests.get(
+#             "https://kapi.kakao.com/v2/user/me",
+#             headers={
+#                 "Authorization": f"Bearer {access_token}", })
+#         profile_json = profile_request.json()
+#         properties = profile_json.get("properties")
+#         kakao_account = profile_json.get("kakao_account")
+#         email = kakao_account.get("email")
+#         nickname = properties.get("nickname")
+#         profile_image = properties.get("profile_image")
+#         try:
+#             user = models.User.objects.get(email=email)
+#             if user.login_method != models.User.LOGIN_KAKAO:
+#                 messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
+#                 return redirect("users:login")
+#         except models.User.DoesNotExist:
+#             user = models.User.objects.create(
+#                 email=email,
+#                 username=email,
+#                 first_name=nickname,
+#                 login_method=models.User.LOGIN_KAKAO,
+#             )
+#             user.set_unusable_password()
+#             user.email_verified = True
+#             user.save()
+#             if profile_image is not None:
+#                 photo_request = requests.get(profile_image)
+#                 user.avatar.save(f"{nickname}-avatar",
+#                                 ContentFile(photo_request.content))
+#         login(request, user)
+#         get_user = models.User.objects.get(username=user.username)
+#         print(get_user.username)
+#         print(get_user.pk)
+#         # return redirect(reverse("core:home"))
+#         return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
+#     except KakaoException:
+#         return redirect(reverse("users:login"))
 
 def naver_login(request):
     if settings.DEBUG == True:
@@ -471,6 +471,8 @@ def naver_callback(request):
         user.save()
     login(request,user)
     return redirect(reverse("core:home"))
+
+
 
 
 class WebViewSample(View):

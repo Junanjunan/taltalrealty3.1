@@ -164,6 +164,18 @@ nav {
   border-radius: 5px;
 }
 
+.social-login-app-div{
+  padding-top: 50%;
+}
+
+.social-login-app{
+  text-decoration: none;
+  width: 200px;
+  height: 50px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
 .kakao-login {
   display: flex;
   justify-content: space-between;

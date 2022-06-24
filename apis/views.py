@@ -1,4 +1,5 @@
 import jwt
+import uuid
 from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -20,6 +21,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
 from django.urls import reverse
+from apis.home_url import home_url
 
 
 class AllUserView(APIView):
@@ -89,13 +91,22 @@ class LoginView(APIView):
 class KakaoException(Exception):
     pass
 
+def kakao_login_app(request):
+    if settings.DEBUG == True:
+        REST_API_KEY = os.environ.get("KAKAO_ID")
+        REDIRECT_URI = f"{home_url}/api/v1/login/kakao/callback/"
+    else:
+        REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
+        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
+    return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
 
-@api_view(["GET", "PUT"])
-def social_login(request):
+
+def kakao_callback_app(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            REDIRECT_URI = "https://5a49-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
+            # REDIRECT_URI = "https://8821-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
+            REDIRECT_URI = f"{home_url}/api/v1/login/kakao/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
             REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
@@ -140,6 +151,110 @@ def social_login(request):
         return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
     except KakaoException:
         return redirect(reverse("users:login"))
+
+
+def naver_login_app(request):
+    if settings.DEBUG == True:
+        client_id = os.environ.get("NAVER_ID")
+        # redirect_uri = "https://8358-121-130-89-131.jp.ngrok.io/users/login/naver/callback/"
+        # redirect_uri = "https://8821-121-130-89-131.jp.ngrok.io/api/v1/login/naver/callback/"
+        redirect_uri = f"{home_url}/api/v1/login/naver/callback/"
+    else:
+        client_id = os.environ.get("NAVER_ID_DEPLOY")
+        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/naver/callback/"
+    state = uuid.uuid4().hex[:20]
+    return redirect(f"https://nid.naver.com/oauth2.0/authorize?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&state={state}")
+
+def naver_callback_app(request):
+    if settings.DEBUG == True:
+        client_id = os.environ.get("NAVER_ID")
+        client_secret = os.environ.get("NAVER_SECRET")
+    else:
+        client_id = os.environ.get("NAVER_ID_DEPLOY")
+        client_secret = os.environ.get("NAVER_SECRET_DEPLOY")
+    code = request.GET.get("code")
+    state = request.GET.get("state")
+    token_request = requests.post(
+        f"https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id={client_id}&client_secret={client_secret}&code={code}&state={state}"
+    )
+    token_json = token_request.json()
+    access_token = token_json.get("access_token")
+    profile_request = requests.get(
+        "https://openapi.naver.com/v1/nid/me",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        }
+    )
+    profile_json = profile_request.json()
+    response = profile_json.get("response")
+    print(response)
+    email = response.get("email")
+    try:
+        user = users_models.User.objects.get(email=email)
+        if user.login_method != users_models.User.LOGIN_NAVER:
+            messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
+            return redirect("users:login")
+    except users_models.User.DoesNotExist:
+        user = users_models.User.objects.create(
+            email=email,
+            username=email,
+            login_method=users_models.User.LOGIN_NAVER
+        )
+        user.set_unusable_password()
+        user.email_verified = True
+        user.save()
+    encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+    login(request,user)
+    return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
+
+def github_login_app(request):
+    if settings.DEBUG == True:
+        client_id = os.environ.get("GH_ID_APP")
+        redirect_uri = f"{home_url}/api/v1/login/github/callback/"
+    else:
+        client_id = os.environ.get("GH_ID_DEPLOY")
+        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/github/callback/"
+    return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user")
+
+
+def github_callback_app(request):
+    if settings.DEBUG == True:
+        client_id = os.environ.get("GH_ID_APP")
+        client_secret = os.environ.get("GH_SECRET_APP")
+    else:
+        client_id = os.environ.get("GH_ID_DEPLOY")
+        client_secret = os.environ.get("GH_SECRET_DEPLOY")
+    code = request.GET.get("code")
+    result = requests.post(
+        f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
+        headers={"Accept": "application/json"},)
+    result_json = result.json()
+    access_token = result_json.get("access_token")
+    profile_request = requests.get(
+        "https://api.github.com/user",
+        headers={
+            "Authorization": f"token {access_token}",
+            "Accept": "application/json"})
+    profile_json = profile_request.json()
+    print(profile_json)
+    email = profile_json.get("email")
+    bio = profile_json.get("bio")
+    bio = "" if bio is None else bio
+    try:
+        user = users_models.User.objects.get(email=email)
+        if user.login_method != users_models.User.LOGIN_GITHUB:
+            messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
+            return redirect("users:login")
+    except users_models.User.DoesNotExist:
+        user = users_models.User.objects.create(
+            username=email, email=email,
+            bio=bio, login_method= users_models.User.LOGIN_GITHUB)
+        user.set_unusable_password()
+        user.email_verified = True
+        user.save()
+    encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+    login(request,user)
+    return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
 
 
 @api_view(["GET", "PUT"])
