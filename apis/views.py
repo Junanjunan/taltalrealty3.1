@@ -129,7 +129,7 @@ def kakao_callback_app(request):
             user = users_models.User.objects.get(email=email)
             if user.login_method != users_models.User.LOGIN_KAKAO:
                 messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
-                return redirect("users:login")
+                return redirect("users:login-app")
         except users_models.User.DoesNotExist:
             user = users_models.User.objects.create(
                 email=email,
@@ -193,7 +193,7 @@ def naver_callback_app(request):
         user = users_models.User.objects.get(email=email)
         if user.login_method != users_models.User.LOGIN_NAVER:
             messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
-            return redirect("users:login")
+            return redirect("users:login-app")
     except users_models.User.DoesNotExist:
         user = users_models.User.objects.create(
             email=email,
@@ -244,7 +244,7 @@ def github_callback_app(request):
         user = users_models.User.objects.get(email=email)
         if user.login_method != users_models.User.LOGIN_GITHUB:
             messages.error(request, "다른 경로로 가입되어있는 이메일입니다")
-            return redirect("users:login")
+            return redirect("users:login-app")
     except users_models.User.DoesNotExist:
         user = users_models.User.objects.create(
             username=email, email=email,
@@ -276,7 +276,8 @@ class BooksApartmentDealingDetailView(APIView):
 
 class BooksVillaDealingView(APIView):
     def get(self, request):
-        books = books_models.RoomDealing.objects.all()
+        user = request.user
+        books = books_models.RoomDealing.objects.filter(realtor_id=user.pk)
         serializer = serializers.BooksVillaSerializer(books, many=True, context={"request":request}).data
         return Response(serializer)
 
@@ -318,9 +319,9 @@ class BooksVillaDealingDeletingView(APIView):
 
 class BooksVillaDealingSearchingView(APIView):
     def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
         address = request.GET.get("address")
         price = int(request.GET.get("price", 0))
-        print(price)
         area_m2 = int(request.GET.get("area_m2", 0))
         room = request.GET.get("room", 0)
         parking = request.GET.get("parking")
@@ -330,6 +331,8 @@ class BooksVillaDealingSearchingView(APIView):
         not_finished = request.GET.get("not_finished")
     
         filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        # filter_args["realtor"] = request.user
         if address:
             filter_args["address__contains"] = address
         # filter_args["description__contains"] = description
