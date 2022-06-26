@@ -37,24 +37,45 @@ class BooksApartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = books_models.ApartmentDealing
         fields =  ('__all__')
-        
 
-class BooksVillaSerializer(serializers.ModelSerializer):
 
+class BooksApartmentDealingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.ApartmentDealing
+        fields = ('__all__')
+
+
+class BooksVillaDealingSerializer(serializers.ModelSerializer):
     class Meta:
         model = books_models.RoomDealing
         fields =  ('__all__')
 
 
-class ContractSerializer(serializers.ModelSerializer):
+class BooksOfficetelDealingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.OfficetelDealing
+        fields =  ('__all__')
 
+
+class BooksStoreDealingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.StoreDealing
+        fields =  ('__all__')
+
+
+class BooksBuildingDealingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.BuildingDealing
+        fields =  ('__all__')
+
+
+class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = contracts_models.ContractBase
         fields =  ('__all__')
 
 
 class ManagementSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = managements_models.Management
         fields = ('__all__')

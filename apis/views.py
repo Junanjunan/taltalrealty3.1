@@ -257,16 +257,116 @@ def github_callback_app(request):
     return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
 
 
-@api_view(["GET", "PUT"])
 def social_logout(request):
     logout(request)
     return redirect(reverse("core:home"))
 
+"""Apartment Start"""
+
 class BooksApartmentDealingView(APIView):
     def get(self, request):
-        books = books_models.ApartmentDealing.objects.all()
-        serializer = serializers.BooksApartmentSerializer(books, many=True, context={"request":request}).data
+        user = request.user
+        books = books_models.ApartmentDealing.objects.filter(realtor_id=user.pk)
+        serializer = serializers.BooksApartmentDealingSerializer(books, many=True, context={"request":request}).data
         return Response(serializer)
+
+    def post(self, request):
+        serializer = serializers.BooksApartmentDealingSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_villa = serializer.save()
+            return Response(serializers.BooksApartmentDealingSerializer(new_villa).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BooksApartmentDealingUpdatingView(APIView):
+    def get(self, request, pk):
+        book = books_models.ApartmentDealing.objects.get(pk=pk)
+        serializer = serializers.BooksApartmentDealingSerializer(book, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        book = books_models.ApartmentDealing.objects.get(pk=pk)
+        serializer = serializers.BooksApartmentDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BooksApartmentDealingDeletingView(APIView):
+    def get(self, request, pk):
+        book = books_models.ApartmentDealing.objects.get(pk=pk)
+        serializer = serializers.BooksApartmentDealingSerializer(book)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        book = books_models.ApartmentDealing.objects.get(pk=pk)
+        book.delete()
+        return Response()
+
+
+class BooksApartmentDealingSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        price = int(request.GET.get("price", 0))
+        area_m2 = int(request.GET.get("area_m2", 0))
+        room = request.GET.get("room", 0)
+        parking = request.GET.get("parking")
+        elevator = request.GET.get("elevator")
+        loan = request.GET.get("loan")
+        empty = request.GET.get("empty")
+        not_finished = request.GET.get("not_finished")
+    
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        # filter_args["realtor"] = request.user
+        if address:
+            filter_args["address__contains"] = address
+        # filter_args["description__contains"] = description
+        if price:
+            filter_args["price__lte"] = price
+        if area_m2:
+            filter_args["area_m2__gte"] = area_m2
+        if room:
+            filter_args["room"] = room
+        if parking:
+            filter_args["parking"] = True
+        else:
+            filter_args["parking"] = False
+        if empty:
+            filter_args["empty"] = True
+        else:
+            filter_args["empty"] = False
+        if elevator:
+            filter_args["elevator"] = True
+        else:
+            filter_args["elevator"] = False
+        if loan:
+            filter_args["loan"] = True
+        else:
+            filter_args["loan"] = False
+        if not_finished:
+            filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+
+        print(filter_args)
+        lists = books_models.ApartmentDealing.objects.filter(**filter_args)
+        print(lists)
+        try:
+            lists = books_models.ApartmentDealing.objects.filter(**filter_args)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.BooksApartmentDealingSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+"""Apartment Finish"""
+
+# class BooksApartmentDealingView(APIView):
+#     def get(self, request):
+#         books = books_models.ApartmentDealing.objects.all()
+#         serializer = serializers.BooksApartmentSerializer(books, many=True, context={"request":request}).data
+#         return Response(serializer)
 
 class BooksApartmentDealingDetailView(APIView):
     def get(self, request, pk):
@@ -278,14 +378,14 @@ class BooksVillaDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.RoomDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksVillaSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksVillaDealingSerializer(books, many=True, context={"request":request}).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksVillaSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             new_villa = serializer.save()
-            return Response(serializers.BooksVillaSerializer(new_villa).data)
+            return Response(serializers.BooksVillaDealingSerializer(new_villa).data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -293,12 +393,12 @@ class BooksVillaDealingView(APIView):
 class BooksVillaDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        serializer = serializers.BooksVillaSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksVillaDealingSerializer(book, context={"request":request}).data
         # updated_villa = serializer.save()
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        serializer = serializers.BooksVillaSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(book, data=request.data, partial=True, context={"request":request})
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -308,7 +408,7 @@ class BooksVillaDealingUpdatingView(APIView):
 class BooksVillaDealingDeletingView(APIView):
     def get(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        serializer = serializers.BooksVillaSerializer(book)
+        serializer = serializers.BooksVillaDealingSerializer(book)
         return Response(serializer.data)
 
     def delete(self, request, pk):
@@ -370,9 +470,286 @@ class BooksVillaDealingSearchingView(APIView):
             lists = books_models.RoomDealing.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksVillaSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
+
+
+"""Officetel Start"""
+
+class BooksOfficetelDealingView(APIView):
+    def get(self, request):
+        user = request.user
+        books = books_models.OfficetelDealing.objects.filter(realtor_id=user.pk)
+        serializer = serializers.BooksOfficetelDealingSerializer(books, many=True, context={"request":request}).data
+        return Response(serializer)
+
+    def post(self, request):
+        serializer = serializers.BooksOfficetelDealingSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_villa = serializer.save()
+            return Response(serializers.BooksOfficetelDealingSerializer(new_villa).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BooksOfficetelDealingUpdatingView(APIView):
+    def get(self, request, pk):
+        book = books_models.OfficetelDealing.objects.get(pk=pk)
+        serializer = serializers.BooksOfficetelDealingSerializer(book, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        book = books_models.OfficetelDealing.objects.get(pk=pk)
+        serializer = serializers.BooksOfficetelDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BooksOfficetelDealingDeletingView(APIView):
+    def get(self, request, pk):
+        book = books_models.OfficetelDealing.objects.get(pk=pk)
+        serializer = serializers.BooksOfficetelDealingSerializer(book)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        book = books_models.OfficetelDealing.objects.get(pk=pk)
+        book.delete()
+        return Response()
+
+
+class BooksOfficetelDealingSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        price = int(request.GET.get("price", 0))
+        area_m2 = int(request.GET.get("area_m2", 0))
+        room = request.GET.get("room", 0)
+        parking = request.GET.get("parking")
+        elevator = request.GET.get("elevator")
+        loan = request.GET.get("loan")
+        empty = request.GET.get("empty")
+        not_finished = request.GET.get("not_finished")
     
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        if address:
+            filter_args["address__contains"] = address
+        if price:
+            filter_args["price__lte"] = price
+        if area_m2:
+            filter_args["area_m2__gte"] = area_m2
+        if room:
+            filter_args["room"] = room
+        if parking:
+            filter_args["parking"] = True
+        else:
+            filter_args["parking"] = False
+        if empty:
+            filter_args["empty"] = True
+        else:
+            filter_args["empty"] = False
+        if elevator:
+            filter_args["elevator"] = True
+        else:
+            filter_args["elevator"] = False
+        if loan:
+            filter_args["loan"] = True
+        else:
+            filter_args["loan"] = False
+        if not_finished:
+            filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+        lists = books_models.OfficetelDealing.objects.filter(**filter_args)
+        try:
+            lists = books_models.OfficetelDealing.objects.filter(**filter_args)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.BooksOfficetelDealingSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+"""Officetel Finish"""
+
+
+"""Store Start"""
+
+class BooksStoreDealingView(APIView):
+    def get(self, request):
+        user = request.user
+        books = books_models.StoreDealing.objects.filter(realtor_id=user.pk)
+        serializer = serializers.BooksStoreDealingSerializer(books, many=True, context={"request":request}).data
+        return Response(serializer)
+
+    def post(self, request):
+        serializer = serializers.BooksStoreDealingSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_villa = serializer.save()
+            return Response(serializers.BooksStoreDealingSerializer(new_villa).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BooksStoreDealingUpdatingView(APIView):
+    def get(self, request, pk):
+        book = books_models.StoreDealing.objects.get(pk=pk)
+        serializer = serializers.BooksStoreDealingSerializer(book, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        book = books_models.StoreDealing.objects.get(pk=pk)
+        serializer = serializers.BooksStoreDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BooksStoreDealingDeletingView(APIView):
+    def get(self, request, pk):
+        book = books_models.StoreDealing.objects.get(pk=pk)
+        serializer = serializers.BooksStoreDealingSerializer(book)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        book = books_models.StoreDealing.objects.get(pk=pk)
+        book.delete()
+        return Response()
+
+
+class BooksStoreDealingSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        price = int(request.GET.get("price", 0))
+        area_m2 = int(request.GET.get("area_m2", 0))
+        parking = request.GET.get("parking")
+        elevator = request.GET.get("elevator")
+        loan = request.GET.get("loan")
+        empty = request.GET.get("empty")
+        not_finished = request.GET.get("not_finished")
+    
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        if address:
+            filter_args["address__contains"] = address
+        if price:
+            filter_args["price__lte"] = price
+        if area_m2:
+            filter_args["area_m2__gte"] = area_m2
+        if parking:
+            filter_args["parking"] = True
+        else:
+            filter_args["parking"] = False
+        if empty:
+            filter_args["empty"] = True
+        else:
+            filter_args["empty"] = False
+        if elevator:
+            filter_args["elevator"] = True
+        else:
+            filter_args["elevator"] = False
+        if loan:
+            filter_args["loan"] = True
+        else:
+            filter_args["loan"] = False
+        if not_finished:
+            filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+        lists = books_models.StoreDealing.objects.filter(**filter_args)
+
+        try:
+            lists = books_models.StoreDealing.objects.filter(**filter_args)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.BooksStoreDealingSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+"""Store Finish"""
+
+"""Building Start"""
+
+class BooksBuildingDealingView(APIView):
+    def get(self, request):
+        user = request.user
+        books = books_models.BuildingDealing.objects.filter(realtor_id=user.pk)
+        serializer = serializers.BooksBuildingDealingSerializer(books, many=True, context={"request":request}).data
+        return Response(serializer)
+
+    def post(self, request):
+        serializer = serializers.BooksBuildingDealingSerializer(data=request.data, context={"request":request})
+        if serializer.is_valid():
+            new_villa = serializer.save()
+            return Response(serializers.BooksBuildingDealingSerializer(new_villa).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BooksBuildingDealingUpdatingView(APIView):
+    def get(self, request, pk):
+        book = books_models.BuildingDealing.objects.get(pk=pk)
+        serializer = serializers.BooksBuildingDealingSerializer(book, context={"request":request}).data
+        return Response(serializer)
+    def put(self, request, pk):
+        book = books_models.BuildingDealing.objects.get(pk=pk)
+        serializer = serializers.BooksBuildingDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BooksBuildingDealingDeletingView(APIView):
+    def get(self, request, pk):
+        book = books_models.BuildingDealing.objects.get(pk=pk)
+        serializer = serializers.BooksBuildingDealingSerializer(book)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        book = books_models.BuildingDealing.objects.get(pk=pk)
+        book.delete()
+        return Response()
+
+
+class BooksBuildingDealingSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        price = int(request.GET.get("price", 0))
+        land_m2 = float(request.GET.get("land_m2", 0))
+        elevator = request.GET.get("elevator")
+        loan = request.GET.get("loan")
+        not_finished = request.GET.get("not_finished")
+    
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        if address:
+            filter_args["address__contains"] = address
+        if price:
+            filter_args["price__lte"] = price
+        if land_m2:
+            filter_args["land_m2__gte"] = land_m2
+        if elevator:
+            filter_args["elevator"] = True
+        else:
+            filter_args["elevator"] = False
+        if loan:
+            filter_args["loan"] = True
+        else:
+            filter_args["loan"] = False
+        if not_finished:
+            filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+
+        lists = books_models.BuildingDealing.objects.filter(**filter_args)
+
+        try:
+            lists = books_models.BuildingDealing.objects.filter(**filter_args)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.BooksBuildingDealingSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+"""Building Finish"""
 
 class ContractView(APIView):
     def get(self, request):
