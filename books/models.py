@@ -19,7 +19,7 @@ class ApartmentDealing(models.Model):
     area_m2 = models.FloatField()
     total_area_m2 = models.FloatField(blank=True, null=True)
     land_m2 = models.FloatField(blank=True, null=True)
-    parking = models.BooleanField(null=True)    
+    parking = models.BooleanField(null=True)
     elevator = models.BooleanField(null=True)
     loan = models.BooleanField(null=True)
     empty = models.BooleanField(null=True)  
