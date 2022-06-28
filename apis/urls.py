@@ -47,6 +47,26 @@ urlpatterns = [
     path("books-building-dealing-deleting/<int:pk>/", views.BooksBuildingDealingDeletingView.as_view()),
     path("books-building-dealing-searching/", views.BooksBuildingDealingSearchingView.as_view()),
 
+    path("books-villa-lease/", views.BooksVillaLeaseView.as_view()),
+    path("books-villa-lease-updating/<int:pk>/", views.BooksVillaLeaseUpdatingView.as_view()),
+    path("books-villa-lease-deleting/<int:pk>/", views.BooksVillaLeaseDeletingView.as_view()),
+    path("books-villa-lease-searching/", views.BooksVillaLeaseSearchingView.as_view()),
+    
+    path("books-apartment-lease/", views.BooksApartmentLeaseView.as_view()),
+    path("books-apartment-lease-updating/<int:pk>/", views.BooksApartmentLeaseUpdatingView.as_view()),
+    path("books-apartment-lease-deleting/<int:pk>/", views.BooksApartmentLeaseDeletingView.as_view()),
+    path("books-apartment-lease-searching/", views.BooksApartmentLeaseSearchingView.as_view()),
+
+    path("books-officetel-lease/", views.BooksOfficetelLeaseView.as_view()),
+    path("books-officetel-lease-updating/<int:pk>/", views.BooksOfficetelLeaseUpdatingView.as_view()),
+    path("books-officetel-lease-deleting/<int:pk>/", views.BooksOfficetelLeaseDeletingView.as_view()),
+    path("books-officetel-lease-searching/", views.BooksOfficetelLeaseSearchingView.as_view()),
+
+    path("books-store-lease/", views.BooksStoreLeaseView.as_view()),
+    path("books-store-lease-updating/<int:pk>/", views.BooksStoreLeaseUpdatingView.as_view()),
+    path("books-store-lease-deleting/<int:pk>/", views.BooksStoreLeaseDeletingView.as_view()),
+    path("books-store-lease-searching/", views.BooksStoreLeaseSearchingView.as_view()),
+
     path("contracts/", views.ContractView.as_view()),
     path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view()),
     path("contract-deleting/<int:pk>/", views.ContractDeletingView.as_view()),

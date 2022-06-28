@@ -220,7 +220,7 @@ class OfficetelLease(models.Model):
     elevator = models.BooleanField()
     loan = models.BooleanField()
     empty = models.BooleanField()  
-    not_finished = models.BooleanField(default=True)   
+    not_finished = models.BooleanField(default=True)
     naver = models.BooleanField()
     dabang = models.BooleanField()
     zicbang = models.BooleanField()

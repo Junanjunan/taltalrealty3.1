@@ -39,6 +39,8 @@ class BooksApartmentSerializer(serializers.ModelSerializer):
         fields =  ('__all__')
 
 
+"""Dealing"""
+
 class BooksApartmentDealingSerializer(serializers.ModelSerializer):
     class Meta:
         model = books_models.ApartmentDealing
@@ -73,6 +75,28 @@ class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = contracts_models.ContractBase
         fields =  ('__all__')
+
+"""Lease"""
+
+class BooksApartmentLeaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.ApartmentLease
+        fields = ('__all__')
+
+class BooksRoomLeaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.RoomLease
+        fields = ('__all__')
+
+class BooksOfficetelLeaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.OfficetelLease
+        fields = ('__all__')
+
+class BooksStoreLeaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = books_models.StoreLease
+        fields = ('__all__')
 
 
 class ManagementSerializer(serializers.ModelSerializer):
