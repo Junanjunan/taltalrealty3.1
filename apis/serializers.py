@@ -83,7 +83,7 @@ class BooksApartmentLeaseSerializer(serializers.ModelSerializer):
         model = books_models.ApartmentLease
         fields = ('__all__')
 
-class BooksRoomLeaseSerializer(serializers.ModelSerializer):
+class BooksVillaLeaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = books_models.RoomLease
         fields = ('__all__')
