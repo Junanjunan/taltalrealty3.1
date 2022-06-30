@@ -67,6 +67,12 @@ urlpatterns = [
     path("books-store-lease-deleting/<int:pk>/", views.BooksStoreLeaseDeletingView.as_view()),
     path("books-store-lease-searching/", views.BooksStoreLeaseSearchingView.as_view()),
 
+    path("customer-apartment-dealing/", views.CustomerApartmentDealingView.as_view()),
+    path("customer-apartment-dealing-updating/<int:pk>/", views.CustomerApartmentDealingUpdatingView.as_view()),
+    path("customer-apartment-dealing-deleting/<int:pk>/", views.CustomerApartmentDealingDeletingView.as_view()),
+    path("customer-apartment-dealing-searching/", views.CustomerApartmentDealingSearchingView.as_view()),
+
+
     path("contracts/", views.ContractView.as_view()),
     path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view()),
     path("contract-deleting/<int:pk>/", views.ContractDeletingView.as_view()),

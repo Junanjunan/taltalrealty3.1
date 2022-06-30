@@ -486,8 +486,6 @@ class ApartmentDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentdealing_customer_search(request):
-
-    deposit = int(request.GET.get("deposit", 0))
     price = int(request.GET.get("price", 0))
     room = request.GET.get("room", 0)
     area_m2 = int(request.GET.get("area_m2", 0))
