@@ -72,6 +72,20 @@ urlpatterns = [
     path("customer-apartment-dealing-deleting/<int:pk>/", views.CustomerApartmentDealingDeletingView.as_view()),
     path("customer-apartment-dealing-searching/", views.CustomerApartmentDealingSearchingView.as_view()),
 
+    path("customer-building-dealing/", views.CustomerBuildingDealingView.as_view()),
+    path("customer-building-dealing-updating/<int:pk>/", views.CustomerBuildingDealingUpdatingView.as_view()),
+    path("customer-building-dealing-deleting/<int:pk>/", views.CustomerBuildingDealingDeletingView.as_view()),
+    path("customer-building-dealing-searching/", views.CustomerBuildingDealingSearchingView.as_view()),
+
+    path("customer-villa-dealing/", views.CustomerVillaDealingView.as_view()),
+    path("customer-villa-dealing-updating/<int:pk>/", views.CustomerVillaDealingUpdatingView.as_view()),
+    path("customer-villa-dealing-deleting/<int:pk>/", views.CustomerVillaDealingDeletingView.as_view()),
+    path("customer-villa-dealing-searching/", views.CustomerVillaDealingSearchingView.as_view()),
+
+    path("customer-officetel-dealing/", views.CustomerOfficetelDealingView.as_view()),
+    path("customer-officetel-dealing-updating/<int:pk>/", views.CustomerOfficetelDealingUpdatingView.as_view()),
+    path("customer-officetel-dealing-deleting/<int:pk>/", views.CustomerOfficetelDealingDeletingView.as_view()),
+    path("customer-officetel-dealing-searching/", views.CustomerOfficetelDealingSearchingView.as_view()),
 
     path("contracts/", views.ContractView.as_view()),
     path("contract-updating/<int:pk>/", views.ContractUpdatingView.as_view()),

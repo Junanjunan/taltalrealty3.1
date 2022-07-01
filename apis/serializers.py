@@ -117,6 +117,7 @@ class CustomerStoreDealingSerializer(serializers.ModelSerializer):
 
 class CustomerBuildingDealingSerializer(serializers.ModelSerializer):
     class Meta:
+        model = customers_models.BuildingDealingCustomer
         fields = ('__all__')
 
 

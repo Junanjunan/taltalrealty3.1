@@ -66,7 +66,6 @@ class BuildingDealingCustomer(models.Model):
     updated = models.DateField(blank=True, null=True)
     price = models.IntegerField()
     land_m2 = models.FloatField(blank=True, null=True)
-    parking = models.BooleanField()
     elevator = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)

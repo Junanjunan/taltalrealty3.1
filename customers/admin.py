@@ -84,7 +84,6 @@ class BuildingDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "updated",
         "price",
         "land_m2",
-        "parking",
         "elevator",
         "not_finished",
         "description",
