@@ -23,56 +23,58 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 from apis.home_url import home_url
 
-"""Customer Building Dealing Start"""
+"""Customer Officetel Dealing Start"""
 
-class CustomerBuildingDealingView(APIView):
+class CustomerOfficetelDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.BuildingDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customers, many=True, context={"request":request}).data
+        customers = customers_models.HouseDealingCustomer.objects.filter(realtor_id=user.pk)
+        serializer = serializers.CustomerOfficetelDealingSerializer(customers, many=True, context={"request":request}).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerBuildingDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerOfficetelDealingSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             new_customer = serializer.save()
-            return Response(serializers.CustomerBuildingDealingSerializer(new_customer).data)
+            return Response(serializers.CustomerOfficetelDealingSerializer(new_customer).data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CustomerBuildingDealingUpdatingView(APIView):
+class CustomerOfficetelDealingUpdatingView(APIView):
     def get(self, request, pk):
-        customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customer, context={"request":request}).data
+        customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
+        serializer = serializers.CustomerOfficetelDealingSerializer(customer, context={"request":request}).data
         return Response(serializer)
     def put(self, request, pk):
-        customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
+        serializer = serializers.CustomerOfficetelDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
         if serializer.is_valid():
             serializer.save()
             return Response()
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CustomerBuildingDealingDeletingView(APIView):
+class CustomerOfficetelDealingDeletingView(APIView):
     def get(self, request, pk):
-        customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customer)
+        customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
+        serializer = serializers.CustomerOfficetelDealingSerializer(customer)
         return Response(serializer.data)
 
     def delete(self, request, pk):
-        customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
+        customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
         customer.delete()
         return Response()
 
 
-class CustomerBuildingDealingSearchingView(APIView):
+class CustomerOfficetelDealingSearchingView(APIView):
     def get(self, request):
         realtor_id = request.GET.get("realtor_id")
         guest_phone = request.GET.get("guest_phone")
         price = int(request.GET.get("price", 0))
-        land_m2 = int(request.GET.get("land_m2", 0))
+        room = request.GET.get("room", 0)
+        area_m2 = int(request.GET.get("area_m2", 0))
+        parking = request.GET.get("parking")
         elevator = request.GET.get("elevator")
         not_finished = request.GET.get("not_finished")
     
@@ -82,8 +84,14 @@ class CustomerBuildingDealingSearchingView(APIView):
             filter_args["guest_phone__contains"] = guest_phone
         if price:
             filter_args["price__lte"] = price
-        if land_m2:
-            filter_args["land_m2__gte"] = land_m2
+        if area_m2:
+            filter_args["area_m2__gte"] = area_m2
+        if room:
+            filter_args["room"] = room
+        if parking:
+            filter_args["parking"] = True
+        else:
+            filter_args["parking"] = False
         if elevator:
             filter_args["elevator"] = True
         else:
@@ -94,10 +102,10 @@ class CustomerBuildingDealingSearchingView(APIView):
             filter_args["not_finished"] = False
 
         try:
-            lists = customers_models.BuildingDealingCustomer.objects.filter(**filter_args)
+            lists = customers_models.HouseDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerBuildingDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerOfficetelDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
 
-"""Customer Building Dealing Finish"""
+"""Customer Officetel Dealing Finish"""
