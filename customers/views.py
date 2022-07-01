@@ -486,21 +486,26 @@ class ApartmentDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentdealing_customer_search(request):
+    guest_phone = request.GET.get("guest_phone")
     price = int(request.GET.get("price", 0))
     room = request.GET.get("room", 0)
     area_m2 = int(request.GET.get("area_m2", 0))
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
     not_finished = request.GET.get("not_finished")
+    description = request.GET.get("description")
 
     filter_args = {}
-    description = request.GET.get("description")
+    
     filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["price__lte"] = price
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
+    if guest_phone:
+            filter_args["guest_phone__contains"] = guest_phone
+    if price:
+        filter_args["price__lte"] = price
+    if area_m2:
+        filter_args["area_m2__gte"] = area_m2
+    if room:
+        filter_args["room"] = room
     if parking == "on":
         filter_args["parking"] = True
     if elevator == "on":
@@ -735,23 +740,30 @@ class BuildingDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def buildingdealing_customer_search(request):
-
+    guest_phone = request.GET.get("guest_phone")
     price = int(request.GET.get("price", 0))
+    parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
     not_finished = request.GET.get("not_finished")
     land_m2 = float(request.GET.get("land_m2", 0))
+    description = request.GET.get("description")
 
     filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["price__lte"] = price
-    filter_args["land_m2__gte"] = land_m2
+    
+    if guest_phone:
+        filter_args["guest_phone__contains"] = guest_phone
+    if price:
+        filter_args["price__lte"] = price
+    if land_m2:
+        filter_args["land_m2__gte"] = land_m2
+    if parking == "on":
+        filter_args["parking"] = True
     if elevator == "on":
         filter_args["elevator"] = True
     if not_finished == "on":
         filter_args["not_finished"] = True
+    if description:
+        filter_args["description__contains"] = description
     lists = models.BuildingDealingCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/buildingdealing/buildingdealing_search.html", {**filter_args, "lists": lists})
