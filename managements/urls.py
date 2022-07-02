@@ -5,6 +5,7 @@ app_name = "managements"
 
 urlpatterns = [
     path("", views.ManagementList.as_view(), name="list"),
+    path("search/", views.management_search, name="search"),
     path("creating/", views.ManagementCreating.as_view(), name="creating"),
     path("update/<int:pk>/", views.ManagementUpdate.as_view(), name="update"),
     path("<int:pk>/", views.ManagementDetail.as_view(), name="detail"),

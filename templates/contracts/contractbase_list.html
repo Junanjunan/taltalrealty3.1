@@ -1,5 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
+<form class="search-form" method="get" action="{% url 'contracts:search' %}">
+    <div class="button-flex">
+        <div class="search-box2">
+            <div class="search-part">
+                <div class="search-part-one">
+                    <div class="search-text-bound-top">
+                        <span class="search-text">|| 주소</span>
+                        <input 
+                            value="{{address__contains}}" 
+                            id='address' 
+                            name='address' 
+                            class="search-input-height search-input-address" 
+                        />
+                    </div>              
+                </div>
+                <div class="search-part-one">
+                    <div class="search-text-bound-top">
+                        <span class="search-text">|| 특징</span>
+                        <input
+                            value="{{description__contains}}" 
+                            id='description' 
+                            name='description' 
+                            class="search-input-height search-input-address" 
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="search-part-two">
+                <div class="search-part">
+                    <div class="search-text-bound-bottom">
+                        <input 
+                            {% if report %}
+                            checked
+                            {% endif %} 
+                            type='checkbox' 
+                            id='report' 
+                            name='report' 
+                        />
+                        <label for='report'>
+                            <span class="search-text">신고완료</span>
+                        </label>
+                    </div>
+                    <div class="search-text-bound-bottom">
+                        <input 
+                            {% if not_finished %}
+                            checked
+                            {% endif %} 
+                            type='checkbox' 
+                            id='not_finished' 
+                            name='not_finished' 
+                        />
+                        <label for='not_finished'>
+                            <span class="search-text">진행중</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div><button class="search-button"><i class="fas fa-search"></i>매물 검색</button></div>
+    </div>
+</form>
+
 <div class="regist"><div class="regist-a"><a href="{% url 'contracts:creating' %}">계약 등록</a></div></div>
 <div>금액단위(만원)</div>
 <table id="myTable">
@@ -20,7 +82,7 @@
         <th onclick="sortTableNumber(12)" class="dis950">잔금일<br>까지(일)</th>
         <th onclick="sortTableLetter(13)" class="dis950">신고기한<br>까지(일)</th>
         <th onclick="sortTableLetter(14)" class="dis1100">거래신고</th>
-        <th onclick="sortTableLetter(15)" class="dis1000">완료계약</th>
+        <th onclick="sortTableLetter(15)" class="dis1000">진행중</th>
         <th onclick="sortTableLetter(16)" class="dis1000">매도(임대)인</th>
         <th onclick="sortTableLetter(17)" class="dis1000">매수(임차)인</th>
         <th onclick="sortTableLetter(18)" class="dis1240">특이사항</th>
@@ -45,7 +107,7 @@
         <td class="last_due_day dis950"></td>
         <td class="report_due_day dis950"></td>
         <td class="dis1100">{% if list.report %}O{% else %}X{% endif %}</td>
-        <td class="dis1000">{% if list.finished %}O{% else %}X{% endif %}</td></td>
+        <td class="dis1000">{% if list.not_finished %}O{% else %}X{% endif %}</td></td>
         <td class="dis640">{{list.owner_phone}}</td>
         <td class="dis640">{{list.tenant_phone}}</td>
         <td class="dis1240">{{list.description}}</td>

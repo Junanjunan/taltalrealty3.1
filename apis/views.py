@@ -1955,6 +1955,38 @@ class ContractView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ContractSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        description = request.GET.get("description")
+        report = request.GET.get("report")
+        not_finished = request.GET.get("not_finished")
+
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        if address:
+            filter_args["address__contains"] = address
+        if description:
+            filter_args["description__contains"] = description
+        if report:
+            filter_args["report"] = True
+        else:
+            filter_args["report"] = False
+        if not_finished:
+            filter_args["not_finished"] = True
+        else:
+            filter_args["not_finished"] = False
+
+        try:
+            lists = contracts_models.ContractBase.objects.filter(**filter_args)
+            
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        print(lists)
+        serializer = serializers.ContractSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
+
 class ContractUpdatingView(APIView):
     def get(self, request, pk):
         contract = contracts_models.ContractBase.objects.get(pk=pk)

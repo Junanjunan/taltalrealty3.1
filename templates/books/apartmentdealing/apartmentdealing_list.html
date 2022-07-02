@@ -2,7 +2,7 @@
 {% block content %}
 <div class="search-box">
     <form class="search-form" method="get" action="{% url 'books:apartment-dealing-search' %}">
-    {% include "books/partials/form_inside.html" %}
+        {% include "books/partials/form_inside.html" %}
     </form>
 </div>
 <div class="regist"><div></div><div class="regist-a"><a href="{% url 'books:apartment-dealing-creating' %}">매물 등록</a></div></div>

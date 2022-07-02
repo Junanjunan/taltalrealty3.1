@@ -1,6 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="regist"><div class="regist-a"><a href="{% url 'managements:creating' %}">관리매물 등록</a></div></div>
+<form class="search-form" method="get" action="{% url 'managements:search' %}">
+    <div class="button-flex">
+        <div class="search-box2">
+            <div class="search-part">
+                <div class="search-part-one">
+                    <div class="search-text-bound-top">
+                        <span class="search-text">|| 주소</span>
+                        <input 
+                            value="{{address__contains}}" 
+                            id='address' 
+                            name='address' 
+                            class="search-input-height search-input-address" 
+                        />
+                    </div>              
+                </div>
+                <div class="search-part-one">
+                    <div class="search-text-bound-top">
+                        <span class="search-text">|| 비고</span>
+                        <input
+                            value="{{description__contains}}" 
+                            id='description' 
+                            name='description' 
+                            class="search-input-height search-input-address" 
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="search-part-one">
+                <div class="search-text-bound-top">
+                    
+                </div>
+            </div>
+            <div class="search-part-two">
+                <div class="search-part">
+                    <div class="search-text-bound-bottom">
+                        <input 
+                            {% if deal_report %}
+                            checked
+                            {% endif %} 
+                            type='checkbox' 
+                            id='deal_report' 
+                            name='deal_report' 
+                        />
+                        <label for='deal_report'>
+                            <span class="search-text">신고완료</span>
+                        </label>
+                    </div>
+                    <div class="search-text-bound-bottom">
+                        <div class="search-text-bound-bottom">
+                            <input 
+                                {% if deal_renewal_notice %}
+                                checked
+                                {% endif %} 
+                                type='checkbox' 
+                                id='deal_renewal_notice' 
+                                name='deal_renewal_notice' 
+                            />
+                            <label for='deal_renewal_notice'>
+                                <span class="search-text">갱신고지</span>
+                            </label>
+                        </div>
+                        <div class="search-text-bound-bottom">
+                            <input 
+                                {% if deal_renewal_right_usage %}
+                                checked
+                                {% endif %} 
+                                type='checkbox' 
+                                id='deal_renewal_right_usage' 
+                                name='deal_renewal_right_usage' 
+                            />
+                            <label for='deal_renewal_right_usage'>
+                                <span class="search-text">갱신청구권 사용</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div><button class="search-button"><i class="fas fa-search"></i>매물 검색</button></div>
+    </div>
+</form>
+<div class="regist">
+    <div class="regist-a">
+        <a href="{% url 'managements:creating' %}">관리매물 등록</a>
+    </div>
+</div>
 <div>금액단위(만원)</div>
 <table id="myTable">
     <thead>
@@ -17,8 +102,8 @@
             <th onclick="sortTableLetter(9)" class="dis1220">만기일</th>
             <th onclick="sortTableNumber(10)" class="dis880">남은계약일</th>
             <th onclick="sortTableLetter(11)" class="dis880">갱신 확인기간<br>(180일~60일)</th>
-            <th onclick="sortTableLetter(12)" class="dis880">갱신여부고지</th>
-            <th onclick="sortTableLetter(13)" class="dis1100">갱신청구권<br>사용여부</th>
+            <th onclick="sortTableLetter(12)" class="dis880">갱신고지</th>
+            <th onclick="sortTableLetter(13)" class="dis1100">갱신청구권<br>사용</th>
             <th onclick="sortTableLetter(14)" class="dis1000">집주인</th>
             <th onclick="sortTableLetter(15)" class="dis1240">세입자</th>
             <th onclick="sortTableLetter(16)">비고</th>
