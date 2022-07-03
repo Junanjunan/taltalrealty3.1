@@ -5,7 +5,7 @@ from . import models
 class ManagementAdmin(admin.ModelAdmin):
     list_display = (
         'address',
-        'manager',
+        'realtor',
         'deposit',
         'month_fee',
         'management_fee',

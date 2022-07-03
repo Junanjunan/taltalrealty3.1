@@ -111,7 +111,7 @@
     </thead>
     <tbody>
         {% for list in lists %}
-        {% if user.pk == list.manager.pk %}
+        {% if user.pk == list.realtor.pk %}
         <tr>
             <td><a href="{% url 'managements:detail' list.pk %}">{{list.address}}</a></td>
             <td class="dis640">{% if list.deposit == 0 or list.deposit == None%}0{% else %}{{list.deposit}}{% endif %}</td>

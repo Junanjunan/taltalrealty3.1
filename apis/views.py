@@ -2015,7 +2015,7 @@ class ContractDeletingView(APIView):
 
 class ManagementView(APIView):
     def get(self, request):
-        managements = managements_models.Management.objects.filter(manager_id = request.user.pk)
+        managements = managements_models.Management.objects.filter(realtor_id = request.user.pk)
         serializer = serializers.ManagementSerializer(managements, many=True, context={"request":request}).data
         return Response(serializer)
     def post(self, request):
@@ -2039,6 +2039,42 @@ class ManagementUpdatingView(APIView):
             return Response()
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ManagementSearchingView(APIView):
+    def get(self, request):
+        realtor_id = request.GET.get("realtor_id")
+        address = request.GET.get("address")
+        description = request.GET.get("description")
+        deal_report = request.GET.get("deal_report")
+        deal_renewal_notice = request.GET.get("deal_renewal_notice")    
+        deal_renewal_right_usage = request.GET.get("deal_renewal_right_usage")    
+
+        filter_args = {}
+        filter_args["realtor_id"] = int(realtor_id)
+        if address:
+            filter_args["address__contains"] = address
+        if description:
+            filter_args["description__contains"] = description
+        if deal_report:
+            filter_args["deal_report"] = True
+        else:
+            filter_args["deal_report"] = False
+        if deal_renewal_notice:
+            filter_args["deal_renewal_notice"] = True
+        else:
+            filter_args["deal_renewal_notice"] = False
+        if deal_renewal_right_usage:
+            filter_args["deal_renewal_right_usage"] = True
+        else:
+            filter_args["deal_renewal_right_usage"] = False
+
+        try:
+            lists = managements_models.Management.objects.filter(**filter_args)
+            
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.ManagementSerializer(lists, many=True, context={"request":request})
+        return Response(serializer.data)
 
 class ManagementDeletingView(APIView):
     def get(self, request, pk):

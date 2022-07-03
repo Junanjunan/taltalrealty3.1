@@ -120,6 +120,7 @@ urlpatterns = [
     path("contract-deleting/<int:pk>/", views.ContractDeletingView.as_view()),
     
     path("managements/", views.ManagementView.as_view()),
+    path("managements/searching/", views.ManagementSearchingView.as_view()),
     path("management-updating/<int:pk>/", views.ManagementUpdatingView.as_view()),
     path("management-deleting/<int:pk>/", views.ManagementDeletingView.as_view()),
 ]

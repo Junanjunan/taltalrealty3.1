@@ -55,7 +55,7 @@ class ManagementCreating(LoggedInOnlyView, CreateView):
 
     def form_valid(self, form):
         management = form.save()
-        management.manager = self.request.user
+        management.realtor = self.request.user
         management.save()
         return redirect(reverse("managements:detail", kwargs={"pk":management.pk}))
 
@@ -67,13 +67,13 @@ class ManagementUpdate(LoggedInOnlyView, UpdateView):
 
     def get_object(self, queryset=None):
         management = super().get_object(queryset=queryset)
-        if management.manager.pk != self.request.user.pk:
+        if management.realtor.pk != self.request.user.pk:
             raise Http404()
         return management
 
     def form_valid(self, form):
         management = form.save()
-        management.manager = self.request.user
+        management.realtor = self.request.user
         management.save()
         return redirect(reverse("managements:detail", kwargs={"pk":management.pk}))
 
