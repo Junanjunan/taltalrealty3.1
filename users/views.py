@@ -26,7 +26,6 @@ from validate_email import validate_email       # pipenv install validate_email
 from . import forms, models
 
 
-
 class LoggedOutOnlyView(UserPassesTestMixin, View):
     def test_func(self):
         return not self.request.user.is_authenticated
