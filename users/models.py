@@ -43,7 +43,7 @@ class User(AbstractUser):
                 "탈탈부동산 회원가입 인증 메일입니다.", 
                 strip_tags(html_message), 
                 settings.EMAIL_HOST_USER,
-                [self.email],
+                [self.username],
                 fail_silently = False,
                 html_message=html_message,
             )

@@ -6,9 +6,9 @@ from . import models
 class ApartmentDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "price",
         "room",
@@ -24,9 +24,9 @@ class ApartmentDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class HouseDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "price",
         "room",
@@ -42,9 +42,9 @@ class HouseDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class OfficetelDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "price",
         "room",
@@ -61,9 +61,9 @@ class OfficetelDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class ShopDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "price",
         "area_m2",
@@ -78,9 +78,9 @@ class ShopDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class BuildingDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "price",
         "land_m2",
@@ -94,9 +94,9 @@ class BuildingDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class ApartmentLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "deposit",
         "month_fee",
@@ -114,9 +114,9 @@ class ApartmentLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class HouseLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "deposit",
         "month_fee",
@@ -134,9 +134,9 @@ class HouseLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class OfficetelLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "deposit",
         "month_fee",
@@ -154,9 +154,9 @@ class OfficetelLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 class ShopLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "guest_phone",
         "realtor",
         "realtor_id",
-        "guest_phone",
         "updated",
         "deposit",
         "month_fee",

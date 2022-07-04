@@ -30,9 +30,9 @@ from . import models
 class AparmentDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "price",
         "deposit",
@@ -63,9 +63,9 @@ class AparmentDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 class RoomDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "price",
         "deposit",
@@ -96,9 +96,9 @@ class RoomDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 class OfficetelDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "price",
         "deposit",
@@ -129,9 +129,9 @@ class OfficetelDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 class StoreDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "price",
         "deposit",
@@ -161,9 +161,9 @@ class StoreDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 class BuildingDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "price",
         "deposit",
@@ -197,9 +197,9 @@ class BuildingDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 class ApartmentLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "deposit",
         "month_fee",
@@ -228,9 +228,9 @@ class ApartmentLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 class RoomLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "deposit",
         "month_fee",
@@ -259,9 +259,9 @@ class RoomLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 class OfficetelLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "deposit",
         "month_fee",
@@ -290,9 +290,9 @@ class OfficetelLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 class StoreLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
     list_display = (
+        "address",
         "realtor",
         "realtor_id",
-        "address",
         "updated",
         "right_deposit",
         "deposit",

@@ -9,6 +9,7 @@ urlpatterns = [
     path("me/", views.MeView.as_view()),
     path("profile/<int:pk>/", views.ProfileView.as_view()),
     path("test/", views.TestView.as_view()),
+    path("users/signup/", views.SignUpView.as_view()),
     path("users/login/", views.LoginView.as_view()),
     # path("users/social-login/", views.SocialLoginView.as_view()),
     path("login/kakao/", views.kakao_login_app, name="kakao-login"),

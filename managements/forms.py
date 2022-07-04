@@ -13,4 +13,4 @@ class ManagementForm(forms.ModelForm):
     contract_last_day = forms.DateField(widget=DateInput)
     class Meta:
         model = models.Management
-        exclude = ['manager']
+        exclude = ['realtor']

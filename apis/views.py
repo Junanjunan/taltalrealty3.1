@@ -58,6 +58,22 @@ class TestView(APIView):
         return Response(serializer)
 
 
+class SignUpView(APIView):
+    def post(self, request):
+        serializer = serializers.UserSerializer(data=request.data)
+        print(type(request.data["password"]))
+        if serializer.is_valid():
+            new_user = serializer.save()
+            new_user.set_password(request.data["password"])
+            new_user.save()
+            user_id = new_user.user_id
+            user = users_models.User.objects.get(pk=user_id)
+            user.verify_email()
+            return Response(serializers.UserSerializer(new_user).data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class LoginView(APIView):
     def post(self, request):
         username = request.data.get("username")
