@@ -49,6 +49,11 @@ class ProfileView(APIView):
         user = users_models.User.objects.get(pk=pk)
         serializer = serializers.UserSerializer(user, context={"request":request}).data
         return Response(serializer)
+    
+    def delete(self, request, pk):
+        user = users_models.User.objects.get(pk=pk)
+        user.delete()
+        return Response()
 
 
 class TestView(APIView):

@@ -52,6 +52,10 @@ class SignUpAfterView(LoggedOutOnlyView, FormView):
     form_class = forms.SignUpForm
 
 
+class SignUpDoneView(View):
+    def get(self, request):
+        return render(request, 'users/signup_done.html')
+
 def complete_verification(request, key):
     try:
         user = models.User.objects.get(email_secret=key)
@@ -60,7 +64,7 @@ def complete_verification(request, key):
         user.save()
     except models.User.DoesNotExist:
         pass
-    return redirect(reverse("users:login"))
+    return redirect(reverse("users:signup-done"))
 
 
 class LoginException(Exception):
@@ -146,8 +150,6 @@ def user_del(request):
     return render(request, 'users/user_del.html', {'password_form':password_form})
 
 
-
-
 class RequestPasswordResetEmail(LoggedOutOnlyView, View):
     def get(self, request):
         return render(request, 'users/reset-password.html')
@@ -170,7 +172,13 @@ class RequestPasswordResetEmail(LoggedOutOnlyView, View):
                     'uid': urlsafe_base64_encode(force_bytes(user[0].pk)),
                     'token': PasswordResetTokenGenerator().make_token(user[0]),
                 }
-                link = reverse('users:reset-user-password', kwargs={'uidb64':email_contents['uid'], 'token':email_contents['token']})
+                link = reverse(
+                    'users:reset-user-password', 
+                    kwargs={
+                        'uidb64':email_contents['uid'], 
+                        'token':email_contents['token']
+                    }
+                )
                 email_subject = '탈탈부동산 비밀번호 재설정 이메일입니다'
                 reset_url = 'http://' + current_site.domain + link
                 

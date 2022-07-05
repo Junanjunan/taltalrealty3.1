@@ -9,6 +9,7 @@ urlpatterns = [
     path("signup/after/", views.SignUpAfterView.as_view(), name="signup-after"),
     # path("activate/<uidb64>/<token>/", views.VerificationView.as_view(), name='activate'),
     path("verify/<str:key>", views.complete_verification, name="complete-verification"),
+    path("signup/done/", views.SignUpDoneView.as_view(), name="signup-done"),
     path("login/", views.LoginView.as_view(), name='login'),
     path("login/github/", views.github_login, name="github-login"),
     path("login/github/callback/", views.github_callback, name="github-callback"),
