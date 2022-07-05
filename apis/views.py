@@ -18,11 +18,13 @@ from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 import os
 import requests
+from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
 from django.urls import reverse
 from apis.home_url import home_url
+
 
 
 class AllUserView(APIView):
@@ -49,7 +51,21 @@ class ProfileView(APIView):
         user = users_models.User.objects.get(pk=pk)
         serializer = serializers.UserSerializer(user, context={"request":request}).data
         return Response(serializer)
-    
+
+    def post(self, request, pk):
+        print(dir(request))
+        print(request.data)
+        password = request.data["password"]
+        user = users_models.User.objects.get(pk=pk)
+        if check_password(password, user.password):     # https://ssungkang.tistory.com/entry/DjangoUser-%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EB%B3%80%EA%B2%BD%ED%95%98%EA%B8%B0-checkpassword
+            new_password = request.data["new_password"]
+            user.set_password(new_password)
+            user.save()
+        else:
+            print("오류오류")
+        return Response()
+        
+
     def delete(self, request, pk):
         user = users_models.User.objects.get(pk=pk)
         user.delete()

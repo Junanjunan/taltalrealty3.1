@@ -80,7 +80,7 @@ class LoginView(LoggedOutOnlyView, FormView):
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
         user = authenticate(self.request, username=email, password=password)
-        user_model = models.User.objects.get(email=email)
+        user_model = models.User.objects.get(username=email)
         # if user_model.email_verified:
         login(self.request, user)                   
         # else:
@@ -162,7 +162,7 @@ class RequestPasswordResetEmail(LoggedOutOnlyView, View):
             return render(request, 'users/reset-password.html', context)        
         
         current_site = get_current_site(request)
-        user = models.User.objects.filter(email=email)
+        user = models.User.objects.filter(username=email)
         
         if user.exists():
             if user[0].login_method == 'email':

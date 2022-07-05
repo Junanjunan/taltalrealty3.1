@@ -53,7 +53,7 @@ class LoginForm(forms.Form):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
         try:
-            user = models.User.objects.get(email=email)
+            user = models.User.objects.get(username=email)
             if user.email_verified:
                 if user.check_password(password):
                     return self.cleaned_data
@@ -61,7 +61,6 @@ class LoginForm(forms.Form):
                     self.add_error("email", forms.ValidationError("이메일 또는 비밀번호를 다시 확인해주세요."))
             else:
                 self.add_error("email", "인증 되지 않은 유저입니다. 이메일을 확인해주세요.")
-           
         except models.User.DoesNotExist:
             self.add_error("email", forms.ValidationError("이메일 또는 비밀번호가 틀렸거나 존재하지 않는 유저입니다."))
 
