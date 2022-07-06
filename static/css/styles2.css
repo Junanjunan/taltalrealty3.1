@@ -52,6 +52,10 @@ body {
   width: 400px;
 }
 
+.width-310{
+  width: 310px;
+}
+
 .toggle_m2 {
   margin: 5px;
 }
@@ -70,7 +74,7 @@ nav {
   margin-right: 25px;
   padding: 3px;
   text-align: center;
-  width: 100px;
+  width: 110px;
   border-style: solid;
   border-color: rgb(206, 206, 206);
   border-width: 1px;
@@ -84,7 +88,7 @@ nav {
 .nav-choice a {
   text-decoration: none;
   color: gray;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .nav-top {
@@ -133,13 +137,13 @@ nav {
 }
 
 .login-form {
-  width: 390px;
+  width: 300px;
   height: 30px;
   margin: 5px;
 }
 
 .login-button {
-  width: 400px;
+  width: 310px;
   height: 50px;
   margin: 5px;
   background-color: rgb(0, 255, 255);
@@ -158,10 +162,17 @@ nav {
 
 .social-login {
   text-decoration: none;
-  width: 400px;
+  width: 310px;
   height: 50px;
   margin: 10px;
   border-radius: 5px;
+}
+
+.social-login-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .social-login-app-div{
@@ -850,4 +861,3 @@ input[type="checkbox"]:checked + label:before {
 .text-center {
   text-align: center;
 }
-
