@@ -1,1 +1,1 @@
-home_url = "https://b790-112-187-140-235.jp.ngrok.io"
+home_url = "https://530d-112-187-140-235.jp.ngrok.io"
