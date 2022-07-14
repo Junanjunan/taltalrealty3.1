@@ -90,14 +90,14 @@ class ManagementDetail(LoggedInOnlyView, DetailView):
 
 @login_required
 def management_delete(request, pk):
-    management = models.Management.objects.filter(pk=pk).delete()
+    management = models.Management.objects.filter(pk=pk)
+    management.delete()
     return redirect(reverse("managements:list"))
 
 
 class ManagementMailing(LoggedInOnlyView, View):
     def get(self, request):
         if request.user.is_staff:
-            # while True:        
             users = users_model.User.objects.all()
             for user in users:
                 lease_renewal_dict = {}
@@ -133,8 +133,6 @@ class ManagementMailing(LoggedInOnlyView, View):
                             fail_silently = False,
                             html_message= report_html_message
                         )
-                
-                
             time.sleep(5)    
             return render(request, 'managements/mailing.html')
         else:

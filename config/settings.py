@@ -50,11 +50,9 @@ PROJECT_APPS = [
     "customers.apps.CustomersConfig",
     "contracts.apps.ContractsConfig",
     "managements.apps.ManagementsConfig",
-    "navs.apps.NavsConfig",
     "apis.apps.ApisConfig"
 ]
 
-# THIRD_PARTY_APPS = ["storages",]
 THIRD_PARTY_APPS = ['import_export', 'verify_email', "storages", "rest_framework"]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -172,9 +170,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 # DEFAULT_FROM_EMAIL = 'wnsghksk@gmail.com'
 
 
-
 # Sentry
-
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'config.custom_storages.UploadStorage'
     STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'

@@ -91,8 +91,8 @@ def houselease_customer_search(request):
 
 @login_required
 def houselease_customer_delete(request, pk):
-    houselease_customer = models.HouseLeaseCustomer.objects.filter(
-        pk=pk).delete()
+    houselease_customer = models.HouseLeaseCustomer.objects.filter(pk=pk)
+    houselease_customer.delete()
     return redirect(reverse("customers:house-lease-customer-list"))
 
 """"""
@@ -177,8 +177,8 @@ def apartmentlease_customer_search(request):
 
 @login_required
 def apartmentlease_customer_delete(request, pk):
-    apartmentlease_customer = models.ApartmentLeaseCustomer.objects.filter(
-        pk=pk).delete()
+    apartmentlease_customer = models.ApartmentLeaseCustomer.objects.filter(pk=pk)
+    apartmentlease_customer.delete()
     return redirect(reverse("customers:apartment-lease-customer-list"))
 
 """"""
@@ -264,8 +264,8 @@ def officetellease_customer_search(request):
 
 @login_required
 def officetellease_customer_delete(request, pk):
-    officetellease_customer = models.OfficetelLeaseCustomer.objects.filter(
-        pk=pk).delete()
+    officetellease_customer = models.OfficetelLeaseCustomer.objects.filter(pk=pk)
+    officetellease_customer.delete()
     return redirect(reverse("customers:officetel-lease-customer-list"))
 
 """below shoplease"""
@@ -348,13 +348,12 @@ def shoplease_customer_search(request):
 
 @login_required
 def shoplease_customer_delete(request, pk):
-    shoplease_customer = models.ShopLeaseCustomer.objects.filter(
-        pk=pk).delete()
+    shoplease_customer = models.ShopLeaseCustomer.objects.filter(pk=pk)
+    shoplease_customer.delete()
     return redirect(reverse("customers:shop-lease-customer-list"))
 
 
 """below housedealing"""
-
 
 class HouseDealingCustomerList(LoggedInOnlyView, ListView):
     model = models.HouseDealingCustomer
@@ -404,7 +403,6 @@ class HouseDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 def housedealing_customer_search(request):
 
-    deposit = int(request.GET.get("deposit", 0))
     price = int(request.GET.get("price", 0))
     room = request.GET.get("room", 0)
     area_m2 = int(request.GET.get("area_m2", 0))
@@ -433,8 +431,8 @@ def housedealing_customer_search(request):
 
 @login_required
 def housedealing_customer_delete(request, pk):
-    housedealing_customer = models.HouseDealingCustomer.objects.filter(
-        pk=pk).delete()
+    housedealing_customer = models.HouseDealingCustomer.objects.filter(pk=pk)
+    housedealing_customer.delete()
     return redirect(reverse("customers:house-dealing-customer-list"))
 
 """"""
@@ -512,19 +510,17 @@ def apartmentdealing_customer_search(request):
         filter_args["elevator"] = True
     if not_finished == "on":
         filter_args["not_finished"] = True
-    lists = models.ApartmentDealingCustomer.objects.filter(
-        **filter_args)
+    lists = models.ApartmentDealingCustomer.objects.filter(**filter_args)
     return render(request, "customers/apartmentdealing/apartmentdealing_search.html", {**filter_args, "lists": lists})
 
 
 @login_required
 def apartmentdealing_customer_delete(request, pk):
-    apartmentdealing_customer = models.ApartmentDealingCustomer.objects.filter(
-        pk=pk).delete()
+    apartmentdealing_customer = models.ApartmentDealingCustomer.objects.filter(pk=pk)
+    apartmentdealing_customer.delete()
     return redirect(reverse("customers:apartment-dealing-customer-list"))
 
 """"""
-
 
 class OfficetelDealingCustomerList(LoggedInOnlyView, ListView):
     model = models.OfficetelDealingCustomer
@@ -602,8 +598,8 @@ def officeteldealing_customer_search(request):
 
 @login_required
 def officeteldealing_customer_delete(request, pk):
-    officeteldealing_customer = models.OfficetelDealingCustomer.objects.filter(
-        pk=pk).delete()
+    officeteldealing_customer = models.OfficetelDealingCustomer.objects.filter(pk=pk)
+    officeteldealing_customer.delete()
     return redirect(reverse("customers:officetel-dealing-customer-list"))
 
 """"""
@@ -655,7 +651,6 @@ class ShopDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 def shopdealing_customer_search(request):
 
-    deposit = int(request.GET.get("deposit", 0))
     price = int(request.GET.get("price", 0))
     area_m2 = int(request.GET.get("area_m2", 0))
     parking = request.GET.get("parking")
@@ -682,8 +677,8 @@ def shopdealing_customer_search(request):
 
 @login_required
 def shopdealing_customer_delete(request, pk):
-    shopdealing_customer = models.ShopDealingCustomer.objects.filter(
-        pk=pk).delete()
+    shopdealing_customer = models.ShopDealingCustomer.objects.filter(pk=pk)
+    shopdealing_customer.delete()
     return redirect(reverse("customers:shop-dealing-customer-list"))
 
 """below buildingdealing"""
@@ -761,13 +756,13 @@ def buildingdealing_customer_search(request):
         filter_args["not_finished"] = True
     if description:
         filter_args["description__contains"] = description
-    lists = models.BuildingDealingCustomer.objects.filter(
-        **filter_args)
+    lists = models.BuildingDealingCustomer.objects.filter(**filter_args)
     return render(request, "customers/buildingdealing/buildingdealing_search.html", {**filter_args, "lists": lists})
 
 
 @login_required
 def buildingdealing_customer_delete(request, pk):
     buildingdealing_customer = models.BuildingDealingCustomer.objects.filter(
-        pk=pk).delete()
+        pk=pk)
+    buildingdealing_customer.delete()
     return redirect(reverse("customers:building-dealing-customer-list"))

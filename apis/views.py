@@ -109,23 +109,6 @@ class LoginView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-# class SocialLoginView(APIView):
-#     def post(self, request):
-#         username = request.data.get("username")
-#         password = request.data.get("password")
-#         # username = "kjhwnsghksk@naver.com"
-#         # password = "52848625a"
-        
-#         if not username:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
-#         # user = authenticate(username=username)
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
-#             return Response(data={"token":encoded_jwt, "id":user.pk})
-#         else:
-#             return Response(status=status.HTTP_401_UNAUTHORIZED)
-
 class KakaoException(Exception):
     pass
 
@@ -143,7 +126,6 @@ def kakao_callback_app(request):
     try:
         if settings.DEBUG == True:
             REST_API_KEY = os.environ.get("KAKAO_ID")
-            # REDIRECT_URI = "https://8821-121-130-89-131.jp.ngrok.io/api/v1/users/social-login/"
             REDIRECT_URI = f"{home_url}/api/v1/login/kakao/callback/"
         else:
             REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
@@ -183,9 +165,7 @@ def kakao_callback_app(request):
                 user.avatar.save(f"{nickname}-avatar",
                                 ContentFile(photo_request.content))
         encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
-        # return render(request, 'app_token.html', {"access_token":access_token, "email":email, "user_pk":get_user.pk})
         login(request, user)
-        # return Response(data={"token":encoded_jwt, "id":user.pk})
         return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
     except KakaoException:
         return redirect(reverse("users:login"))
@@ -194,8 +174,6 @@ def kakao_callback_app(request):
 def naver_login_app(request):
     if settings.DEBUG == True:
         client_id = os.environ.get("NAVER_ID")
-        # redirect_uri = "https://8358-121-130-89-131.jp.ngrok.io/users/login/naver/callback/"
-        # redirect_uri = "https://8821-121-130-89-131.jp.ngrok.io/api/v1/login/naver/callback/"
         redirect_uri = f"{home_url}/api/v1/login/naver/callback/"
     else:
         client_id = os.environ.get("NAVER_ID_DEPLOY")
@@ -225,7 +203,6 @@ def naver_callback_app(request):
     )
     profile_json = profile_request.json()
     response = profile_json.get("response")
-    print(response)
     email = response.get("email")
     try:
         user = users_models.User.objects.get(email=email)
@@ -274,7 +251,6 @@ def github_callback_app(request):
             "Authorization": f"token {access_token}",
             "Accept": "application/json"})
     profile_json = profile_request.json()
-    print(profile_json)
     email = profile_json.get("email")
     bio = profile_json.get("bio")
     bio = "" if bio is None else bio
@@ -358,10 +334,8 @@ class BooksApartmentDealingSearchingView(APIView):
     
         filter_args = {}
         filter_args["realtor_id"] = int(realtor_id)
-        # filter_args["realtor"] = request.user
         if address:
             filter_args["address__contains"] = address
-        # filter_args["description__contains"] = description
         if price:
             filter_args["price__lte"] = price
         if area_m2:
@@ -400,12 +374,6 @@ class BooksApartmentDealingSearchingView(APIView):
         return Response(serializer.data)
 """Apartment Finish"""
 
-# class BooksApartmentDealingView(APIView):
-#     def get(self, request):
-#         books = books_models.ApartmentDealing.objects.all()
-#         serializer = serializers.BooksApartmentSerializer(books, many=True, context={"request":request}).data
-#         return Response(serializer)
-
 class BooksApartmentDealingDetailView(APIView):
     def get(self, request, pk):
         books = books_models.ApartmentDealing.objects.get(pk=pk)
@@ -432,7 +400,6 @@ class BooksVillaDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
         serializer = serializers.BooksVillaDealingSerializer(book, context={"request":request}).data
-        # updated_villa = serializer.save()
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
@@ -470,10 +437,8 @@ class BooksVillaDealingSearchingView(APIView):
     
         filter_args = {}
         filter_args["realtor_id"] = int(realtor_id)
-        # filter_args["realtor"] = request.user
         if address:
             filter_args["address__contains"] = address
-        # filter_args["description__contains"] = description
         if price:
             filter_args["price__lte"] = price
         if area_m2:
@@ -501,9 +466,8 @@ class BooksVillaDealingSearchingView(APIView):
         else:
             filter_args["not_finished"] = False
 
-        print(filter_args)
         lists = books_models.RoomDealing.objects.filter(**filter_args)
-        print(lists)
+
         try:
             lists = books_models.RoomDealing.objects.filter(**filter_args)
         except:
@@ -607,7 +571,6 @@ class BooksOfficetelDealingSearchingView(APIView):
         serializer = serializers.BooksOfficetelDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
 """Officetel Finish"""
-
 
 """Store Start"""
 
@@ -1607,8 +1570,6 @@ class CustomerStoreDealingSearchingView(APIView):
         return Response(serializer.data)
 
 """Customer Store Dealing Finish"""
-
-
 
 """Customer Apartment Lease Start"""
 

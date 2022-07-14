@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from . import models, forms
-from django.utils import timezone
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -255,9 +254,6 @@ def apartmentlease_search(request):
     empty = request.GET.get("empty")
     not_finished = request.GET.get("not_finished")
     naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
     description = request.GET.get("description")
     
     filter_args = {}
@@ -420,7 +416,8 @@ def officetellease_search(request):
 
 @login_required
 def officetellease_delete(request, pk):
-    room = models.OfficetelLease.objects.filter(pk=pk).delete()
+    room = models.OfficetelLease.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:officetel-lease-list"))
 
 
@@ -500,7 +497,6 @@ class StoreLeaseUpdate(LoggedInOnlyView, UpdateView):
 def storelease_search(request):
 
     address = request.GET.get("address")
-    right_deposit = int(request.GET.get("right_deposit", 0))
     deposit = int(request.GET.get("deposit", 0))
     month_fee = int(request.GET.get("month_fee", 0))
     area_m2 = int(request.GET.get("area_m2", 0))
@@ -542,7 +538,8 @@ def storelease_search(request):
 
 @login_required
 def storelease_delete(request, pk):
-    room = models.StoreLease.objects.filter(pk=pk).delete()
+    room = models.StoreLease.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:store-lease-list"))
 
 """"""
@@ -663,7 +660,8 @@ def roomdealing_search(request):
 
 @login_required
 def roomdealing_delete(request, pk):
-    room = models.RoomDealing.objects.filter(pk=pk).delete()
+    room = models.RoomDealing.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:room-dealing-list"))
 
 """"""
@@ -737,7 +735,6 @@ class ApartmentDealingUpdate(LoggedInOnlyView, UpdateView):
         if book.tenant_phone is None:
             book.tenant_phone = "-"
         book.save()
-        update = book
         
         return redirect(reverse("books:apartment-dealing-detail", kwargs={"pk":book.pk}))
         
@@ -785,7 +782,8 @@ def apartmentdealing_search(request):
 
 @login_required
 def apartmentdealing_delete(request, pk):
-    room = models.ApartmentDealing.objects.filter(pk=pk).delete()
+    room = models.ApartmentDealing.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:apartment-dealing-list"))
 
 """"""
@@ -907,7 +905,8 @@ def officeteldealing_search(request):
 
 @login_required
 def officeteldealing_delete(request, pk):
-    room = models.OfficetelDealing.objects.filter(pk=pk).delete()
+    room = models.OfficetelDealing.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:officetel-dealing-list"))
 
 """"""
@@ -1023,7 +1022,8 @@ def storedealing_search(request):
 
 @login_required
 def storedealing_delete(request, pk):
-    room = models.StoreDealing.objects.filter(pk=pk).delete()
+    room = models.StoreDealing.objects.filter(pk=pk)
+    room.delete()
     return redirect(reverse("books:store-dealing-list"))
 
 """"""
@@ -1164,5 +1164,6 @@ def buildingdealing_search(request):
 
 @login_required
 def buildingdealing_delete(request, pk):
-    building = models.BuildingDealing.objects.filter(pk=pk).delete()
+    building = models.BuildingDealing.objects.filter(pk=pk)
+    building.delete()
     return redirect(reverse("books:building-dealing-list"))

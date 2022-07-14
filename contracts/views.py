@@ -82,5 +82,6 @@ class ContractDetail(LoggedInOnlyView, DetailView):
 
 @login_required
 def contract_delete(request, pk):
-    contract = models.ContractBase.objects.filter(pk=pk).delete()
+    contract = models.ContractBase.objects.filter(pk=pk)
+    contract.delete()
     return redirect(reverse("contracts:list"))

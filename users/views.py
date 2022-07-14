@@ -159,7 +159,7 @@ class RequestPasswordResetEmail(LoggedOutOnlyView, View):
         context = {'values':request.POST}
         if not validate_email(email):
             messages.error(request, "올바른 이메일을 입력해주세요")
-            return render(request, 'users/reset-password.html', context)        
+            return render(request, 'users/reset-password.html', context)
         
         current_site = get_current_site(request)
         user = models.User.objects.filter(username=email)
