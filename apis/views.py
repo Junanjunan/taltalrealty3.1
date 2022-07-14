@@ -186,8 +186,8 @@ def naver_callback_app(request):
         client_id = os.environ.get("NAVER_ID")
         client_secret = os.environ.get("NAVER_SECRET")
     else:
-        client_id = os.environ.get("NAVER_ID_DEPLOY")
-        client_secret = os.environ.get("NAVER_SECRET_DEPLOY")
+        client_id = os.environ.get("NAVER_ID_DEPLOY_APP")
+        client_secret = os.environ.get("NAVER_SECRET_DEPLOY_APP")
     code = request.GET.get("code")
     state = request.GET.get("state")
     token_request = requests.post(
@@ -227,7 +227,7 @@ def github_login_app(request):
         client_id = os.environ.get("GH_ID_APP")
         redirect_uri = f"{home_url}/api/v1/login/github/callback/"
     else:
-        client_id = os.environ.get("GH_ID_DEPLOY")
+        client_id = os.environ.get("GH_ID_DEPLOY_APP")
         redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/github/callback/"
     return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user")
 
@@ -237,8 +237,8 @@ def github_callback_app(request):
         client_id = os.environ.get("GH_ID_APP")
         client_secret = os.environ.get("GH_SECRET_APP")
     else:
-        client_id = os.environ.get("GH_ID_DEPLOY")
-        client_secret = os.environ.get("GH_SECRET_DEPLOY")
+        client_id = os.environ.get("GH_ID_DEPLOY_APP")
+        client_secret = os.environ.get("GH_SECRET_DEPLOY_APP")
     code = request.GET.get("code")
     result = requests.post(
         f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
