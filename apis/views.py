@@ -128,8 +128,8 @@ def kakao_callback_app(request):
             REST_API_KEY = os.environ.get("KAKAO_ID")
             REDIRECT_URI = f"{home_url}/api/v1/login/kakao/callback/"
         else:
-            REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
+            REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY_APP")
+            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/login/kakao/callback/"
         code = request.GET.get("code")
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
@@ -176,8 +176,8 @@ def naver_login_app(request):
         client_id = os.environ.get("NAVER_ID")
         redirect_uri = f"{home_url}/api/v1/login/naver/callback/"
     else:
-        client_id = os.environ.get("NAVER_ID_DEPLOY")
-        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/naver/callback/"
+        client_id = os.environ.get("NAVER_ID_DEPLOY_APP")
+        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/login/naver/callback/"
     state = uuid.uuid4().hex[:20]
     return redirect(f"https://nid.naver.com/oauth2.0/authorize?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&state={state}")
 
