@@ -228,7 +228,7 @@ def github_login_app(request):
         redirect_uri = f"{home_url}/api/v1/login/github/callback/"
     else:
         client_id = os.environ.get("GH_ID_DEPLOY_APP")
-        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/github/callback/"
+        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/login/github/callback/"
     return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user")
 
 
