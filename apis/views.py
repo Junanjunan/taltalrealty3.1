@@ -118,7 +118,7 @@ def kakao_login_app(request):
         REDIRECT_URI = f"{home_url}/api/v1/login/kakao/callback/"
     else:
         REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/users/social-login/"
+        REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/api/v1/login/kakao/callback/"
     return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
 
 
