@@ -11,52 +11,52 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('customers', '0001_initial'),
+        ('books', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='shopleasecustomer',
+            model_name='storelease',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='shopdealingcustomer',
+            model_name='storedealing',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='officetelleasecustomer',
+            model_name='roomlease',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='officeteldealingcustomer',
+            model_name='roomdealing',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='houseleasecustomer',
+            model_name='officetellease',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='housedealingcustomer',
+            model_name='officeteldealing',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='buildingdealingcustomer',
+            model_name='buildingdealing',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='apartmentleasecustomer',
+            model_name='apartmentlease',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='apartmentdealingcustomer',
+            model_name='apartmentdealing',
             name='realtor',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
