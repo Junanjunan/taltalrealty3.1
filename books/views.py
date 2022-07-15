@@ -693,6 +693,10 @@ class ApartmentDealingCreating(LoggedInOnlyView, CreateView):
         book.realtor = self.request.user
         if book.bath is None:
             book.bath = 0
+        if book.deposit is None:
+            book.deposit = 0
+        if book.month_fee is None:
+            book.month_fee = 0
         if book.management_fee is None:
             book.management_fee = 0
         if book.total_area_m2 is None:

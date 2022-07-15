@@ -7,14 +7,15 @@ from datetime import datetime
 class ApartmentDealing(models.Model):
     # apartmentdealing_id = models.BigAutoField(primary_key=True)
     realtor = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
     updated = models.DateField(blank=True, null=True)
+    address = models.CharField(max_length=100)
+    room = models.IntegerField()
+    bath = models.IntegerField(blank=True, null=True)
     price = models.IntegerField()
     deposit = models.IntegerField(blank=True, null=True)
     month_fee = models.IntegerField(blank=True, null=True)
     management_fee = models.IntegerField(blank=True, null=True)
-    room = models.IntegerField()
-    bath = models.IntegerField(blank=True, null=True)
+    
     birth = models.DateField(blank=True, null=True)
     area_m2 = models.FloatField()
     total_area_m2 = models.FloatField(blank=True, null=True)
@@ -59,9 +60,6 @@ class RoomDealing(models.Model):
     owner_phone = models.CharField(blank=True, null=True, max_length=100)
     tenant_phone = models.CharField(blank=True, null=True, max_length=100)
     description = models.TextField(blank=True, null=True)
-    
-    
-    
     
 
 class OfficetelDealing(models.Model):
