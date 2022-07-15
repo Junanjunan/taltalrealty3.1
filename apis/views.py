@@ -82,7 +82,6 @@ class TestView(APIView):
 class SignUpView(APIView):
     def post(self, request):
         serializer = serializers.UserSerializer(data=request.data)
-        print(type(request.data["password"]))
         if serializer.is_valid():
             new_user = serializer.save()
             new_user.set_password(request.data["password"])
