@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-# import sentry_sdk
-# from sentry_sdk.integrations.django import DjangoIntegration
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -182,11 +182,11 @@ if not DEBUG:
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
-#     sentry_sdk.init(
-#     dsn=os.environ.get("SENTRY_URL"),
-#     integrations=[DjangoIntegration()],
-#     send_default_pii=True,
-#     )
+    sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_URL"),
+    integrations=[DjangoIntegration()],
+    send_default_pii=True,
+    )
 
 
 # WARNINGS: books.ApartmentDealing: (models.W042) Auto-created primary key used when not defining a primary key type, by default 'django.db.models.AutoField'. / HINT: Configure the DEFAULT_AUTO_FIELD setting or the BooksConfig.default_auto_field attribute to point to a subclass of AutoField, e.g. 'django.db.models.BigAutoField'.
