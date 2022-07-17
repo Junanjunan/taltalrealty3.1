@@ -26,6 +26,11 @@ from validate_email import validate_email       # pipenv install validate_email
 from . import forms, models
 
 
+class PrivacyPolicyView(View):
+    def get(self, request):
+        return render(request, 'users/privacy.html')
+
+
 class LoggedOutOnlyView(UserPassesTestMixin, View):
     def test_func(self):
         return not self.request.user.is_authenticated
@@ -55,6 +60,7 @@ class SignUpAfterView(LoggedOutOnlyView, FormView):
 class SignUpDoneView(View):
     def get(self, request):
         return render(request, 'users/signup_done.html')
+
 
 def complete_verification(request, key):
     try:
@@ -282,7 +288,6 @@ def github_callback(request):
             "Authorization": f"token {access_token}",
             "Accept": "application/json"})
     profile_json = profile_request.json()
-    print(profile_json)
     email = profile_json.get("email")
     bio = profile_json.get("bio")
     bio = "" if bio is None else bio
