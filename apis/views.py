@@ -12,9 +12,6 @@ from customers import models as customers_models
 from contracts import models as contracts_models
 from managements import models as managements_models
 from . import serializers
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 import os
 import requests
@@ -30,26 +27,39 @@ from apis.home_url import home_url
 class AllUserView(APIView):
     def get(self, request):
         user = users_models.User.objects.all()
-        serializer = serializers.UserSerializer(user, many=True, context={"request":request}).data
+        serializer = serializers.UserSerializer(
+            user, 
+            many=True, 
+            context={"request":request}
+        ).data
         return Response(serializer)
 
 
 class SocialLoginTokenView(APIView):
     def get(self, request,pk):
         user = users_models.User.objects.get(pk=pk)
-        serializer = serializers.UserTokenSerializer(user, context={"request":request}).data
+        serializer = serializers.UserTokenSerializer(
+            user, 
+            context={"request":request}
+        ).data
         return Response(serializer)
 
 
 class MeView(APIView):
     def get(self, request):
-        return Response(serializers.UserSerializer(request.user, context={"request":request}).data)
+        return Response(serializers.UserSerializer(
+            request.user,
+            context={"request":request}
+            ).data)
 
 
 class ProfileView(APIView):
     def get(self, request, pk):
         user = users_models.User.objects.get(pk=pk)
-        serializer = serializers.UserSerializer(user, context={"request":request}).data
+        serializer = serializers.UserSerializer(
+            user, 
+            context={"request":request}
+        ).data
         return Response(serializer)
 
     def post(self, request, pk):
@@ -102,7 +112,11 @@ class LoginView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         user = authenticate(username=username, password=password)
         if user is not None:
-            encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+            encoded_jwt = jwt.encode(
+                {"pk":user.pk}, 
+                settings.SECRET_KEY, 
+                algorithm="HS256"
+            )
             return Response(data={"token":encoded_jwt, "id":user.pk})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -217,9 +231,18 @@ def naver_callback_app(request):
         user.set_unusable_password()
         user.email_verified = True
         user.save()
-    encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+    encoded_jwt = jwt.encode(
+        {"pk":user.pk}, 
+        settings.SECRET_KEY, 
+        algorithm="HS256"
+    )
     login(request,user)
-    return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
+    return render(request, 'app_token.html', {
+        "user_pk":user.pk, 
+        'access_token':encoded_jwt, 
+        'email':email, 
+        'request':request
+        })
 
 def github_login_app(request):
     if settings.DEBUG == True:
@@ -265,9 +288,18 @@ def github_callback_app(request):
         user.set_unusable_password()
         user.email_verified = True
         user.save()
-    encoded_jwt = jwt.encode({"pk":user.pk}, settings.SECRET_KEY, algorithm="HS256")
+    encoded_jwt = jwt.encode(
+        {"pk":user.pk}, 
+        settings.SECRET_KEY, 
+        algorithm="HS256"
+        )
     login(request,user)
-    return render(request, 'app_token.html', {"user_pk":user.pk, 'access_token':encoded_jwt, 'email':email, 'request':request})
+    return render(request, 'app_token.html', {
+        "user_pk":user.pk, 
+        'access_token':encoded_jwt, 
+        'email':email, 
+        'request':request}
+        )
 
 
 def social_logout(request):
@@ -280,11 +312,18 @@ class BooksApartmentDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.ApartmentDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksApartmentDealingSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksApartmentDealingSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksApartmentDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksApartmentDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksApartmentDealingSerializer(new_villa).data)
@@ -295,11 +334,19 @@ class BooksApartmentDealingView(APIView):
 class BooksApartmentDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.ApartmentDealing.objects.get(pk=pk)
-        serializer = serializers.BooksApartmentDealingSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksApartmentDealingSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.ApartmentDealing.objects.get(pk=pk)
-        serializer = serializers.BooksApartmentDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksApartmentDealingSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -362,9 +409,8 @@ class BooksApartmentDealingSearchingView(APIView):
         else:
             filter_args["not_finished"] = False
 
-        print(filter_args)
         lists = books_models.ApartmentDealing.objects.filter(**filter_args)
-        print(lists)
+
         try:
             lists = books_models.ApartmentDealing.objects.filter(**filter_args)
         except:
@@ -383,11 +429,18 @@ class BooksVillaDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.RoomDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksVillaDealingSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksVillaDealingSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksVillaDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksVillaDealingSerializer(new_villa).data)
@@ -398,11 +451,19 @@ class BooksVillaDealingView(APIView):
 class BooksVillaDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        serializer = serializers.BooksVillaDealingSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksVillaDealingSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.RoomDealing.objects.get(pk=pk)
-        serializer = serializers.BooksVillaDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -471,7 +532,11 @@ class BooksVillaDealingSearchingView(APIView):
             lists = books_models.RoomDealing.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksVillaDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksVillaDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 
@@ -481,11 +546,18 @@ class BooksOfficetelDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.OfficetelDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksOfficetelDealingSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksOfficetelDealingSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksOfficetelDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksOfficetelDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksOfficetelDealingSerializer(new_villa).data)
@@ -496,11 +568,19 @@ class BooksOfficetelDealingView(APIView):
 class BooksOfficetelDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.OfficetelDealing.objects.get(pk=pk)
-        serializer = serializers.BooksOfficetelDealingSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksOfficetelDealingSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.OfficetelDealing.objects.get(pk=pk)
-        serializer = serializers.BooksOfficetelDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksOfficetelDealingSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -567,7 +647,11 @@ class BooksOfficetelDealingSearchingView(APIView):
             lists = books_models.OfficetelDealing.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksOfficetelDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksOfficetelDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 """Officetel Finish"""
 
@@ -577,11 +661,18 @@ class BooksStoreDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.StoreDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksStoreDealingSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksStoreDealingSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksStoreDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksStoreDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksStoreDealingSerializer(new_villa).data)
@@ -592,11 +683,19 @@ class BooksStoreDealingView(APIView):
 class BooksStoreDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.StoreDealing.objects.get(pk=pk)
-        serializer = serializers.BooksStoreDealingSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksStoreDealingSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.StoreDealing.objects.get(pk=pk)
-        serializer = serializers.BooksStoreDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksStoreDealingSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -671,11 +770,18 @@ class BooksBuildingDealingView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.BuildingDealing.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksBuildingDealingSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksBuildingDealingSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksBuildingDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksBuildingDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksBuildingDealingSerializer(new_villa).data)
@@ -686,11 +792,19 @@ class BooksBuildingDealingView(APIView):
 class BooksBuildingDealingUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.BuildingDealing.objects.get(pk=pk)
-        serializer = serializers.BooksBuildingDealingSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksBuildingDealingSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.BuildingDealing.objects.get(pk=pk)
-        serializer = serializers.BooksBuildingDealingSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksBuildingDealingSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -758,11 +872,18 @@ class BooksApartmentLeaseView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.ApartmentLease.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksApartmentLeaseSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksApartmentLeaseSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksApartmentLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksApartmentLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksApartmentLeaseSerializer(new_villa).data)
@@ -773,11 +894,19 @@ class BooksApartmentLeaseView(APIView):
 class BooksApartmentLeaseUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.ApartmentLease.objects.get(pk=pk)
-        serializer = serializers.BooksApartmentLeaseSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksApartmentLeaseSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.ApartmentLease.objects.get(pk=pk)
-        serializer = serializers.BooksApartmentLeaseSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksApartmentLeaseSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -847,7 +976,11 @@ class BooksApartmentLeaseSearchingView(APIView):
             lists = books_models.ApartmentLease.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksApartmentLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksApartmentLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 """Apartment Lease Finish"""
 
@@ -856,11 +989,18 @@ class BooksVillaLeaseView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.RoomLease.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksVillaLeaseSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksVillaLeaseSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksVillaLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksVillaLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksVillaLeaseSerializer(new_villa).data)
@@ -871,11 +1011,19 @@ class BooksVillaLeaseView(APIView):
 class BooksVillaLeaseUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.RoomLease.objects.get(pk=pk)
-        serializer = serializers.BooksVillaLeaseSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksVillaLeaseSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.RoomLease.objects.get(pk=pk)
-        serializer = serializers.BooksVillaLeaseSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksVillaLeaseSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -945,7 +1093,11 @@ class BooksVillaLeaseSearchingView(APIView):
             lists = books_models.RoomLease.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksVillaLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksVillaLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 """Villa Lease Finish"""
 
@@ -956,11 +1108,18 @@ class BooksOfficetelLeaseView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.OfficetelLease.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksOfficetelLeaseSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksOfficetelLeaseSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksOfficetelLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksOfficetelLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksOfficetelLeaseSerializer(new_villa).data)
@@ -971,11 +1130,19 @@ class BooksOfficetelLeaseView(APIView):
 class BooksOfficetelLeaseUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.OfficetelLease.objects.get(pk=pk)
-        serializer = serializers.BooksOfficetelLeaseSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksOfficetelLeaseSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.OfficetelLease.objects.get(pk=pk)
-        serializer = serializers.BooksOfficetelLeaseSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksOfficetelLeaseSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1045,7 +1212,11 @@ class BooksOfficetelLeaseSearchingView(APIView):
             lists = books_models.OfficetelLease.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksOfficetelLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksOfficetelLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 """Officetel Lease Finish"""
 
@@ -1056,11 +1227,18 @@ class BooksStoreLeaseView(APIView):
     def get(self, request):
         user = request.user
         books = books_models.StoreLease.objects.filter(realtor_id=user.pk)
-        serializer = serializers.BooksStoreLeaseSerializer(books, many=True, context={"request":request}).data
+        serializer = serializers.BooksStoreLeaseSerializer(
+            books, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.BooksStoreLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.BooksStoreLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_villa = serializer.save()
             return Response(serializers.BooksStoreLeaseSerializer(new_villa).data)
@@ -1071,11 +1249,19 @@ class BooksStoreLeaseView(APIView):
 class BooksStoreLeaseUpdatingView(APIView):
     def get(self, request, pk):
         book = books_models.StoreLease.objects.get(pk=pk)
-        serializer = serializers.BooksStoreLeaseSerializer(book, context={"request":request}).data
+        serializer = serializers.BooksStoreLeaseSerializer(
+            book, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         book = books_models.StoreLease.objects.get(pk=pk)
-        serializer = serializers.BooksStoreLeaseSerializer(book, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.BooksStoreLeaseSerializer(
+            book, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1142,7 +1328,11 @@ class BooksStoreLeaseSearchingView(APIView):
             lists = books_models.StoreLease.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.BooksStoreLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.BooksStoreLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 """Store Lease Finish"""
 
@@ -1152,11 +1342,18 @@ class CustomerApartmentDealingView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.ApartmentDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerApartmentDealingSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerApartmentDealingSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerApartmentDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerApartmentDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerApartmentDealingSerializer(new_customer).data)
@@ -1167,11 +1364,19 @@ class CustomerApartmentDealingView(APIView):
 class CustomerApartmentDealingUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.ApartmentDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerApartmentDealingSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerApartmentDealingSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.ApartmentDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerApartmentDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerApartmentDealingSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1228,7 +1433,11 @@ class CustomerApartmentDealingSearchingView(APIView):
             lists = customers_models.ApartmentDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerApartmentDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerApartmentDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Apartment Dealing Finish"""
@@ -1239,11 +1448,18 @@ class CustomerBuildingDealingView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.BuildingDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerBuildingDealingSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerBuildingDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerBuildingDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerBuildingDealingSerializer(new_customer).data)
@@ -1254,11 +1470,19 @@ class CustomerBuildingDealingView(APIView):
 class CustomerBuildingDealingUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerBuildingDealingSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.BuildingDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerBuildingDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerBuildingDealingSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1307,7 +1531,11 @@ class CustomerBuildingDealingSearchingView(APIView):
             lists = customers_models.BuildingDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerBuildingDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerBuildingDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Building Dealing Finish"""
@@ -1318,11 +1546,18 @@ class CustomerVillaDealingView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.HouseDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerVillaDealingSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerVillaDealingSerializer(
+            customers,
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerVillaDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerVillaDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerVillaDealingSerializer(new_customer).data)
@@ -1333,11 +1568,19 @@ class CustomerVillaDealingView(APIView):
 class CustomerVillaDealingUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerVillaDealingSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerVillaDealingSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.HouseDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerVillaDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerVillaDealingSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1394,7 +1637,11 @@ class CustomerVillaDealingSearchingView(APIView):
             lists = customers_models.HouseDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerVillaDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerVillaDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Villa Dealing Finish"""
@@ -1405,11 +1652,18 @@ class CustomerOfficetelDealingView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.OfficetelDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerOfficetelDealingSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerOfficetelDealingSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerOfficetelDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerOfficetelDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerOfficetelDealingSerializer(new_customer).data)
@@ -1420,11 +1674,19 @@ class CustomerOfficetelDealingView(APIView):
 class CustomerOfficetelDealingUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.OfficetelDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerOfficetelDealingSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerOfficetelDealingSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.OfficetelDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerOfficetelDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerOfficetelDealingSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1481,7 +1743,11 @@ class CustomerOfficetelDealingSearchingView(APIView):
             lists = customers_models.OfficetelDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerOfficetelDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerOfficetelDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Officetel Dealing Finish"""
@@ -1492,11 +1758,18 @@ class CustomerStoreDealingView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.ShopDealingCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerStoreDealingSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerStoreDealingSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerStoreDealingSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerStoreDealingSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerStoreDealingSerializer(new_customer).data)
@@ -1507,11 +1780,19 @@ class CustomerStoreDealingView(APIView):
 class CustomerStoreDealingUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.ShopDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerStoreDealingSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerStoreDealingSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.ShopDealingCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerStoreDealingSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerStoreDealingSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1565,7 +1846,11 @@ class CustomerStoreDealingSearchingView(APIView):
             lists = customers_models.ShopDealingCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerStoreDealingSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerStoreDealingSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Store Dealing Finish"""
@@ -1576,11 +1861,18 @@ class CustomerApartmentLeaseView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.ApartmentLeaseCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerApartmentLeaseSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerApartmentLeaseSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerApartmentLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerApartmentLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerApartmentLeaseSerializer(new_customer).data)
@@ -1591,11 +1883,19 @@ class CustomerApartmentLeaseView(APIView):
 class CustomerApartmentLeaseUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.ApartmentLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerApartmentLeaseSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerApartmentLeaseSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.ApartmentLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerApartmentLeaseSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerApartmentLeaseSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1655,7 +1955,11 @@ class CustomerApartmentLeaseSearchingView(APIView):
             lists = customers_models.ApartmentLeaseCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerApartmentLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerApartmentLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Apartment Lease Finish"""
@@ -1666,11 +1970,18 @@ class CustomerVillaLeaseView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.HouseLeaseCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerVillaLeaseSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerVillaLeaseSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerVillaLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerVillaLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerVillaLeaseSerializer(new_customer).data)
@@ -1681,11 +1992,19 @@ class CustomerVillaLeaseView(APIView):
 class CustomerVillaLeaseUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.HouseLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerVillaLeaseSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerVillaLeaseSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.HouseLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerVillaLeaseSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerVillaLeaseSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1750,7 +2069,11 @@ class CustomerVillaLeaseSearchingView(APIView):
             lists = customers_models.HouseLeaseCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerVillaLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerVillaLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Villa Lease Finish"""
@@ -1761,11 +2084,18 @@ class CustomerOfficetelLeaseView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.OfficetelLeaseCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerOfficetelLeaseSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerOfficetelLeaseSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerOfficetelLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerOfficetelLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerOfficetelLeaseSerializer(new_customer).data)
@@ -1776,11 +2106,19 @@ class CustomerOfficetelLeaseView(APIView):
 class CustomerOfficetelLeaseUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.OfficetelLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerOfficetelLeaseSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerOfficetelLeaseSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.OfficetelLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerOfficetelLeaseSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerOfficetelLeaseSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1845,7 +2183,11 @@ class CustomerOfficetelLeaseSearchingView(APIView):
             lists = customers_models.OfficetelLeaseCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerOfficetelLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerOfficetelLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Officetel Lease Finish"""
@@ -1856,11 +2198,18 @@ class CustomerStoreLeaseView(APIView):
     def get(self, request):
         user = request.user
         customers = customers_models.ShopLeaseCustomer.objects.filter(realtor_id=user.pk)
-        serializer = serializers.CustomerStoreLeaseSerializer(customers, many=True, context={"request":request}).data
+        serializer = serializers.CustomerStoreLeaseSerializer(
+            customers, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
 
     def post(self, request):
-        serializer = serializers.CustomerStoreLeaseSerializer(data=request.data, context={"request":request})
+        serializer = serializers.CustomerStoreLeaseSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_customer = serializer.save()
             return Response(serializers.CustomerStoreLeaseSerializer(new_customer).data)
@@ -1871,11 +2220,19 @@ class CustomerStoreLeaseView(APIView):
 class CustomerStoreLeaseUpdatingView(APIView):
     def get(self, request, pk):
         customer = customers_models.ShopLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerStoreLeaseSerializer(customer, context={"request":request}).data
+        serializer = serializers.CustomerStoreLeaseSerializer(
+            customer, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         customer = customers_models.ShopLeaseCustomer.objects.get(pk=pk)
-        serializer = serializers.CustomerStoreLeaseSerializer(customer, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.CustomerStoreLeaseSerializer(
+            customer, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -1932,7 +2289,11 @@ class CustomerStoreLeaseSearchingView(APIView):
             lists = customers_models.ShopLeaseCustomer.objects.filter(**filter_args)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.CustomerStoreLeaseSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.CustomerStoreLeaseSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 """Customer Store Lease Finish"""
@@ -1941,10 +2302,17 @@ class CustomerStoreLeaseSearchingView(APIView):
 class ContractView(APIView):
     def get(self, request):
         contracts = contracts_models.ContractBase.objects.filter(realtor_id=request.user.pk)
-        serializer = serializers.ContractSerializer(contracts, many=True, context={"request":request}).data
+        serializer = serializers.ContractSerializer(
+            contracts, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def post(self, request):
-        serializer = serializers.ContractSerializer(data=request.data, context={"request":request})
+        serializer = serializers.ContractSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_contract = serializer.save()
             return Response(serializers.ContractSerializer(new_contract).data)
@@ -1981,17 +2349,29 @@ class ContractSearchingView(APIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         print(lists)
-        serializer = serializers.ContractSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.ContractSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 class ContractUpdatingView(APIView):
     def get(self, request, pk):
         contract = contracts_models.ContractBase.objects.get(pk=pk)
-        serializer = serializers.ContractSerializer(contract, context={"request":request}).data
+        serializer = serializers.ContractSerializer(
+            contract, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         contract = contracts_models.ContractBase.objects.get(pk=pk)
-        serializer = serializers.ContractSerializer(contract, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.ContractSerializer(
+            contract, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -2013,10 +2393,17 @@ class ContractDeletingView(APIView):
 class ManagementView(APIView):
     def get(self, request):
         managements = managements_models.Management.objects.filter(realtor_id = request.user.pk)
-        serializer = serializers.ManagementSerializer(managements, many=True, context={"request":request}).data
+        serializer = serializers.ManagementSerializer(
+            managements, 
+            many=True, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def post(self, request):
-        serializer = serializers.ManagementSerializer(data=request.data, context={"request":request})
+        serializer = serializers.ManagementSerializer(
+            data=request.data, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             new_management = serializer.save()
             return Response(serializers.ManagementSerializer(new_management).data)
@@ -2026,11 +2413,19 @@ class ManagementView(APIView):
 class ManagementUpdatingView(APIView):
     def get(self, request, pk):
         management = managements_models.Management.objects.get(pk=pk)
-        serializer = serializers.ManagementSerializer(management, context={"request":request}).data
+        serializer = serializers.ManagementSerializer(
+            management, 
+            context={"request":request}
+            ).data
         return Response(serializer)
     def put(self, request, pk):
         management = managements_models.Management.objects.get(pk=pk)
-        serializer = serializers.ManagementSerializer(management, data=request.data, partial=True, context={"request":request})
+        serializer = serializers.ManagementSerializer(
+            management, 
+            data=request.data, 
+            partial=True, 
+            context={"request":request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response()
@@ -2070,7 +2465,11 @@ class ManagementSearchingView(APIView):
             
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.ManagementSerializer(lists, many=True, context={"request":request})
+        serializer = serializers.ManagementSerializer(
+            lists, 
+            many=True, 
+            context={"request":request}
+            )
         return Response(serializer.data)
 
 class ManagementDeletingView(APIView):
