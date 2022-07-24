@@ -179,7 +179,7 @@ if not DEBUG:
     AWS_STORAGE_BUCKET_NAME = 'taltalrealty31'
     AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86500'}
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com'     # AWS_STORAGE_BUCKET_NAME 위치가 뒤에 와야 되는 경우도 있음 / 상황에 따라 다르니 주의 -> S3 들어가서 url 보고 확인
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
     sentry_sdk.init(

@@ -49,6 +49,7 @@ djangorestframework = "*"
 jwt = "*"
 pyjwt = "*"
 sentry-sdk = "*"
+awsebcli = "*"
 
 [dev-packages]
 

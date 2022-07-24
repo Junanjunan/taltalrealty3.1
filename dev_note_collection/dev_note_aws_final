@@ -171,6 +171,8 @@ S3 만들기
 
   처음으로 통으로 올릴때는 객체 소유권도 ACL 활성화로(버킷 소유자 선호) 해주어야 업로드 가능
 
+$ pipenv install pipenv-to-requirements
+    $ pipenv lock -r > requirements.txt
 
 $ eb init
     - seoul 선택 (10번)
@@ -185,8 +187,6 @@ $ eb init
                 Enter passphrase(empty for no passphrase): 비어있는 상태로 엔터
                 Enter same passphrase again: 그대로 엔터
 
-$ pipenv install pipenv-to-requirements
-    $ pipenv lock -r > requirements.txt
 
 $ git add . / git commit -m "." / eb create
     - Enter Environment Name: taltalrealty31-dev
@@ -449,54 +449,54 @@ S3 ACL 설정(S3 버킷 삭제도 가능)
   5. [Edit Bucket Policy]를 선택합니다.
 
   6.다음 정책을 버킷 정책 편집기 창으로 복사합니다.
+{
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Sid": "AWSConfigBucketPermissionsCheck",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "config.amazonaws.com"
-          },
-          "Action": "s3:GetBucketAcl",
-          "Resource": "arn:aws:s3:::targetBucketName",
-          "Condition": { 
-            "StringEquals": {
-              "AWS:SourceAccount": "sourceAccountID"
-            }
-          }
-        },
-        {
-          "Sid": "AWSConfigBucketExistenceCheck",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "config.amazonaws.com"
-          },
-          "Action": "s3:ListBucket",
-          "Resource": "arn:aws:s3:::targetBucketName",
-          "Condition": { 
-            "StringEquals": {
-              "AWS:SourceAccount": "sourceAccountID"
-            }
-          }
-        },
-        {
-          "Sid": "AWSConfigBucketDelivery",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "config.amazonaws.com"
-          },
-          "Action": "s3:PutObject",
-          "Resource": "arn:aws:s3:::targetBucketName/[optional] prefix/AWSLogs/sourceAccountID/Config/*",
-          "Condition": { 
-            "StringEquals": { 
-              "s3:x-amz-acl": "bucket-owner-full-control",
-              "AWS:SourceAccount": "sourceAccountID"
-            }
-          }
+      "Sid": "AWSConfigBucketPermissionsCheck",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "config.amazonaws.com"
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "arn:aws:s3:::targetBucketName",
+      "Condition": { 
+        "StringEquals": {
+          "AWS:SourceAccount": "sourceAccountID"
         }
-      ]
+      }
+    },
+    {
+      "Sid": "AWSConfigBucketExistenceCheck",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "config.amazonaws.com"
+      },
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::targetBucketName",
+      "Condition": { 
+        "StringEquals": {
+          "AWS:SourceAccount": "sourceAccountID"
+        }
+      }
+    },
+    {
+      "Sid": "AWSConfigBucketDelivery",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "config.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::targetBucketName/[optional] prefix/AWSLogs/sourceAccountID/Config/*",
+      "Condition": { 
+        "StringEquals": { 
+          "s3:x-amz-acl": "bucket-owner-full-control",
+          "AWS:SourceAccount": "sourceAccountID"
+        }
+      }
     }
+  ]
+}
 
     sourceAccountID는 계정 ID: 1542-4215-1844 숫자 형태로 되어있는것
                                 영문으로 되어있는 걸로 하면 퍼블릭 액세스 차단 상태에서 접근이 안됨
@@ -599,3 +599,21 @@ S3 ACL 설정(S3 버킷 삭제도 가능)
 
 
   * 서비스 종료: eb terminate / eb terminate --all
+
+
+* awsebcli에서 botocore 버전 오류를 일으킬때가 있음. eb init 자체가 안될때 
+  -> pip3 uninstall awsebcli 후 pip3 install awsebcli 하면 botocore가 boto3 버전에 안맞다고 나올때 있음
+    이때는 pip3 install --upgrade botocore 하면 upgrade 되고 eb init 됨
+
+* eb logs --all 이 계속 로딩만 되고 안되는 경우 오류
+    The conflict is caused by:
+        The user requested requests==2.26.0
+        iamport-rest-client 0.9.0 depends on requests==2.26.0
+        docker-compose 1.21.2 depends on requests!=2.11.0, !=2.12.2, !=2.18.0, <2.19 and >=2.6.1
+
+    To fix this you could try to:
+    1. loosen the range of package versions you've specified
+    2. remove package versions to allow pip attempt to solve the dependency conflict
+
+    특정 버전의 requests 를 다운 받기 위해서
+      $ pipenv install requests~=2.28.1

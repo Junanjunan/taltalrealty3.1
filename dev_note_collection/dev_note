@@ -86,3 +86,7 @@
  - requests : pipenv install requests
 
 
+* pipenv uninstall module-name 안될때
+    pip uninstall module-name 한 후에
+    pipenv uninstall module-name 하면 됨
+    ex) pipenv uninstall requests
