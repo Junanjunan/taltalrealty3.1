@@ -311,7 +311,7 @@ def social_logout(request):
 class BooksApartmentDealingView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.ApartmentDealing.objects.filter(realtor_id=user.pk)
+        books = books_models.ApartmentDealing.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksApartmentDealingSerializer(
             books, 
             many=True, 
@@ -417,18 +417,20 @@ class BooksApartmentDealingSearchingView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksApartmentDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
-"""Apartment Finish"""
 
 class BooksApartmentDealingDetailView(APIView):
     def get(self, request, pk):
         books = books_models.ApartmentDealing.objects.get(pk=pk)
         serializer = serializers.BooksApartmentSerializer(books, context={"request":request}).data
         return Response(serializer)
+"""Apartment Finish"""
+
+
 
 class BooksVillaDealingView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.RoomDealing.objects.filter(realtor_id=user.pk)
+        books = books_models.RoomDealing.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksVillaDealingSerializer(
             books, 
             many=True, 
@@ -545,7 +547,7 @@ class BooksVillaDealingSearchingView(APIView):
 class BooksOfficetelDealingView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.OfficetelDealing.objects.filter(realtor_id=user.pk)
+        books = books_models.OfficetelDealing.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksOfficetelDealingSerializer(
             books, 
             many=True, 
@@ -660,7 +662,7 @@ class BooksOfficetelDealingSearchingView(APIView):
 class BooksStoreDealingView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.StoreDealing.objects.filter(realtor_id=user.pk)
+        books = books_models.StoreDealing.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksStoreDealingSerializer(
             books, 
             many=True, 
@@ -769,7 +771,7 @@ class BooksStoreDealingSearchingView(APIView):
 class BooksBuildingDealingView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.BuildingDealing.objects.filter(realtor_id=user.pk)
+        books = books_models.BuildingDealing.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksBuildingDealingSerializer(
             books, 
             many=True, 
@@ -871,7 +873,7 @@ class BooksBuildingDealingSearchingView(APIView):
 class BooksApartmentLeaseView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.ApartmentLease.objects.filter(realtor_id=user.pk)
+        books = books_models.ApartmentLease.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksApartmentLeaseSerializer(
             books, 
             many=True, 
@@ -988,7 +990,7 @@ class BooksApartmentLeaseSearchingView(APIView):
 class BooksVillaLeaseView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.RoomLease.objects.filter(realtor_id=user.pk)
+        books = books_models.RoomLease.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksVillaLeaseSerializer(
             books, 
             many=True, 
@@ -1107,7 +1109,7 @@ class BooksVillaLeaseSearchingView(APIView):
 class BooksOfficetelLeaseView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.OfficetelLease.objects.filter(realtor_id=user.pk)
+        books = books_models.OfficetelLease.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksOfficetelLeaseSerializer(
             books, 
             many=True, 
@@ -1226,7 +1228,7 @@ class BooksOfficetelLeaseSearchingView(APIView):
 class BooksStoreLeaseView(APIView):
     def get(self, request):
         user = request.user
-        books = books_models.StoreLease.objects.filter(realtor_id=user.pk)
+        books = books_models.StoreLease.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.BooksStoreLeaseSerializer(
             books, 
             many=True, 
@@ -1341,7 +1343,7 @@ class BooksStoreLeaseSearchingView(APIView):
 class CustomerApartmentDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.ApartmentDealingCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.ApartmentDealingCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerApartmentDealingSerializer(
             customers, 
             many=True, 
@@ -1447,7 +1449,7 @@ class CustomerApartmentDealingSearchingView(APIView):
 class CustomerBuildingDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.BuildingDealingCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.BuildingDealingCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerBuildingDealingSerializer(
             customers, 
             many=True, 
@@ -1545,7 +1547,7 @@ class CustomerBuildingDealingSearchingView(APIView):
 class CustomerVillaDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.HouseDealingCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.HouseDealingCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerVillaDealingSerializer(
             customers,
             many=True, 
@@ -1651,7 +1653,7 @@ class CustomerVillaDealingSearchingView(APIView):
 class CustomerOfficetelDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.OfficetelDealingCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.OfficetelDealingCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerOfficetelDealingSerializer(
             customers, 
             many=True, 
@@ -1757,7 +1759,7 @@ class CustomerOfficetelDealingSearchingView(APIView):
 class CustomerStoreDealingView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.ShopDealingCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.ShopDealingCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerStoreDealingSerializer(
             customers, 
             many=True, 
@@ -1860,7 +1862,7 @@ class CustomerStoreDealingSearchingView(APIView):
 class CustomerApartmentLeaseView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.ApartmentLeaseCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.ApartmentLeaseCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerApartmentLeaseSerializer(
             customers, 
             many=True, 
@@ -1969,7 +1971,7 @@ class CustomerApartmentLeaseSearchingView(APIView):
 class CustomerVillaLeaseView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.HouseLeaseCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.HouseLeaseCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerVillaLeaseSerializer(
             customers, 
             many=True, 
@@ -2083,7 +2085,7 @@ class CustomerVillaLeaseSearchingView(APIView):
 class CustomerOfficetelLeaseView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.OfficetelLeaseCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.OfficetelLeaseCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerOfficetelLeaseSerializer(
             customers, 
             many=True, 
@@ -2197,7 +2199,7 @@ class CustomerOfficetelLeaseSearchingView(APIView):
 class CustomerStoreLeaseView(APIView):
     def get(self, request):
         user = request.user
-        customers = customers_models.ShopLeaseCustomer.objects.filter(realtor_id=user.pk)
+        customers = customers_models.ShopLeaseCustomer.objects.filter(realtor_id=user.pk, not_finished=True)
         serializer = serializers.CustomerStoreLeaseSerializer(
             customers, 
             many=True, 
@@ -2301,7 +2303,7 @@ class CustomerStoreLeaseSearchingView(APIView):
 
 class ContractView(APIView):
     def get(self, request):
-        contracts = contracts_models.ContractBase.objects.filter(realtor_id=request.user.pk)
+        contracts = contracts_models.ContractBase.objects.filter(realtor_id=request.user.pk, not_finished=True)
         serializer = serializers.ContractSerializer(
             contracts, 
             many=True, 
