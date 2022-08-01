@@ -1,5 +1,5 @@
 from django.contrib import admin
-from import_export.admin import ExportActionModelAdmin, ImportExportMixin, ImportMixin
+from import_export.admin import ImportExportMixin
 from . import models
 
 @admin.register(models.ApartmentDealingCustomer)

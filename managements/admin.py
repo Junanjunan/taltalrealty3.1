@@ -1,8 +1,9 @@
 from django.contrib import admin
+from import_export.admin import ImportExportMixin
 from . import models
 
 @admin.register(models.Management)
-class ManagementAdmin(admin.ModelAdmin):
+class ManagementAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = (
         'address',
         'realtor',
