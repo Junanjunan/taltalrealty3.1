@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from . import models, forms
+from components.search_filter import search_filter
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -18,22 +19,7 @@ class ContractsList(LoggedInOnlyView, ListView):
     context_object_name = "lists"
 
 def contract_search(request):
-    address = request.GET.get("address")
-    description = request.GET.get("description")
-    report = request.GET.get("report")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    filter_args["address__contains"] = address
-    filter_args["description__contains"] = description
-    if report == "on":
-        filter_args["report"] = True
-    if report != "on":
-        filter_args["report"] = False
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if not_finished != "on":
-        filter_args["not_finished"] = False
+    filter_args = search_filter(request)
     lists = models.ContractBase.objects.filter(**filter_args)
     return render(request, "contracts/contractbase_list.html", {**filter_args, "lists": lists})
 

@@ -1,4 +1,5 @@
-def search_filter(request):
+def search_filter_for_app(request):
+    realtor_id = request.GET.get("realtor_id")
     address = request.GET.get("address")
     guest_phone = request.GET.get("guest_phone")
     price = request.GET.get("price")
@@ -23,7 +24,8 @@ def search_filter(request):
     description = request.GET.get("description")
 
     filter_args = {}
-
+    
+    filter_args["realtor_id"] = int(realtor_id)
     if address:
         filter_args["address__contains"] = address
     if guest_phone:
@@ -42,30 +44,30 @@ def search_filter(request):
         filter_args["room__gte"] = room
     if description:
         filter_args["description__contains"] = description
-    if parking == "on":
+    if parking:
         filter_args["parking"] = True
-    if elevator == "on":
+    if elevator:
         filter_args["elevator"] = True
-    if loan == "on":
+    if loan:
         filter_args["loan"] = True
-    if empty == "on":
+    if empty:
         filter_args["empty"] = True
-    if not_finished == "on":
+    if not_finished:
         filter_args["not_finished"] = True
-    if naver == "on":
+    if naver:
         filter_args["naver"] = True
-    if dabang == "on":
+    if dabang:
         filter_args["dabang"] = True
-    if zicbang == "on":
+    if zicbang:
         filter_args["zicbang"] = True
-    if peterpan == "on":
+    if peterpan:
         filter_args["peterpan"] = True
-    if report == "on":
+    if report:
         filter_args["report"] = True
-    if deal_report == "on":
+    if deal_report:
         filter_args["deal_report"] = True
-    if deal_renewal_notice == "on":
+    if deal_renewal_notice:
         filter_args["deal_renewal_notice"] = True
-    if deal_renewal_right_usage == "on":
+    if deal_renewal_right_usage:
         filter_args["deal_renewal_right_usage"] = True
     return filter_args

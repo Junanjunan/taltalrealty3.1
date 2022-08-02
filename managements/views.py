@@ -12,6 +12,7 @@ from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from . import models, forms
 from users import models as users_model
+from components.search_filter import search_filter
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -23,28 +24,7 @@ class ManagementList(LoggedInOnlyView, ListView):
     context_object_name = "lists"
 
 def management_search(request):
-    address = request.GET.get("address")
-    description = request.GET.get("description")
-    deal_report = request.GET.get("deal_report")
-    deal_renewal_notice = request.GET.get("deal_renewal_notice")
-    deal_renewal_right_usage = request.GET.get("deal_renewal_right_usage")
-
-
-    filter_args = {}
-    filter_args["address__contains"] = address
-    filter_args["description__contains"] = description
-    if deal_report == "on":
-        filter_args["deal_report"] = True
-    if deal_report != "on":
-        filter_args["deal_report"] = False
-    if deal_renewal_notice == "on":
-        filter_args["deal_renewal_notice"] = True
-    if deal_renewal_notice != "on":
-        filter_args["deal_renewal_notice"] = False
-    if deal_renewal_right_usage == "on":
-        filter_args["deal_renewal_right_usage"] = True
-    if deal_renewal_right_usage != "on":
-        filter_args["deal_renewal_right_usage"] = False
+    filter_args = search_filter(request)
     lists = models.Management.objects.filter(**filter_args)
     return render(request, "managements/management_list.html", {**filter_args, "lists": lists})
 

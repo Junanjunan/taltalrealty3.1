@@ -1,27 +1,25 @@
 import jwt
 import uuid
+import os
+import requests
 from django.conf import settings
-from django.contrib.auth import authenticate
-from rest_framework import serializers
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import render, redirect
+from django.core.files.base import ContentFile
+from django.urls import reverse
+from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
 from users import models as users_models
 from books import models as books_models
 from customers import models as customers_models
 from contracts import models as contracts_models
 from managements import models as managements_models
-from . import serializers
-from django.contrib.auth import authenticate, login, logout
-import os
-import requests
-from django.contrib.auth.hashers import check_password
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.core.files.base import ContentFile
-from django.urls import reverse
 from apis.home_url import home_url
-
+from components.search_filter_for_app import search_filter_for_app
+from . import serializers
 
 
 class AllUserView(APIView):
@@ -74,7 +72,6 @@ class ProfileView(APIView):
         else:
             print("오류오류")
         return Response()
-        
 
     def delete(self, request, pk):
         user = users_models.User.objects.get(pk=pk)
@@ -367,54 +364,8 @@ class BooksApartmentDealingDeletingView(APIView):
 
 class BooksApartmentDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        price = int(request.GET.get("price", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
+        filter_args = search_filter_for_app(request)
         lists = books_models.ApartmentDealing.objects.filter(**filter_args)
-
-        try:
-            lists = books_models.ApartmentDealing.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksApartmentDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
 
@@ -486,54 +437,8 @@ class BooksVillaDealingDeletingView(APIView):
 
 class BooksVillaDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        price = int(request.GET.get("price", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
+        filter_args = search_filter_for_app(request)
         lists = books_models.RoomDealing.objects.filter(**filter_args)
-
-        try:
-            lists = books_models.RoomDealing.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksVillaDealingSerializer(
             lists, 
             many=True, 
@@ -603,52 +508,8 @@ class BooksOfficetelDealingDeletingView(APIView):
 
 class BooksOfficetelDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        price = int(request.GET.get("price", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
+        filter_args = search_filter_for_app(request)
         lists = books_models.OfficetelDealing.objects.filter(**filter_args)
-        try:
-            lists = books_models.OfficetelDealing.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksOfficetelDealingSerializer(
             lists, 
             many=True, 
@@ -718,50 +579,8 @@ class BooksStoreDealingDeletingView(APIView):
 
 class BooksStoreDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        price = int(request.GET.get("price", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
+        filter_args = search_filter_for_app(request)
         lists = books_models.StoreDealing.objects.filter(**filter_args)
-
-        try:
-            lists = books_models.StoreDealing.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksStoreDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
 """Store Finish"""
@@ -828,41 +647,8 @@ class BooksBuildingDealingDeletingView(APIView):
 
 class BooksBuildingDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        price = int(request.GET.get("price", 0))
-        land_m2 = float(request.GET.get("land_m2", 0))
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if price:
-            filter_args["price__lte"] = price
-        if land_m2:
-            filter_args["land_m2__gte"] = land_m2
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
+        filter_args = search_filter_for_app(request)
         lists = books_models.BuildingDealing.objects.filter(**filter_args)
-
-        try:
-            lists = books_models.BuildingDealing.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.BooksBuildingDealingSerializer(lists, many=True, context={"request":request})
         return Response(serializer.data)
 """Building Finish"""
@@ -929,55 +715,8 @@ class BooksApartmentLeaseDeletingView(APIView):
 
 class BooksApartmentLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        area_m2 = int(request.GET.get("area_m2", 0))
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = books_models.ApartmentLease.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = books_models.ApartmentLease.objects.filter(**filter_args)
         serializer = serializers.BooksApartmentLeaseSerializer(
             lists, 
             many=True, 
@@ -1046,55 +785,8 @@ class BooksVillaLeaseDeletingView(APIView):
 
 class BooksVillaLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = books_models.RoomLease.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = books_models.RoomLease.objects.filter(**filter_args)
         serializer = serializers.BooksVillaLeaseSerializer(
             lists, 
             many=True, 
@@ -1165,55 +857,8 @@ class BooksOfficetelLeaseDeletingView(APIView):
 
 class BooksOfficetelLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        room = request.GET.get("room", 0)
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-        
-        try:
-            lists = books_models.OfficetelLease.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = books_models.OfficetelLease.objects.filter(**filter_args)
         serializer = serializers.BooksOfficetelLeaseSerializer(
             lists, 
             many=True, 
@@ -1284,52 +929,8 @@ class BooksStoreLeaseDeletingView(APIView):
 
 class BooksStoreLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        empty = request.GET.get("empty")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if empty:
-            filter_args["empty"] = True
-        else:
-            filter_args["empty"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if loan:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = books_models.StoreLease.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = books_models.StoreLease.objects.filter(**filter_args)
         serializer = serializers.BooksStoreLeaseSerializer(
             lists, 
             many=True, 
@@ -1399,42 +1000,8 @@ class CustomerApartmentDealingDeletingView(APIView):
 
 class CustomerApartmentDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        price = int(request.GET.get("price", 0))
-        room = request.GET.get("room", 0)
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.ApartmentDealingCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.ApartmentDealingCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerApartmentDealingSerializer(
             lists, 
             many=True, 
@@ -1505,34 +1072,8 @@ class CustomerBuildingDealingDeletingView(APIView):
 
 class CustomerBuildingDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        price = int(request.GET.get("price", 0))
-        land_m2 = int(request.GET.get("land_m2", 0))
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if price:
-            filter_args["price__lte"] = price
-        if land_m2:
-            filter_args["land_m2__gte"] = land_m2
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.BuildingDealingCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.BuildingDealingCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerBuildingDealingSerializer(
             lists, 
             many=True, 
@@ -1603,42 +1144,8 @@ class CustomerVillaDealingDeletingView(APIView):
 
 class CustomerVillaDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        price = int(request.GET.get("price", 0))
-        room = request.GET.get("room", 0)
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.HouseDealingCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.HouseDealingCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerVillaDealingSerializer(
             lists, 
             many=True, 
@@ -1709,42 +1216,8 @@ class CustomerOfficetelDealingDeletingView(APIView):
 
 class CustomerOfficetelDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        price = int(request.GET.get("price", 0))
-        room = request.GET.get("room", 0)
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.OfficetelDealingCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.OfficetelDealingCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerOfficetelDealingSerializer(
             lists, 
             many=True, 
@@ -1815,39 +1288,8 @@ class CustomerStoreDealingDeletingView(APIView):
 
 class CustomerStoreDealingSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        price = int(request.GET.get("price", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if price:
-            filter_args["price__lte"] = price
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.ShopDealingCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.ShopDealingCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerStoreDealingSerializer(
             lists, 
             many=True, 
@@ -1918,45 +1360,8 @@ class CustomerApartmentLeaseDeletingView(APIView):
 
 class CustomerApartmentLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        room = request.GET.get("room", 0)
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.ApartmentLeaseCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.ApartmentLeaseCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerApartmentLeaseSerializer(
             lists, 
             many=True, 
@@ -2027,50 +1432,8 @@ class CustomerVillaLeaseDeletingView(APIView):
 
 class CustomerVillaLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        room = request.GET.get("room", 0)
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if elevator:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.HouseLeaseCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.HouseLeaseCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerVillaLeaseSerializer(
             lists, 
             many=True, 
@@ -2141,50 +1504,8 @@ class CustomerOfficetelLeaseDeletingView(APIView):
 
 class CustomerOfficetelLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        room = request.GET.get("room", 0)
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        loan = request.GET.get("loan")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if room:
-            filter_args["room"] = room
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if elevator:
-            filter_args["loan"] = True
-        else:
-            filter_args["loan"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.OfficetelLeaseCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.OfficetelLeaseCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerOfficetelLeaseSerializer(
             lists, 
             many=True, 
@@ -2255,42 +1576,8 @@ class CustomerStoreLeaseDeletingView(APIView):
 
 class CustomerStoreLeaseSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        guest_phone = request.GET.get("guest_phone")
-        deposit = int(request.GET.get("deposit", 0))
-        month_fee = int(request.GET.get("month_fee", 0))
-        area_m2 = int(request.GET.get("area_m2", 0))
-        parking = request.GET.get("parking")
-        elevator = request.GET.get("elevator")
-        not_finished = request.GET.get("not_finished")
-    
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-        if area_m2:
-            filter_args["area_m2__gte"] = area_m2
-        if deposit:
-            filter_args["deposit__lte"] = deposit
-        if month_fee:
-            filter_args["month_fee__lte"] = month_fee
-        if parking:
-            filter_args["parking"] = True
-        else:
-            filter_args["parking"] = False
-        if elevator:
-            filter_args["elevator"] = True
-        else:
-            filter_args["elevator"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = customers_models.ShopLeaseCustomer.objects.filter(**filter_args)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = customers_models.ShopLeaseCustomer.objects.filter(**filter_args)
         serializer = serializers.CustomerStoreLeaseSerializer(
             lists, 
             many=True, 
@@ -2324,33 +1611,8 @@ class ContractView(APIView):
 
 class ContractSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        description = request.GET.get("description")
-        report = request.GET.get("report")
-        not_finished = request.GET.get("not_finished")
-
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if description:
-            filter_args["description__contains"] = description
-        if report:
-            filter_args["report"] = True
-        else:
-            filter_args["report"] = False
-        if not_finished:
-            filter_args["not_finished"] = True
-        else:
-            filter_args["not_finished"] = False
-
-        try:
-            lists = contracts_models.ContractBase.objects.filter(**filter_args)
-            
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        print(lists)
+        filter_args = search_filter_for_app(request)
+        lists = contracts_models.ContractBase.objects.filter(**filter_args)
         serializer = serializers.ContractSerializer(
             lists, 
             many=True, 
@@ -2436,37 +1698,8 @@ class ManagementUpdatingView(APIView):
 
 class ManagementSearchingView(APIView):
     def get(self, request):
-        realtor_id = request.GET.get("realtor_id")
-        address = request.GET.get("address")
-        description = request.GET.get("description")
-        deal_report = request.GET.get("deal_report")
-        deal_renewal_notice = request.GET.get("deal_renewal_notice")    
-        deal_renewal_right_usage = request.GET.get("deal_renewal_right_usage")    
-
-        filter_args = {}
-        filter_args["realtor_id"] = int(realtor_id)
-        if address:
-            filter_args["address__contains"] = address
-        if description:
-            filter_args["description__contains"] = description
-        if deal_report:
-            filter_args["deal_report"] = True
-        else:
-            filter_args["deal_report"] = False
-        if deal_renewal_notice:
-            filter_args["deal_renewal_notice"] = True
-        else:
-            filter_args["deal_renewal_notice"] = False
-        if deal_renewal_right_usage:
-            filter_args["deal_renewal_right_usage"] = True
-        else:
-            filter_args["deal_renewal_right_usage"] = False
-
-        try:
-            lists = managements_models.Management.objects.filter(**filter_args)
-            
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        filter_args = search_filter_for_app(request)
+        lists = managements_models.Management.objects.filter(**filter_args)
         serializer = serializers.ManagementSerializer(
             lists, 
             many=True, 

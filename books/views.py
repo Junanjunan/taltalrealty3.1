@@ -28,7 +28,6 @@ class RoomLeaseList(LoggedInOnlyView, ListView):
 
 class RoomLeaseDetail(LoggedInOnlyView, DetailView):
     model = models.RoomLease
-    # template_name = 'books/roomlease/roomlease_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -40,7 +39,6 @@ class RoomLeaseDetail(LoggedInOnlyView, DetailView):
 
 class RoomLeaseCreating(LoggedInOnlyView, CreateView):
     form_class = forms.RoomLeaseForm
-    # template_name = 'books/roomlease/roomlease_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -65,7 +63,6 @@ class RoomLeaseCreating(LoggedInOnlyView, CreateView):
 class RoomLeaseUpdate(LoggedInOnlyView, UpdateView):
     model = models.RoomLease
     form_class = forms.RoomLeaseForm
-    # template_name = "books/roomlease/roomlease_update.html"
     template_name = 'books/creating_total.html'
     
 
@@ -113,7 +110,6 @@ class ApartmentLeaseList(LoggedInOnlyView, ListView):
 
 class ApartmentLeaseDetail(LoggedInOnlyView, DetailView):
     model = models.ApartmentLease
-    # template_name = 'books/apartmentlease/apartmentlease_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -125,7 +121,6 @@ class ApartmentLeaseDetail(LoggedInOnlyView, DetailView):
 
 class ApartmentLeaseCreating(LoggedInOnlyView, CreateView):
     form_class = forms.ApartmentLeaseForm
-    # template_name = 'books/apartmentlease/apartmentlease_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -143,14 +138,11 @@ class ApartmentLeaseCreating(LoggedInOnlyView, CreateView):
             book.tenant_phone = "-"
         book.save()
         return redirect(reverse("books:apartment-lease-detail", kwargs={"pk":book.pk}))
-    # def get_success_url(self):
-    #     return reverse("books:room-lease-list")   # 위 아래 둘 다 가능
 
 
 class ApartmentLeaseUpdate(LoggedInOnlyView, UpdateView):
     model = models.ApartmentLease
     form_class = forms.ApartmentLeaseForm
-    # template_name = "books/apartmentlease/apartmentlease_update.html"
     template_name = 'books/creating_total.html'
     
 
@@ -197,7 +189,6 @@ class OfficetelLeaseList(LoggedInOnlyView, ListView):
 
 class OfficetelLeaseDetail(LoggedInOnlyView, DetailView):
     model = models.OfficetelLease
-    # template_name = 'books/officetellease/officetellease_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -209,7 +200,6 @@ class OfficetelLeaseDetail(LoggedInOnlyView, DetailView):
 
 class OfficetelLeaseCreating(LoggedInOnlyView, CreateView):
     form_class = forms.OfficetelLeaseForm
-    # template_name = 'books/officetellease/officetellease_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -232,7 +222,6 @@ class OfficetelLeaseCreating(LoggedInOnlyView, CreateView):
 class OfficetelLeaseUpdate(LoggedInOnlyView, UpdateView):
     model = models.OfficetelLease
     form_class = forms.RoomLeaseForm
-    # template_name = "books/officetellease/officetellease_update.html"
     template_name = 'books/creating_total.html'
     
 
@@ -281,7 +270,6 @@ class StoreLeaseList(LoggedInOnlyView, ListView):
 
 class StoreLeaseDetail(LoggedInOnlyView, DetailView):
     model = models.StoreLease
-    # template_name = 'books/storelease/storelease_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -293,7 +281,6 @@ class StoreLeaseDetail(LoggedInOnlyView, DetailView):
 
 class StoreLeaseCreating(LoggedInOnlyView, CreateView):
     form_class = forms.StoreLeaseForm
-    # template_name = 'books/storelease/storelease_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -312,14 +299,10 @@ class StoreLeaseCreating(LoggedInOnlyView, CreateView):
         book.save()
         return redirect(reverse("books:store-lease-detail", kwargs={"pk":book.pk}))
 
-    # def get_success_url(self):
-    #     return reverse("books:room-lease-list")   # 위 아래 둘 다 가능
-
 
 class StoreLeaseUpdate(LoggedInOnlyView, UpdateView):
     model = models.StoreLease
     form_class = forms.StoreLeaseForm
-    # template_name = "books/storelease/storelease_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
@@ -367,7 +350,6 @@ class RoomDealingList(LoggedInOnlyView, ListView):
 
 class RoomDealingDetail(LoggedInOnlyView, DetailView):
     model = models.RoomDealing
-    # template_name = 'books/roomdealing/roomdealing_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -379,7 +361,6 @@ class RoomDealingDetail(LoggedInOnlyView, DetailView):
 
 class RoomDealingCreating(LoggedInOnlyView, CreateView):
     form_class = forms.RoomDealingForm
-    # template_name = 'books/roomdealing/roomdealing_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -408,7 +389,6 @@ class RoomDealingCreating(LoggedInOnlyView, CreateView):
 class RoomDealingUpdate(LoggedInOnlyView, UpdateView):
     model = models.RoomDealing
     form_class = forms.RoomDealingForm
-    # template_name = "books/roomdealing/roomdealing_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
@@ -457,7 +437,6 @@ class ApartmentDealingList(LoggedInOnlyView, ListView):
 
 class ApartmentDealingDetail(LoggedInOnlyView, DetailView):
     model = models.ApartmentDealing
-    # template_name = 'books/apartmentdealing/apartmentdealing_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -469,7 +448,6 @@ class ApartmentDealingDetail(LoggedInOnlyView, DetailView):
 
 class ApartmentDealingCreating(LoggedInOnlyView, CreateView):
     form_class = forms.ApartmentDealingForm
-    # template_name = 'books/apartmentdealing/apartmentdealing_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -498,7 +476,6 @@ class ApartmentDealingCreating(LoggedInOnlyView, CreateView):
 class ApartmentDealingUpdate(LoggedInOnlyView, UpdateView):
     model = models.ApartmentDealing
     form_class = forms.ApartmentDealingForm
-    # template_name = "books/apartmentdealing/apartmentdealing_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
@@ -548,7 +525,6 @@ class OfficetelDealingList(LoggedInOnlyView, ListView):
 
 class OfficetelDealingDetail(LoggedInOnlyView, DetailView):
     model = models.OfficetelDealing
-    # template_name = 'books/officeteldealing/officeteldealing_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -560,7 +536,6 @@ class OfficetelDealingDetail(LoggedInOnlyView, DetailView):
 
 class OfficetelDealingCreating(LoggedInOnlyView, CreateView):
     form_class = forms.OfficetelDealingForm
-    # template_name = 'books/officeteldealing/officeteldealing_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -585,7 +560,6 @@ class OfficetelDealingCreating(LoggedInOnlyView, CreateView):
 class OfficetelDealingUpdate(LoggedInOnlyView, UpdateView):
     model = models.OfficetelDealing
     form_class = forms.OfficetelDealingForm
-    # template_name = "books/officeteldealing/officeteldealing_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
@@ -635,7 +609,6 @@ class StoreDealingList(LoggedInOnlyView, ListView):
 
 class StoreDealingDetail(LoggedInOnlyView, DetailView):
     model = models.StoreDealing
-    # template_name = 'books/storedealing/storedealing_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -647,7 +620,6 @@ class StoreDealingDetail(LoggedInOnlyView, DetailView):
 
 class StoreDealingCreating(LoggedInOnlyView, CreateView):
     form_class = forms.StoreDealingForm
-    # template_name = 'books/storedealing/storedealing_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -670,7 +642,6 @@ class StoreDealingCreating(LoggedInOnlyView, CreateView):
 class StoreDealingUpdate(LoggedInOnlyView, UpdateView):
     model = models.StoreDealing
     form_class = forms.StoreDealingForm
-    # template_name = "books/storedealing/storedealing_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
@@ -717,7 +688,6 @@ class BuildingDealingList(LoggedInOnlyView, ListView):
 
 class BuildingDealingDetail(LoggedInOnlyView, DetailView):
     model = models.BuildingDealing
-    # template_name = 'books/buildingdealing/buildingdealing_detail.html'
     template_name = 'books/detail_total.html'
 
     def get_object(self, queryset=None):
@@ -729,7 +699,6 @@ class BuildingDealingDetail(LoggedInOnlyView, DetailView):
 
 class BuildingDealingCreating(LoggedInOnlyView, CreateView):
     form_class = forms.BuildingDealingForm
-    # template_name = 'books/buildingdealing/buildingdealing_creating.html'
     template_name = 'books/creating_total.html'
 
     def form_valid(self, form):
@@ -768,7 +737,6 @@ class BuildingDealingCreating(LoggedInOnlyView, CreateView):
 class BuildingDealingUpdate(LoggedInOnlyView, UpdateView):
     model = models.BuildingDealing
     form_class = forms.BuildingDealingForm
-    # template_name = "books/buildingdealing/buildingdealing_update.html"
     template_name = 'books/creating_total.html'
 
     def get_object(self, queryset=None):
