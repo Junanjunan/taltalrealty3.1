@@ -15,6 +15,7 @@ class ApartmentDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "not_finished",
         "description",
     )
@@ -33,6 +34,7 @@ class HouseDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "not_finished",
         "description",
     )
@@ -51,6 +53,7 @@ class OfficetelDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "not_finished",
         "description",
     )
@@ -69,6 +72,7 @@ class ShopDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "not_finished",
         "description",
     )
@@ -105,6 +109,7 @@ class ApartmentLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "parking",
         "elevator",
         "loan",
+        "loan",
         "not_finished",
         "description",
     )
@@ -124,6 +129,7 @@ class HouseLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "loan",
         "not_finished",
         "description",
@@ -145,6 +151,7 @@ class OfficetelLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "parking",
         "elevator",
         "loan",
+        "loan",
         "not_finished",
         "description",
     )
@@ -163,6 +170,7 @@ class ShopLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
         "area_m2",
         "parking",
         "elevator",
+        "loan",
         "not_finished",
         "description",
     )

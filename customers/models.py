@@ -10,6 +10,7 @@ class ApartmentDealingCustomer(models.Model):
     updated = models.DateField(blank=True, null=True)
     parking = models.BooleanField()
     elevator = models.BooleanField()
+    loan = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
     area_m2 = models.FloatField()
@@ -27,6 +28,7 @@ class HouseDealingCustomer(models.Model):
     area_m2 = models.FloatField()
     parking = models.BooleanField()
     elevator = models.BooleanField()
+    loan = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
 
@@ -41,6 +43,7 @@ class OfficetelDealingCustomer(models.Model):
     area_m2 = models.FloatField()
     parking = models.BooleanField()
     elevator = models.BooleanField()
+    loan = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
 
@@ -54,9 +57,9 @@ class ShopDealingCustomer(models.Model):
     area_m2 = models.FloatField()
     parking = models.BooleanField()
     elevator = models.BooleanField()
+    loan = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
-    
 
 
 class BuildingDealingCustomer(models.Model):
@@ -67,6 +70,7 @@ class BuildingDealingCustomer(models.Model):
     price = models.IntegerField()
     land_m2 = models.FloatField(blank=True, null=True)
     elevator = models.BooleanField()
+    loan = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
     
@@ -131,6 +135,7 @@ class ShopLeaseCustomer(models.Model):
     month_fee = models.IntegerField()
     area_m2 = models.FloatField()
     parking = models.BooleanField()
+    loan = models.BooleanField()
     elevator = models.BooleanField()
     not_finished = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)

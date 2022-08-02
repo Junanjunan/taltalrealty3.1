@@ -43,13 +43,15 @@
         </div>
         <div class="search-part-two">
             <div class="search-part">
+                {% if request.path != url_9 and request.path != url_10 %}
                 <div class="search-text-bound-bottom"><input {% if parking %}checked{% endif %} type='checkbox' id='parking' name='parking' /><label for='parking'><span class="search-text">주차</span></label></div>
+                {% endif %}
                 <div class="search-text-bound-bottom"><input {% if elevator %}checked{% endif %} type='checkbox' id='elevator' name='elevator' /><label for='elevator'><span class="search-text">승강기</span></label></div>
                 <div class="search-text-bound-bottom"><input {% if loan %}checked{% endif %} type='checkbox' id='loan' name='loan' /><label for='loan'><span class="search-text">대출</span></label></div>
                 {% if request.path == url_1 or request.path == url_3 or request.path == url_5 or request.path == url_7 or request.path == url_9 or request.path == url_11 or request.path == url_13 or request.path == url_15 or request.path == url_17 %}
                 <div class="search-text-bound-bottom"><input checked type='checkbox' id='not_finished' name='not_finished' /><label for='not_finished'><span class="search-text">진행손님</span></label></div>
                 {% else %}
-                <div class="search-text-bound-bottom"><input {% if not_finished %}checked{% endif %} type='checkbox' id='not_finished' name='not_finished' /><label for='not_finished'><span class="search-text">진행매물</span></label></div>
+                <div class="search-text-bound-bottom"><input {% if not_finished %}checked{% endif %} type='checkbox' id='not_finished' name='not_finished' /><label for='not_finished'><span class="search-text">진행손님</span></label></div>
                 {% endif %}
             </div>
         </div>

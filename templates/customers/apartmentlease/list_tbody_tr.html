@@ -1,12 +1,12 @@
 <tr>
     <td><a href="{% url 'customers:apartment-lease-customer-detail' list.pk %}">{{list.guest_phone}}</a></td>
-    <!-- <td>{{list.updated|date:"Y-m-d"}}</td> -->
+    <td>{{list.updated|date:"Y-m-d"}}</td>
     <td class="toggle_money_area">{{list.deposit}}</td>
     <td class="toggle_money_area">{{list.month_fee}}</td>
     <td>{{list.room}}</td>
     <td class="table-area_m2 toggle_area">{{list.area_m2}}</td>
-    <!-- <td>{% if list.parking %}O{% else %}X{% endif %}</td> -->
-    <!-- <td>{% if list.elevator %}O{% else %}X{% endif %}</td> -->
+    <td>{% if list.parking %}O{% else %}X{% endif %}</td>
+    <td>{% if list.elevator %}O{% else %}X{% endif %}</td>
     <td class="table-loan">{% if list.loan %}O{% else %}X{% endif %}</td>
     <td class="table-not_finished">{% if list.not_finished %}O{% else %}X{% endif %}</td>
 </tr>

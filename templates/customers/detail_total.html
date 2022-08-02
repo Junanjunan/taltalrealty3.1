@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include "partials/bnc2.html" %}
+{% url 'customers:building-dealing-customer-detail' object.pk as url_2 %}
 <h4>-손님 상세 정보-</h4>
 <div class="creating-form">
     <div class="creating">
@@ -32,10 +33,11 @@
     </div>
     {% endif %}
     <div class="creating"><button class="toggle_m2" value="m2" onclick="toggling()">면적단위(㎡)</button></div><div></div>
+    {% if request.path != url_2 %}
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">전용면적</div><span class="toggle_area">{{object.area_m2}}</span></div>
     </div>
-    {% url 'customers:building-dealing-customer-detail' object.pk as url_2 %}
+    {% endif %}
     {% if request.path == url_2 %}
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">대지면적</div><span class="toggle_area">{{object.land_m2}}</span></div>   
@@ -44,6 +46,10 @@
     {% if request.path != url_2 %}
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">주차가능</div>{% if object.parking %}O{% else %}X{% endif %}<label for="id_parking"></label></div>
+        <div class="creating-input-bound"><div class="creating-div">승강기</div>{% if object.elevator %}O{% else %}X{% endif %}<label for="id_elevator"></label></div>
+    </div>
+    {% else %}
+    <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">승강기</div>{% if object.elevator %}O{% else %}X{% endif %}<label for="id_elevator"></label></div>
     </div>
     {% endif %}

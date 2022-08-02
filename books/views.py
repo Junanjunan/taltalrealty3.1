@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from . import models, forms
+from components.search_filter import search_filter
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -92,53 +93,7 @@ class RoomLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def roomlease_search(request):
-    address = request.GET.get("address")
-    deposit = request.GET.get("deposit")
-    month_fee = request.GET.get("month_fee")
-    area_m2 = request.GET.get("area_m2")
-    room = request.GET.get("room")
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if deposit:
-        filter_args["deposit__lte"] = deposit
-    if month_fee:
-        filter_args["month_fee__lte"] = month_fee
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.RoomLease.objects.filter(**filter_args)
     return render(request, "books/roomlease/roomlease_search.html", {**filter_args, "lists": lists})
 
@@ -223,44 +178,7 @@ class ApartmentLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentlease_search(request):
-    address = request.GET.get("address")
-    deposit = request.GET.get("deposit")
-    month_fee = request.GET.get("month_fee")
-    area_m2 = request.GET.get("area_m2")
-    room = request.GET.get("room")
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    description = request.GET.get("description")
-    
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if deposit:
-        filter_args["deposit__lte"] = deposit
-    if month_fee:
-        filter_args["month_fee__lte"] = month_fee
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
+    filter_args = search_filter(request)
     lists = models.ApartmentLease.objects.filter(**filter_args)
     return render(request, "books/apartmentlease/apartmentlease_search.html", {**filter_args, "lists": lists})
 
@@ -342,53 +260,7 @@ class OfficetelLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def officetellease_search(request):
-    address = request.GET.get("address")
-    deposit = request.GET.get("deposit", 0)
-    month_fee = request.GET.get("month_fee", 0)
-    area_m2 = request.GET.get("area_m2", 0)
-    room = request.GET.get("room", 0)
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if deposit:
-        filter_args["deposit__lte"] = deposit
-    if month_fee:
-        filter_args["month_fee__lte"] = month_fee
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.OfficetelLease.objects.filter(**filter_args)
     return render(request, "books/officetellease/officetellease_search.html", {**filter_args, "lists": lists})
 
@@ -474,48 +346,7 @@ class StoreLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def storelease_search(request):
-
-    address = request.GET.get("address")
-    deposit = int(request.GET.get("deposit", 0))
-    month_fee = int(request.GET.get("month_fee", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if deposit:
-        filter_args["deposit__lte"] = deposit
-    if month_fee:
-        filter_args["month_fee__lte"] = month_fee
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if  dabang == "on":
-        filter_args["dabang"] = True
-    if  zicbang == "on":
-        filter_args["zicbang"] = True
-    if  peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.StoreLease.objects.filter(**filter_args)
     return render(request, "books/storelease/storelease_search.html", {**filter_args, "lists": lists})
 
@@ -606,47 +437,7 @@ class RoomDealingUpdate(LoggedInOnlyView, UpdateView):
 
 
 def roomdealing_search(request):
-    address = request.GET.get("address")
-    price = int(request.GET.get("price", 0))
-    area_m2 = request.GET.get("area_m2")
-    room = request.GET.get("room", 10)
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-    
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if price:
-        filter_args["price__lte"] = price
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.RoomDealing.objects.filter(**filter_args)
     return render(request, "books/roomdealing/roomdealing_search.html", {**filter_args, "lists": lists})
 
@@ -736,48 +527,7 @@ class ApartmentDealingUpdate(LoggedInOnlyView, UpdateView):
         return redirect(reverse("books:apartment-dealing-detail", kwargs={"pk":book.pk}))
         
 def apartmentdealing_search(request):
-
-    address = request.GET.get("address")
-    price = int(request.GET.get("price", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    room = request.GET.get("room", 0)
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-    
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if price:
-        filter_args["price__lte"] = price
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.ApartmentDealing.objects.filter(**filter_args)
     return render(request, "books/apartmentdealing/apartmentdealing_search.html", {**filter_args, "lists": lists})
 
@@ -864,48 +614,7 @@ class OfficetelDealingUpdate(LoggedInOnlyView, UpdateView):
 
 
 def officeteldealing_search(request):
-
-    address = request.GET.get("address")
-    price = int(request.GET.get("price", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    room = request.GET.get("room", 0)
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-    
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if price:
-        filter_args["price__lte"] = price
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__contains"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.OfficetelDealing.objects.filter(**filter_args)
     return render(request, "books/officeteldealing/officeteldealing_search.html", {**filter_args, "lists": lists})
 
@@ -988,45 +697,7 @@ class StoreDealingUpdate(LoggedInOnlyView, UpdateView):
 
 
 def storedealing_search(request):
-
-    address = request.GET.get("address")
-    price = int(request.GET.get("price", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    empty = request.GET.get("empty")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-    
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if price:
-        filter_args["price__lte"] = price
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if empty == "on":
-        filter_args["empty"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.StoreDealing.objects.filter(**filter_args)
     return render(request, "books/storedealing/storedealing_search.html", {**filter_args, "lists": lists})
 
@@ -1140,39 +811,7 @@ class BuildingDealingUpdate(LoggedInOnlyView, UpdateView):
 
 
 def buildingdealing_search(request):
-
-    address = request.GET.get("address")
-    price = int(request.GET.get("price", 0))
-    land_m2 = int(request.GET.get("area_m2", 0))
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-    naver = request.GET.get("naver")
-    dabang = request.GET.get("dabang")
-    zicbang = request.GET.get("zicbang")
-    peterpan = request.GET.get("peterpan")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    if address:
-        filter_args["address__contains"] = address
-    if price:
-        filter_args["price__lte"] = price
-    if land_m2:
-        filter_args["land_m2__gte"] = land_m2
-    if description:
-        filter_args["description__contains"] = description
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if naver == "on":
-        filter_args["naver"] = True
-    if dabang == "on":
-        filter_args["dabang"] = True
-    if zicbang == "on":
-        filter_args["zicbang"] = True
-    if peterpan == "on":
-        filter_args["peterpan"] = True
+    filter_args = search_filter(request)
     lists = models.BuildingDealing.objects.filter(**filter_args)
     return render(request, "books/buildingdealing/buildingdealing_search.html", {**filter_args, "lists": lists})
 

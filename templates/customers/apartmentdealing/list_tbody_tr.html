@@ -4,8 +4,9 @@
     <td class="toggle_money_area">{{list.price}}</td>
     <td >{{list.room}}</td>
     <td class="table-area_m2 toggle_area">{{list.area_m2}}</td>
-    <!-- <td>{% if list.parking %}O{% else %}X{% endif %}</td> -->
-    <!-- <td>{% if list.elevator %}O{% else %}X{% endif %}</td> -->
+    <td>{% if list.parking %}O{% else %}X{% endif %}</td>
+    <td>{% if list.elevator %}O{% else %}X{% endif %}</td>
+    <td>{% if list.loan %}O{% else %}X{% endif %}</td>
     <td CLASS="table-not_finished">{% if list.not_finished %}O{% else %}X{% endif %}</td>
     <!-- <td>
         <div>

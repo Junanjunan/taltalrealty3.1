@@ -22,7 +22,7 @@
             <div class="search-part-one">
                 <div class="search-text-bound-top"><span class="search-text">|| 주소</span><input value="{{address__contains}}" id='address' name='address' class="search-input-height search-input-address" /></div>              
                 {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 or request.path == url_7 or request.path == url_8 or request.path == url_9 or request.path == url_10 %}
-                <div class="search-text-bound-top"><span class="search-text">|| 매매가</span><input value="{% if price__lte %}{{price__lte}}{% else %}999999{% endif %}" onfocus="this.value=''" type='number' id='price' name='price' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
+                <div class="search-text-bound-top"><span class="search-text">|| 매매가</span><input value="{{price__lte}}" onfocus="this.value=''" type='number' id='price' name='price' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
                 {% else %}
                 <div class="search-text-bound-top"><span class="search-text">|| 보증금</span><input value="{{deposit__lte}}" onfocus="this.value=''" type='number' id='deposit' name='deposit' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
                 <div class="search-text-bound-top"><span class="search-text">|| 월세</span><input value="{{month_fee__lte}}" onfocus="this.value=''" type='number' id='month_fee' name='month_fee'  class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>

@@ -4,7 +4,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from jmespath import search
 from . import models, forms
+from components.search_filter import search_filter
 
 
 class LoggedInOnlyView(LoginRequiredMixin):
@@ -57,39 +59,7 @@ class HouseLeaseCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def houselease_customer_search(request):
-
-    guest_phone = request.GET.get("guest_phone")
-    deposit = int(request.GET.get("deposit"))
-    month_fee = int(request.GET.get("month_fee"))
-    room = request.GET.get("room")
-    area_m2 = int(request.GET.get("area_m2"))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    not_finished = request.GET.get("not_finished")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    if guest_phone:
-        filter_args["guest_phone__contains"] = guest_phone
-    if deposit:
-        filter_args["deposit__lte"] = deposit
-    if month_fee:
-        filter_args["month_fee__lte"] = month_fee
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room__gte"] = room
-    if description:
-        filter_args["description__contains"] = description
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.HouseLeaseCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/houselease/houselease_search.html", {**filter_args, "lists": lists})
@@ -149,33 +119,7 @@ class ApartmentLeaseCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentlease_customer_search(request):
-
-    deposit = int(request.GET.get("deposit", 0))
-    month_fee = int(request.GET.get("month_fee", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["deposit__lte"] = deposit
-    filter_args["month_fee__lte"] = month_fee
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.ApartmentLeaseCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/apartmentlease/apartmentlease_search.html", {**filter_args, "lists": lists})
@@ -236,33 +180,7 @@ class OfficetelLeaseCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def officetellease_customer_search(request):
-
-    deposit = int(request.GET.get("deposit", 0))
-    month_fee = int(request.GET.get("month_fee", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    loan = request.GET.get("loan")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["deposit__lte"] = deposit
-    filter_args["month_fee__lte"] = month_fee
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if loan == "on":
-        filter_args["loan"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.OfficetelLeaseCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/officetellease/officetellease_search.html", {**filter_args, "lists": lists})
@@ -324,29 +242,7 @@ class ShopLeaseCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def shoplease_customer_search(request):
-
-    deposit = int(request.GET.get("deposit", 0))
-    month_fee = int(request.GET.get("month_fee", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["deposit__lte"] = deposit
-    filter_args["month_fee__lte"] = month_fee
-    filter_args["area_m2__gte"] = area_m2
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-
+    filter_args = search_filter(request)
     lists = models.ShopLeaseCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/shoplease/shoplease_search.html", {**filter_args, "lists": lists})
@@ -408,28 +304,7 @@ class HouseDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def housedealing_customer_search(request):
-
-    price = int(request.GET.get("price", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["price__lte"] = price
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.HouseDealingCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/housedealing/housedealing_search.html", {**filter_args, "lists": lists})
@@ -490,32 +365,7 @@ class ApartmentDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentdealing_customer_search(request):
-    guest_phone = request.GET.get("guest_phone")
-    price = int(request.GET.get("price", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-    description = request.GET.get("description")
-
-    filter_args = {}
-    
-    filter_args["description__contains"] = description
-    if guest_phone:
-            filter_args["guest_phone__contains"] = guest_phone
-    if price:
-        filter_args["price__lte"] = price
-    if area_m2:
-        filter_args["area_m2__gte"] = area_m2
-    if room:
-        filter_args["room"] = room
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.ApartmentDealingCustomer.objects.filter(**filter_args)
     return render(request, "customers/apartmentdealing/apartmentdealing_search.html", {**filter_args, "lists": lists})
 
@@ -575,28 +425,7 @@ class OfficetelDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def officeteldealing_customer_search(request):
-
-    price = int(request.GET.get("price", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["price__lte"] = price
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.OfficetelDealingCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/officeteldealing/officeteldealing_search.html", {**filter_args, "lists": lists})
@@ -656,26 +485,7 @@ class ShopDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def shopdealing_customer_search(request):
-
-    price = int(request.GET.get("price", 0))
-    area_m2 = int(request.GET.get("area_m2", 0))
-    parking = request.GET.get("parking")
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-
-    filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    guest_phone = request.GET.get("guest_phone")
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["price__lte"] = price
-    filter_args["area_m2__gte"] = area_m2
-    if parking == "on":
-        filter_args["parking"] = True
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
+    filter_args = search_filter(request)
     lists = models.ShopDealingCustomer.objects.filter(
         **filter_args)
     return render(request, "customers/shopdealing/shopdealing_search.html", {**filter_args, "lists": lists})
@@ -741,27 +551,7 @@ class BuildingDealingCustomerUpdate(LoggedInOnlyView, UpdateView):
 
 
 def buildingdealing_customer_search(request):
-    guest_phone = request.GET.get("guest_phone")
-    price = int(request.GET.get("price", 0))
-    elevator = request.GET.get("elevator")
-    not_finished = request.GET.get("not_finished")
-    land_m2 = float(request.GET.get("land_m2", 0))
-    description = request.GET.get("description")
-
-    filter_args = {}
-    
-    if guest_phone:
-        filter_args["guest_phone__contains"] = guest_phone
-    if price:
-        filter_args["price__lte"] = price
-    if land_m2:
-        filter_args["land_m2__gte"] = land_m2
-    if elevator == "on":
-        filter_args["elevator"] = True
-    if not_finished == "on":
-        filter_args["not_finished"] = True
-    if description:
-        filter_args["description__contains"] = description
+    filter_args = search_filter(request)
     lists = models.BuildingDealingCustomer.objects.filter(**filter_args)
     return render(request, "customers/buildingdealing/buildingdealing_search.html", {**filter_args, "lists": lists})
 

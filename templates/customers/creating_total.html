@@ -41,19 +41,14 @@
     </div>
     {% endif %}
     <div class="creating">
+        {% url 'customers:building-dealing-customer-creating' as url_1 %}
+        {% if request.path != url_1 %}
         <div class="creating-input-bound"><div class="creating-div">주차가능</div> {{form.parking}}<label for="id_parking"></label></div>
+        {% endif %}
         <div class="creating-input-bound"><div class="creating-div">승강기</div> {{form.elevator}}<label for="id_elevator"></label></div>
     </div>
     <div class="creating">
-        {% url 'customers:apartment-lease-customer-creating' as url_1 %}
-        {% url 'customers:apartment-lease-customer-update' as url_2 %}
-        {% url 'customers:house-lease-customer-creating' as url_3 %}
-        {% url 'customers:house-lease-customer-update' as url_4 %}
-        {% url 'customers:officetel-lease-customer-creating' as url_5 %}
-        {% url 'customers:officetel-lease-customer-update' as url_6 %}
-        {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 %}
         <div class="creating-input-bound"><div class="creating-div">대출</div> {{form.loan}}<label for="id_loan"></label></div>
-        {% endif %}
         <div class="creating-input-bound"><div class="creating-div">진행매물</div> {{form.not_finished}}<label for="id_not_finished"></label></div>     
     </div>
     <div class="creating creating-description-text">
