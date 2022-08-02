@@ -59,23 +59,29 @@ class HouseLeaseCustomerUpdate(LoggedInOnlyView, UpdateView):
 def houselease_customer_search(request):
 
     guest_phone = request.GET.get("guest_phone")
-    deposit = int(request.GET.get("deposit", 0))
-    month_fee = int(request.GET.get("month_fee", 0))
-    room = request.GET.get("room", 0)
-    area_m2 = int(request.GET.get("area_m2", 0))
+    deposit = int(request.GET.get("deposit"))
+    month_fee = int(request.GET.get("month_fee"))
+    room = request.GET.get("room")
+    area_m2 = int(request.GET.get("area_m2"))
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
     loan = request.GET.get("loan")
     not_finished = request.GET.get("not_finished")
+    description = request.GET.get("description")
 
     filter_args = {}
-    description = request.GET.get("description")
-    filter_args["description__contains"] = description
-    filter_args["guest_phone__contains"] = guest_phone
-    filter_args["deposit__lte"] = deposit
-    filter_args["month_fee__lte"] = month_fee
-    filter_args["area_m2__gte"] = area_m2
-    filter_args["room__contains"] = room
+    if guest_phone:
+        filter_args["guest_phone__contains"] = guest_phone
+    if deposit:
+        filter_args["deposit__lte"] = deposit
+    if month_fee:
+        filter_args["month_fee__lte"] = month_fee
+    if area_m2:
+        filter_args["area_m2__gte"] = area_m2
+    if room:
+        filter_args["room__gte"] = room
+    if description:
+        filter_args["description__contains"] = description
     if parking == "on":
         filter_args["parking"] = True
     if elevator == "on":

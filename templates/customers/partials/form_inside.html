@@ -33,7 +33,7 @@
                 <div class="search-text-bound-top"><span class="search-text">|| 전용면적</span><input value="{% if area_m2__gte %}{{area_m2__gte}}{% else %}0{% endif %}" onfocus="this.value=''" type='number' id='area_m2' name='area_m2'  class="search-input-height search-input" /><div class="search-text">㎡ 이상</div></div>               
                 {% endif %}
                 {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 or request.path == url_11 or request.path == url_12 or request.path == url_13 or request.path == url_14 or request.path == url_15 or request.path == url_16 %}
-                <div class="search-text-bound-top"><span class="search-text">|| 방 수</span><input value="{{room__contains}}" type='number' id='room' name='room'  class="search-input-height search-input" /></div>                
+                <div class="search-text-bound-top"><span class="search-text">|| 방 수</span><input value="{% if room__gte %}{{room__gte}}{% else %}0{% endif %}" type='number' id='room' name='room'  class="search-input-height search-input" /></div>                
                 {% endif %}
                 {% if request.path == url_9 or request.path == url_10 %}
                 <div class="search-text-bound-top"><div class="search-text">|| 대지면적</div><input value="{% if land_m2__gte %}{{land_m2__gte}}{% else %}0{% endif %}" onfocus="this.value=''" type='number' id='land_m2' name='land_m2' class="search-input-height search-input" /><div class="search-text">㎡ 이상</div></div>

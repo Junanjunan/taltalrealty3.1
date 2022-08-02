@@ -92,10 +92,23 @@ class RoomLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def roomlease_search(request):
+
     address = request.GET.get("address")
-    deposit = request.GET.get("deposit")
-    month_fee = request.GET.get("month_fee")
-    area_m2 = request.GET.get("area_m2")
+    try:
+        deposit = int(request.GET.get("deposit"))
+    except:
+        messages.error(request, "최대 보증금을 입력해주세요")
+        return redirect(reverse("books:room-lease-list"))
+    try:
+        month_fee = int(request.GET.get("month_fee"))
+    except:
+        messages.error(request, "최대 월세를 입력해주세요")
+        return redirect(reverse("books:room-lease-list"))
+    try:
+        area_m2 = int(request.GET.get("area_m2"))
+    except:
+        messages.error(request, "최소 면적을 입력해주세요")
+        return redirect(reverse("books:room-lease-list"))
     room = request.GET.get("room")
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
@@ -223,10 +236,23 @@ class ApartmentLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def apartmentlease_search(request):
+
     address = request.GET.get("address")
-    deposit = request.GET.get("deposit")
-    month_fee = request.GET.get("month_fee")
-    area_m2 = request.GET.get("area_m2")
+    try:
+        deposit = int(request.GET.get("deposit"))
+    except:
+        messages.error(request, "최대 보증금을 입력해주세요")
+        return redirect(reverse("books:apartment-lease-list"))
+    try:
+        month_fee = int(request.GET.get("month_fee"))
+    except:
+        messages.error(request, "최대 월세를 입력해주세요")
+        return redirect(reverse("books:apartment-lease-list"))
+    try:
+        area_m2 = int(request.GET.get("area_m2"))
+    except:
+        messages.error(request, "최소 면적을 입력해주세요")
+        return redirect(reverse("books:apartment-lease-list"))
     room = request.GET.get("room")
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")
@@ -342,10 +368,23 @@ class OfficetelLeaseUpdate(LoggedInOnlyView, UpdateView):
 
 
 def officetellease_search(request):
+
     address = request.GET.get("address")
-    deposit = request.GET.get("deposit", 0)
-    month_fee = request.GET.get("month_fee", 0)
-    area_m2 = request.GET.get("area_m2", 0)
+    try:
+        deposit = int(request.GET.get("deposit", 0))
+    except:
+        messages.error(request, "최대 보증금을 입력해주세요")
+        return redirect(reverse("books:officetel-lease-list"))
+    try:
+        month_fee = int(request.GET.get("month_fee", 0))
+    except:
+        messages.error(request, "최대 월세를 입력해주세요")
+        return redirect(reverse("books:officetel-lease-list"))
+    try:
+        area_m2 = int(request.GET.get("area_m2", 0))
+    except:
+        messages.error(request, "최소 면적을 입력해주세요")
+        return redirect(reverse("books:officetel-lease-list"))
     room = request.GET.get("room", 0)
     parking = request.GET.get("parking")
     elevator = request.GET.get("elevator")

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django import forms
 from . import models
 
@@ -5,7 +6,8 @@ class DateInput(forms.DateInput):
     input_type='date'
 
 class CommonInput(forms.ModelForm):
-    updated = forms.DateField(widget=DateInput, required=False)
+    updated = forms.DateField(widget=DateInput, required=False, initial=timezone.now())
+    birth = forms.DateField(widget=DateInput, required=False)
 
 
 class HouseLeaseCustomerForm(CommonInput):

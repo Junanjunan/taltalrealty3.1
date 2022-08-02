@@ -8,6 +8,7 @@
     <td class="table-birth">{{list.birth|date:"Y년"}}</td>
     <td class="table-area_m2 toggle_area">{{list.area_m2}}</td>
     <td class="table-parking">{% if list.parking %}O{% else %}X{% endif %}</td>
+    <td class="table-loan">{% if list.loan %}O{% else %}X{% endif %}</td>
     <td class="table-elevator">{% if list.elevator %}O{% else %}X{% endif %}</td>
     <td class="table-empty">{% if list.empty %}O{% else %}X{% endif %}</td>
     <td class="table-not_finished">{% if list.not_finished %}O{% else %}X{% endif %}</td>

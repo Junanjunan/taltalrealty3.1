@@ -24,14 +24,14 @@
                 {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 or request.path == url_7 or request.path == url_8 or request.path == url_9 or request.path == url_10 %}
                 <div class="search-text-bound-top"><span class="search-text">|| 매매가</span><input value="{% if price__lte %}{{price__lte}}{% else %}999999{% endif %}" onfocus="this.value=''" type='number' id='price' name='price' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
                 {% else %}
-                <div class="search-text-bound-top"><span class="search-text">|| 보증금</span><input value="{% if deposit__lte %}{{deposit__lte}}{% else %}99999{% endif %}" onfocus="this.value=''" type='number' id='deposit' name='deposit' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
-                <div class="search-text-bound-top"><span class="search-text">|| 월세</span><input value="{% if month_fee__lte %}{{month_fee__lte}}{% else %}9999{% endif %}" onfocus="this.value=''" type='number' id='month_fee' name='month_fee'  class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
+                <div class="search-text-bound-top"><span class="search-text">|| 보증금</span><input value="{{deposit__lte}}" onfocus="this.value=''" type='number' id='deposit' name='deposit' class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
+                <div class="search-text-bound-top"><span class="search-text">|| 월세</span><input value="{{month_fee__lte}}" onfocus="this.value=''" type='number' id='month_fee' name='month_fee'  class="search-input-height search-input-price" /><div class="search-text">만원 이하</div></div>
                 {% endif %}
             </div>
             <div class="search-part-one">
-                <div class="search-text-bound-top"><span class="search-text">|| 전용면적</span><input value="{% if area_m2__gte %}{{area_m2__gte}}{% else %}0{% endif %}" onfocus="this.value=''" type='number' id='area_m2' name='area_m2'  class="search-input-height search-input" /><div class="search-text">㎡ 이상</div></div>               
+                <div class="search-text-bound-top"><span class="search-text">|| 전용면적</span><input value="{{area_m2__gte}}" onfocus="this.value=''" type='number' id='area_m2' name='area_m2'  class="search-input-height search-input" /><div class="search-text">㎡ 이상</div></div>               
                 {% if request.path == url_1 or request.path == url_2 or request.path == url_3 or request.path == url_4 or request.path == url_5 or request.path == url_6 or request.path == url_11 or request.path == url_12 or request.path == url_13 or request.path == url_14 or request.path == url_15 or request.path == url_16 %}
-                <div class="search-text-bound-top"><span class="search-text">|| 방 수</span><input value="{% if room__gte %}{{room__gte}}{% else %}0{% endif %}" type='number' id='room' name='room'  class="search-input-height search-input" /></div>                
+                <div class="search-text-bound-top"><span class="search-text">|| 방 수</span><input value="{{room__gte}}" type='number' id='room' name='room'  class="search-input-height search-input" /></div>
                 {% endif %}
                 {% if request.path == url_9 or request.path == url_10 %}
                 <div class="search-text-bound-top"><div class="search-text">|| 대지면적</div><input value="{% if land_m2__gte %}{{land_m2__gte}}{% else %}0{% endif %}" onfocus="this.value=''" type='number' id='land_m2' name='land_m2' class="search-input-height search-input" /><div class="search-text">㎡ 이상</div></div>
@@ -41,7 +41,9 @@
         </div>
         <div class="search-part-two">
             <div class="search-part">
+                {% if request.path != url_9 and request.path != url_10 %}
                 <div class="search-text-bound-bottom"><input {% if parking %}checked{% endif %} type='checkbox' id='parking' name='parking' /><label for='parking'><span class="search-text">주차</span></label></div>
+                {% endif %}
                 <div class="search-text-bound-bottom"><input {% if elevator %}checked{% endif %} type='checkbox' id='elevator' name='elevator' /><label for='elevator'><span class="search-text">승강기</span></label></div>
                 <div class="search-text-bound-bottom"><input {% if loan %}checked{% endif %} type='checkbox' id='loan' name='loan' /><label for='loan'><span class="search-text">대출</span></label></div>
                 {% if not request.path == url_9 and not request.path == url_10 %}

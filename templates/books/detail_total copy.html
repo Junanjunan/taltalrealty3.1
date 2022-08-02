@@ -66,7 +66,7 @@
         <div class="creating-input-bound"><div class="creating-div">준공</div> {{object.birth|date:"Y/m/d"}}</div>
     </div>    
     <div class="creating"><button class="toggle_m2" value="m2" onclick="toggling()">면적단위(㎡)</button></div><div></div>
-    {% if not object.land_type %}
+    {% if object.price and object.area_m2 %}
     <div class="creating">
         <div class="creating-input-bound"><div class="creating-div">전용면적</div> <span class="toggle_area">{{object.area_m2}}</span></div>
         {% if object.total_area_m2 %}
@@ -82,6 +82,22 @@
         {% endif %}
                 
         
+    </div>
+    {% endif %}
+    {% if not object.price and object.area_m2 %}
+    <div class="creating">
+        <div class="creating-input-bound"><div class="creating-div">전용면적</div> <span class="toggle_area">{{object.area_m2}}</span></div>
+        {% if object.total_area_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">{{object.total_area_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">공급면적</div> <span class="toggle_area">-</span></div>        
+        {% endif %}
+        
+        {% if object.land_m2 %}
+        <div class="creating-input-bound"><div class="creating-div">대지지분</div> <span class="toggle_area">{{object.land_m2}}</span></div>
+        {% else %}
+        <div class="creating-input-bound"><div class="creating-div">대지지분</div> <span class="toggle_area">-</span></div>   
+        {% endif %}
     </div>
     {% endif %}
     
