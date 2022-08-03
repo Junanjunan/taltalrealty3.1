@@ -21,6 +21,8 @@ class User(AbstractUser):
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
     bio = models.TextField(blank=True)
+    office = models.CharField(max_length=30, null=True, blank=True)
+    tel = models.CharField(max_length=30, null=True, blank=True)
     avatar = models.ImageField(upload_to="avatars", blank=True)
     email_verified = models.BooleanField(default=False)
     email_secret = models.CharField(max_length=20, default="", blank=True)

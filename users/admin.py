@@ -9,8 +9,8 @@ class CustomUserAdmin(UserAdmin):
     """ Custom User Admin"""
 
     fieldsets = UserAdmin.fieldsets + \
-        (("Custom Profile", {"fields": ('login_method', "email_verified", "bio", "avatar")}),)
-    list_display = ("username", "email", "login_method", "email_verified", "created", "get_avatar")
+        (("Custom Profile", {"fields": ('login_method', "email_verified", "office","tel", "bio", "avatar")}),)
+    list_display = ("username", "email", "login_method", "email_verified", "office","tel", "created", "get_avatar")
 
     def get_avatar(self, obj):
         try:
