@@ -77,14 +77,26 @@ class ProfileView(APIView):
         return Response()
 
 class UpdateStatusView(APIView):
+    def get(self, request, pk):
+        user = users_models.User.objects.get(pk=pk)
+        serializer = serializers.UserSerializer(
+            user,
+            context={"request":request}
+        ).data
+        return Response(serializer)
+
     def post(self, request, pk):
         office = request.data["office"]
         tel = request.data["tel"]
         user= users_models.User.objects.get(pk=pk)
         user.office = office
         user.tel = tel
-        user.save() 
-        return Response()
+        user.save()
+        serializer = serializers.UserSerializer(
+            user,
+            context={"request":request}
+        ) .data
+        return Response(serializer)
 
 
 class TestView(APIView):
