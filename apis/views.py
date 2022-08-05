@@ -61,8 +61,6 @@ class ProfileView(APIView):
         return Response(serializer)
 
     def post(self, request, pk):
-        print(dir(request))
-        print(request.data)
         password = request.data["password"]
         user = users_models.User.objects.get(pk=pk)
         if check_password(password, user.password):     # https://ssungkang.tistory.com/entry/DjangoUser-%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EB%B3%80%EA%B2%BD%ED%95%98%EA%B8%B0-checkpassword
@@ -76,6 +74,16 @@ class ProfileView(APIView):
     def delete(self, request, pk):
         user = users_models.User.objects.get(pk=pk)
         user.delete()
+        return Response()
+
+class UpdateStatusView(APIView):
+    def post(self, request, pk):
+        office = request.data["office"]
+        tel = request.data["tel"]
+        user= users_models.User.objects.get(pk=pk)
+        user.office = office
+        user.tel = tel
+        user.save() 
         return Response()
 
 

@@ -112,7 +112,19 @@ class UserStatusView(LoggedInOnlyView, ListView):
         if user.realtor.pk != self.request.user.pk:
             raise Http404()
         return user
+        
 
+"""UserStatusUpdate"""
+class UserStatusUpdateView(LoggedInOnlyView, UpdateView):
+    model = models.User
+    form_class = forms.UpdateStatusForm
+    template_name = "users/status_update.html"
+
+    def get_object(self, queryset=None):
+        user = super().get_object(queryset=queryset)
+        if user.pk != self.request.user.pk:
+            raise Http404()
+        return super().get_object()
 
 """UpdatePasswordView 1"""
 # class UpdatePasswordView(LoggedInOnlyView, PasswordChangeView):
@@ -483,7 +495,6 @@ def naver_callback(request):
         user.save()
     login(request,user)
     return redirect(reverse("core:home"))
-
 
 
 

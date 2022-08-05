@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div>
+  <div class="change-delete-div change-div"><a href="{% url 'users:status-update' user.pk %}" class="change-delete-text"> 회원정보 수정</a></div>
   <div class="change-delete-div change-div"><a href="{% url 'users:change-password' user.pk %}" class="change-delete-text">비밀번호 수정</a></div>
   <div class="change-delete-div delete-div"><a href="{% url 'users:user_del' %}" class="change-delete-text">회원 탈퇴</a></div>
 </div>

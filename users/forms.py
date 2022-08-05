@@ -65,6 +65,15 @@ class LoginForm(forms.Form):
             self.add_error("email", forms.ValidationError("이메일 또는 비밀번호가 틀렸거나 존재하지 않는 유저입니다."))
 
 
+class UpdateStatusForm(forms.ModelForm):
+    office = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'상호', 'class':'login-form'}))
+    tel = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'연락처', 'class':'login-form'}))
+
+    class Meta:
+        model = models.User
+        fields = ('office', 'tel')
+
+
 class UpdatePasswordForm(PasswordChangeForm):
     old_password = forms.CharField( widget=forms.PasswordInput(attrs={'placeholder':'현재 비밀번호', 'class':'login-form'}))
     new_password1 = forms.CharField( widget=forms.PasswordInput(attrs={'placeholder':'새 비밀번호', 'class':'login-form'}))

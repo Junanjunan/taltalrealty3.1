@@ -25,6 +25,7 @@ urlpatterns = [
     path("login/naver/callback/", views.naver_callback, name="naver-callback"),
     path("logout/", views.log_out, name="logout"),
     path("status/<int:pk>/", views.UserStatusView.as_view(), name="status"),
+    path("status/<int:pk>/update", views.UserStatusUpdateView.as_view(), name="status-update"),
     path("changepassword/<int:pk>/", views.UpdatePasswordView.as_view(), name="change-password"),
     path("user_del/", views.user_del, name="user_del"),
     # path("update-password/", views.UpdatePasswordView.as_view(), name="update-password"),
