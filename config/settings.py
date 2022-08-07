@@ -25,8 +25,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET", "fjzmdlazhk!2jdkz3")
 # SECRET_KEY = "1k2kdmahjsloqqjkdfasl"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG"))
-# DEBUG = True
+# DEBUG = bool(os.environ.get("DEBUG"))
+DEBUG = True
 
 
 ALLOWED_HOSTS = ["*"]
@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if DEBUG:
+if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -171,7 +171,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
 # Sentry
-if not DEBUG:
+if DEBUG:
     DEFAULT_FILE_STORAGE = 'config.custom_storages.UploadStorage'
     STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
