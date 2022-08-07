@@ -46,10 +46,9 @@ psycopg2-binary = "*"
 boto3 = "*"
 django-staticfiles = "*"
 djangorestframework = "*"
-jwt = "*"
-pyjwt = "*"
 sentry-sdk = "*"
 awsebcli = "*"
+pyjwt = "*"
 
 [dev-packages]
 
