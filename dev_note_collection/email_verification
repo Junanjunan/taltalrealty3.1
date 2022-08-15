@@ -37,7 +37,7 @@ https://www.youtube.com/watch?v=Rbkc-0rqSw8&list=PLx-q4INfd95ESFMQ1Je3Z0gFdQLhrE
 
     (.env)
         export EMAIL_FROM_USER = wnsghksk@gmail.com
-        export EMAIL_HOST_PASSWORD = 'rsfakjsyjpotqwjj'
+        export EMAIL_HOST_PASSWORD = '.'
 
 
     (users/views.py)
