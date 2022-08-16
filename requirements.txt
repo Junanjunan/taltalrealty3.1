@@ -35,7 +35,7 @@ et-xmlfile==1.1.0; python_version >= '3.6'
 filelock==3.6.0
 idna==3.3
 jmespath==1.0.1; python_version >= '3.7'
-lxml==4.8.0
+lxml==4.9.1
 markuppy==1.14
 odfpy==1.4.1
 openpyxl==3.0.10
