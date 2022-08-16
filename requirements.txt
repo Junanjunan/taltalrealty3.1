@@ -40,7 +40,7 @@ markuppy==1.14
 odfpy==1.4.1
 openpyxl==3.0.10
 pbr==5.8.1
-pillow==9.1.0
+pillow==9.1.1
 pip==22.2.2; python_version >= '3.7'
 pipenv-to-requirements==0.9.0
 pipenv==2022.4.8
