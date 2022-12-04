@@ -1,4 +1,4 @@
-import yagmail, time
+import time
 from datetime import timedelta, date
 from django.conf import settings
 from django.http import Http404

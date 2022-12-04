@@ -17,7 +17,6 @@ class User(AbstractUser):
     LOGIN_NAVER = "naver"
     LOGIN_CHOICES = ((LOGIN_EMAIL, "Email"),(LOGIN_GITHUB, "Github"), (LOGIN_KAKAO, "Kakao"), (LOGIN_NAVER, "Naver"))
 
-    user_id = models.BigAutoField(primary_key=True)
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
     bio = models.TextField(blank=True)

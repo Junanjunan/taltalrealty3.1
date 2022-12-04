@@ -1,9 +1,7 @@
-from django import forms as django_forms
 from django.http import Http404
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
-from django.views.generic import View, ListView, CreateView, DetailView, UpdateView
-from django.contrib import messages
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from . import models, forms

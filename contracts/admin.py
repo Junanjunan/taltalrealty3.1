@@ -1,10 +1,9 @@
 from django.contrib import admin
-from import_export.admin import ImportExportMixin
 from . import models
 
 
 @admin.register(models.ContractBase)
-class ContractAdmin(ImportExportMixin, admin.ModelAdmin):
+class ContractAdmin(admin.ModelAdmin):
     list_display = (
         'realtor',
         'types',

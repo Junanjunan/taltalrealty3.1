@@ -1,33 +1,9 @@
 from django.contrib import admin
-from import_export.admin import ExportActionModelAdmin, ImportExportMixin, ImportMixin, ImportExportModelAdmin
 from . import models
 
-# @admin.register(resources.BaseItems)
-# class BaseItemsAdmin(ImportExportModelAdmin):
-#     resources_class = resources.BaseItemsAdminResource
-
-# @admin.register(models.AdItems)
-# class AdItemsAdmin(admin.ModelAdmin):
-#     pass
-
-# @admin.register(models.BaseItems)
-# class BaseItemsAdmin(admin.ModelAdmin):
-#     pass
-
-# @admin.register(models.CommonItems)
-# class CommonItemsAdmin(admin.ModelAdmin):
-#     pass
-
-# @admin.register(models.DealingItems)
-# class DealingItemsAdmin(admin.ModelAdmin):
-#     pass
-
-# @admin.register(models.RoomItems)
-# class RoomItemsAdmin(admin.ModelAdmin):
-#     pass
 
 @admin.register(models.ApartmentDealing)
-class AparmentDealingAdmin(ImportExportMixin, admin.ModelAdmin):
+class AparmentDealingAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -60,7 +36,7 @@ class AparmentDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.RoomDealing)
-class RoomDealingAdmin(ImportExportMixin, admin.ModelAdmin):
+class RoomDealingAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -93,7 +69,7 @@ class RoomDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.OfficetelDealing)
-class OfficetelDealingAdmin(ImportExportMixin, admin.ModelAdmin):
+class OfficetelDealingAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -126,7 +102,7 @@ class OfficetelDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.StoreDealing)
-class StoreDealingAdmin(ImportExportMixin, admin.ModelAdmin):
+class StoreDealingAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -158,7 +134,7 @@ class StoreDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.BuildingDealing)
-class BuildingDealingAdmin(ImportExportMixin, admin.ModelAdmin):
+class BuildingDealingAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -196,7 +172,7 @@ class BuildingDealingAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.ApartmentLease)
-class ApartmentLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
+class ApartmentLeaseAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -228,7 +204,7 @@ class ApartmentLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.RoomLease)
-class RoomLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
+class RoomLeaseAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -260,7 +236,7 @@ class RoomLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.OfficetelLease)
-class OfficetelLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
+class OfficetelLeaseAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",
@@ -292,7 +268,7 @@ class OfficetelLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.StoreLease)
-class StoreLeaseAdmin(ImportExportMixin, admin.ModelAdmin):
+class StoreLeaseAdmin(admin.ModelAdmin):
 
     list_display = (
         "address",

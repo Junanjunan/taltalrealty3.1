@@ -1,11 +1,9 @@
-from datetime import timedelta, date
 from django.http import Http404
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from . import models, forms
 from components.search_filter import search_filter
 

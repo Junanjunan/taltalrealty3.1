@@ -1,9 +1,8 @@
 from django.contrib import admin
-from import_export.admin import ImportExportMixin
 from . import models
 
 @admin.register(models.ApartmentDealingCustomer)
-class ApartmentDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class ApartmentDealingCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -22,7 +21,7 @@ class ApartmentDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.HouseDealingCustomer)
-class HouseDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class HouseDealingCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -41,7 +40,7 @@ class HouseDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.OfficetelDealingCustomer)
-class OfficetelDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class OfficetelDealingCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -61,7 +60,7 @@ class OfficetelDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.ShopDealingCustomer)
-class ShopDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class ShopDealingCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -79,7 +78,7 @@ class ShopDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.BuildingDealingCustomer)
-class BuildingDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class BuildingDealingCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -95,7 +94,7 @@ class BuildingDealingCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.ApartmentLeaseCustomer)
-class ApartmentLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class ApartmentLeaseCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -116,7 +115,7 @@ class ApartmentLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.HouseLeaseCustomer)
-class HouseLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class HouseLeaseCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -137,7 +136,7 @@ class HouseLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.OfficetelLeaseCustomer)
-class OfficetelLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class OfficetelLeaseCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",
@@ -158,7 +157,7 @@ class OfficetelLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 @admin.register(models.ShopLeaseCustomer)
-class ShopLeaseCustomerAdmin(ImportExportMixin, admin.ModelAdmin):
+class ShopLeaseCustomerAdmin(admin.ModelAdmin):
 
     list_display = (
         "guest_phone",

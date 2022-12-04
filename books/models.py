@@ -5,7 +5,6 @@ from datetime import datetime
 """ dealing """
 
 class ApartmentDealing(models.Model):
-    # apartmentdealing_id = models.BigAutoField(primary_key=True)
     realtor = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
     updated = models.DateField(blank=True, null=True)
