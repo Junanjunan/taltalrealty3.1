@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-from .local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from .local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, POSTGRESQL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,12 +89,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = POSTGRESQL
 
 
 # Password validation
