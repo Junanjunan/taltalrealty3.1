@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-from .local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, POSTGRESQL
+from .local_settings_dir.local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, POSTGRESQL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -158,3 +158,8 @@ REST_FRAMEWORK = {
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Configure Celery and Redis
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
