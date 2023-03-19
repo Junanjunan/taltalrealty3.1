@@ -24,7 +24,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from validate_email import validate_email       # pipenv install validate_email
 from . import forms, models
-from config.local_settings_dir.local_settings import GH_ID_DEPLOY, GH_SECRET_DEPLOY, GH_ID_LOCAL, GH_SECRET_LOCAL
+from config.local_settings_dir.local_settings import GH_ID_DEPLOY, GH_SECRET_DEPLOY, GH_ID_LOCAL, GH_SECRET_LOCAL, KAKAO_ID, KAKAO_ID_DEPLOY, NAVER_ID, NAVER_SECRET, NAVER_ID_DEPLOY, NAVER_SECRET_DEPLOY
 
 
 class PrivacyPolicyView(View):
@@ -322,10 +322,10 @@ def github_callback(request):
 
 def kakao_login(request):
     if settings.DEBUG == True:
-        REST_API_KEY = os.environ.get("KAKAO_ID")
+        REST_API_KEY = KAKAO_ID
         REDIRECT_URI = "http://127.0.0.1:8000/users/login/kakao/callback/"
     else:
-        REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
+        REST_API_KEY = KAKAO_ID_DEPLOY
         REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
     return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
 
@@ -337,11 +337,11 @@ class KakaoException(Exception):
 def kakao_callback(request):
     try:
         if settings.DEBUG == True:
-            REST_API_KEY = os.environ.get("KAKAO_ID")
+            REST_API_KEY = KAKAO_ID
             REDIRECT_URI = "http://127.0.0.1:8000/users/login/kakao/callback/"
         else:
-            REST_API_KEY = os.environ.get("KAKAO_ID_DEPLOY")
-            REDIRECT_URI = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/kakao/callback/"
+            REST_API_KEY = KAKAO_ID_DEPLOY
+            REDIRECT_URI = "https://taltalrealty.shop/users/login/kakao/callback/"
         code = request.GET.get("code")
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}")
@@ -385,11 +385,11 @@ def kakao_callback(request):
 
 def naver_login(request):
     if settings.DEBUG == True:
-        client_id = os.environ.get("NAVER_ID")
+        client_id = NAVER_ID
         redirect_uri = "http://127.0.0.1:8000/users/login/naver/callback/"
     else:
-        client_id = os.environ.get("NAVER_ID_DEPLOY")
-        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/naver/callback/"
+        client_id = NAVER_ID_DEPLOY
+        redirect_uri = "https://taltalrealty.shop/users/login/naver/callback/"
     state = uuid.uuid4().hex[:20]
     return redirect(f"https://nid.naver.com/oauth2.0/authorize?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&state={state}")
 
@@ -397,11 +397,11 @@ def naver_login(request):
 
 def naver_callback(request):
     if settings.DEBUG == True:
-        client_id = os.environ.get("NAVER_ID")
-        client_secret = os.environ.get("NAVER_SECRET")
+        client_id = NAVER_ID
+        client_secret = NAVER_SECRET
     else:
-        client_id = os.environ.get("NAVER_ID_DEPLOY")
-        client_secret = os.environ.get("NAVER_SECRET_DEPLOY")
+        client_id = NAVER_ID_DEPLOY
+        client_secret = NAVER_SECRET_DEPLOY
     code = request.GET.get("code")
     state = request.GET.get("state")
     token_request = requests.post(
