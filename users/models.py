@@ -19,14 +19,14 @@ class User(AbstractUser):
 
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
-    bio = models.TextField(blank=True)
+    bio = models.TextField(null=True, blank=True)
     office = models.CharField(max_length=30, null=True, blank=True)
     tel = models.CharField(max_length=30, null=True, blank=True)
-    avatar = models.ImageField(upload_to="avatars", blank=True)
+    avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
     email_verified = models.BooleanField(default=False)
-    email_secret = models.CharField(max_length=20, default="", blank=True)
+    email_secret = models.CharField(max_length=20, default="", blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    objects = UserManager() # eb deploy를 할때 command로 createsuperuser를 하기 위해 작성 -> users/management/commands/createsu.py를 보자
+    # objects = UserManager() # eb deploy를 할때 command로 createsuperuser를 하기 위해 작성 -> users/management/commands/createsu.py를 보자
 
     def verify_email(self):
         if self.email_verified is False:
