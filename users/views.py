@@ -24,6 +24,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from validate_email import validate_email       # pipenv install validate_email
 from . import forms, models
+from config.local_settings_dir.local_settings import GH_ID_DEPLOY, GH_SECRET_DEPLOY, GH_ID_LOCAL, GH_SECRET_LOCAL
 
 
 class PrivacyPolicyView(View):
@@ -273,21 +274,21 @@ class SendingPasswordEmailDone(LoggedOutOnlyView, View):
 
 def github_login(request):
     if settings.DEBUG == True:
-        client_id = os.environ.get("GH_ID")
+        client_id = GH_ID_LOCAL
         redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
     else:
-        client_id = os.environ.get("GH_ID_DEPLOY")
-        redirect_uri = "http://taltalrealty31-dev.ap-northeast-2.elasticbeanstalk.com/users/login/github/callback/"
+        client_id = GH_ID_DEPLOY
+        redirect_uri = "https://taltalrealty.shop/users/login/github/callback/"
     return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user")
 
 
 def github_callback(request):
     if settings.DEBUG == True:
-        client_id = os.environ.get("GH_ID")
-        client_secret = os.environ.get("GH_SECRET")
+        client_id = GH_ID_LOCAL
+        client_secret = GH_SECRET_LOCAL
     else:
-        client_id = os.environ.get("GH_ID_DEPLOY")
-        client_secret = os.environ.get("GH_SECRET_DEPLOY")
+        client_id = GH_ID_DEPLOY
+        client_secret = GH_SECRET_DEPLOY
     code = request.GET.get("code")
     result = requests.post(
         f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
