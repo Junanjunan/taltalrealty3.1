@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .local_settings_dir import local_settings
 
 
 def trigger_error(request):
@@ -31,7 +32,7 @@ urlpatterns = [
     path("contracts/", include('contracts.urls', namespace="contracts")),
     path("managements/", include('managements.urls', namespace="managements")),
     path("api/v1/", include('apis.urls', namespace='api')),
-    path('admin/', admin.site.urls),
+    path(local_settings.ADMIN_URL, admin.site.urls),
     path('sentry-debug/', trigger_error),
     # path('verification/', include('verify_email.urls')),
 ]
