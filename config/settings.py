@@ -50,7 +50,9 @@ PROJECT_APPS = [
     "apis.apps.ApisConfig"
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'rest_framework'
+]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
