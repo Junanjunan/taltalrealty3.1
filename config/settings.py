@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-from .local_settings_dir.local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, POSTGRESQL
+from .local_settings_dir.local_settings import DJANGO_SECRET, DEBUG_CONFIG, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, POSTGRESQL, DEPLOY_URL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,6 +149,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 
+DEPLOY_URL = DEPLOY_URL
 
 # Django Rest Framework
 REST_FRAMEWORK = {
